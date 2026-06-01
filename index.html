@@ -301,6 +301,7 @@ Policía Nacional de Colombia
 </div>
 
 <script>
+    <script>
 
 const WEBAPP_URL =
 "https://script.google.com/macros/s/AKfycbxSUwfCermRJXo1BfVLd29DjJL8ckFj4qL3AJni3iFbX6E3lVz3xUaHz9VJd6UR-lO_/exec";
@@ -339,6 +340,7 @@ document
         AL: document.getElementById("actoAdministrativo").value,
 
         AT: document.getElementById("proyectoResolucion").value
+
     };
 
     try {
@@ -348,20 +350,14 @@ document
         const url =
             WEBAPP_URL + "?" + params.toString();
 
-        console.log("URL enviada:", url);
+        console.log("URL enviada:");
+        console.log(url);
 
-        const response = await fetch(url, {
-            method: "GET"
-        });
-
-        if (!response.ok) {
-            throw new Error(
-                `HTTP ${response.status} - ${response.statusText}`
-            );
-        }
+        const response = await fetch(url);
 
         const result = await response.json();
 
+        console.log("Respuesta Apps Script:");
         console.log(result);
 
         if(result.success){
@@ -370,14 +366,14 @@ document
                 result.textoAP || "";
 
             alert(
-                "Registro guardado correctamente. Fila: " +
+                "Registro guardado correctamente.\nFila: " +
                 result.fila
             );
 
         }else{
 
             alert(
-                "Respuesta recibida:\n\n" +
+                "Error:\n" +
                 JSON.stringify(result, null, 2)
             );
 
@@ -388,7 +384,7 @@ document
         console.error(error);
 
         alert(
-            "Error de conexión con Google Apps Script:\n\n" +
+            "Error de conexión:\n" +
             error.message
         );
 
@@ -397,6 +393,3 @@ document
 });
 
 </script>
-
-</body>
-</html>
