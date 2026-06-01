@@ -24,6 +24,9 @@ input,select,textarea{padding:10px}
 </style>
 </head>
 <body>
+
+
+
 <div class="header"><h1>BONIFICACIÓN FAMILIAR 2026</h1></div>
 <div class="container"><div class="card">
 <form id="formBonificacion">
@@ -70,40 +73,93 @@ input,select,textarea{padding:10px}
 <div class="footer">Policía Nacional de Colombia</div>
 
 <script>
-const WEBAPP_URL="https://script.google.com/macros/s/AKfycbxSUwfCermRJXo1BfVLd29DjJL8ckFj4qL3AJni3iFbX6E3lVz3xUaHz9VJd6UR-lO_/exec";
 
-document.getElementById('formBonificacion').addEventListener('submit', async function(e){
-e.preventDefault();
+const WEBAPP_URL =
+"https://script.google.com/macros/s/AKfycbxSUwfCermRJXo1BfVLd29DjJL8ckFj4qL3AJni3iFbX6E3lVz3xUaHz9VJd6UR-lO_/exec";
 
-const data={
-E:tramite.value,F:concepto.value,H:observaciones.value,I:estado.value,
-J:fechaJ.value,K:fechaK.value,O:cedulaTitular.value,P:beneficiario.value,
-Y:nombreBeneficiario.value,Z:cedulaBeneficiario.value,AA:sexo.value,
-AC:fechaNacimiento.value,AE:tipoDocumento.value,AH:documentoSoporte.value,
-AI:expedidoPor.value,AJ:ciudadSede.value,AK:fechaDocumento.value,
-AL:actoAdministrativo.value,AT:proyectoResolucion.value
-};
+document
+.getElementById("formBonificacion")
+.addEventListener("submit", async function(e){
 
-try{
-const response=await fetch(WEBAPP_URL,{
-method:'POST',
-headers:{'Content-Type':'application/json'},
-body:JSON.stringify(data)
+    e.preventDefault();
+
+    const data = {
+
+        action: "guardar",
+
+        E: document.getElementById("tramite").value,
+        F: document.getElementById("concepto").value,
+        H: document.getElementById("observaciones").value,
+        I: document.getElementById("estado").value,
+        J: document.getElementById("fechaJ").value,
+        K: document.getElementById("fechaK").value,
+
+        O: document.getElementById("cedulaTitular").value,
+        P: document.getElementById("beneficiario").value,
+
+        Y: document.getElementById("nombreBeneficiario").value,
+        Z: document.getElementById("cedulaBeneficiario").value,
+
+        AA: document.getElementById("sexo").value,
+        AC: document.getElementById("fechaNacimiento").value,
+        AE: document.getElementById("tipoDocumento").value,
+
+        AH: document.getElementById("documentoSoporte").value,
+        AI: document.getElementById("expedidoPor").value,
+        AJ: document.getElementById("ciudadSede").value,
+        AK: document.getElementById("fechaDocumento").value,
+        AL: document.getElementById("actoAdministrativo").value,
+
+        AT: document.getElementById("proyectoResolucion").value
+
+    };
+
+    try {
+
+        const params = new URLSearchParams(data);
+
+        const response = await fetch(
+            WEBAPP_URL + "?" + params.toString(),
+            {
+                method: "GET"
+            }
+        );
+
+        const result = await response.json();
+
+        if(result.success){
+
+            document.getElementById("textoAP").value =
+            result.textoAP || "";
+
+            alert(
+                "Registro guardado correctamente\nFila: " +
+                result.fila
+            );
+
+        } else {
+
+            alert(
+                "Error:\n" +
+                result.error
+            );
+
+        }
+
+    } catch(error){
+
+        console.error(error);
+
+        alert(
+            "Error de conexión con Google Apps Script:\n" +
+            error.message
+        );
+
+    }
+
 });
 
-const result=await response.json();
-
-if(result.success){
-document.getElementById('textoAP').value=result.textoAP||'';
-alert('Registro guardado correctamente. Fila: '+result.fila);
-}else{
-alert('Error: '+(result.error||'No se pudo guardar'));
-}
-}catch(err){
-alert('Error de conexión: '+err.message);
-console.error(err);
-}
-});
+</script>
 </script>
 </body>
 </html>
