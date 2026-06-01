@@ -169,24 +169,62 @@ textarea{
 </div>
 
 <div
-id="registro"
-class="tabcontent active">
-
-<form id="formBonificacion">
-
-<div class="section">
-Información del Titular
+<!-- REGISTRO -->
+<div id="registro" class="tabcontent active">
+    ...
 </div>
 
-<div class="grid">
+<!-- RESOLUCIÓN -->
+<div id="resolucion" class="tabcontent">
 
-<div class="form-group">
-<label>Cédula Titular</label>
-<input
-type="text"
-id="cedulaTitular"
-inputmode="numeric"
-required>
+    <h3>Texto AP</h3>
+
+    <textarea
+        id="textoAP"
+        style="width:100%;height:300px"
+        readonly>
+    </textarea>
+
+</div>
+
+<!-- CONSULTA -->
+<div id="consulta" class="tabcontent">
+
+    <h3>Consultar Registro</h3>
+
+    <div class="grid">
+
+        <div class="form-group">
+            <label>Cédula Titular</label>
+            <input
+                type="text"
+                id="cedulaBuscar"
+                inputmode="numeric">
+        </div>
+
+    </div>
+
+    <br>
+
+    <button
+        type="button"
+        class="btn-save"
+        onclick="buscarRegistro()">
+
+        🔍 Buscar
+
+    </button>
+
+    <br><br>
+
+    <label>Resultado</label>
+
+    <textarea
+        id="textoConsulta"
+        style="width:100%;height:350px"
+        readonly>
+    </textarea>
+
 </div>
 
 <div class="form-group">
@@ -462,16 +500,16 @@ document
         AT: document.getElementById("proyectoResolucion").value
     };
 
-    async function buscarRegistro(){
+   async function buscarRegistro(){
 
     const cedula =
-        document.getElementById("cedulaBuscar").value;
+        document.getElementById("cedulaBuscar").value.trim();
 
     if(!cedula){
 
         alert("Ingrese una cédula");
-
         return;
+
     }
 
     try{
@@ -491,17 +529,60 @@ document
 
         if(result.success){
 
+            let texto = "";
+
+            texto +=
+                "RESULTADOS ENCONTRADOS: " +
+                result.total +
+                "\n\n";
+
+            result.registros.forEach((item,index)=>{
+
+                texto +=
+                    "RESULTADO #" +
+                    (index+1) +
+                    "\n";
+
+                texto +=
+                    "CÉDULA TITULAR: " +
+                    item.cedula +
+                    "\n";
+
+                texto +=
+                    "BENEFICIARIO: " +
+                    item.beneficiario +
+                    "\n";
+
+                texto +=
+                    "DOCUMENTO BENEFICIARIO: " +
+                    item.documento +
+                    "\n";
+
+                texto +=
+                    "ESTADO: " +
+                    item.estado +
+                    "\n";
+
+                texto +=
+                    "FILA: " +
+                    item.fila +
+                    "\n";
+
+                texto +=
+                    "---------------------------------\n";
+
+            });
+
             document
                 .getElementById("textoConsulta")
-                .value =
-                result.textoAP || "";
+                .value = texto;
 
         }else{
 
-            alert(
-                result.error ||
-                "No se encontró información"
-            );
+            document
+                .getElementById("textoConsulta")
+                .value =
+                "No se encontraron registros.";
 
         }
 
@@ -515,64 +596,6 @@ document
     }
 
 }
-
-    try{
-
-        const params =
-        new URLSearchParams(data);
-
-        const url =
-        WEBAPP_URL +
-        "?" +
-        params.toString();
-
-        console.log(url);
-
-        const response =
-        await fetch(url);
-
-        const result =
-        await response.json();
-
-        console.log(result);
-
-        if(result.success){
-
-            document
-            .getElementById("textoAP")
-            .value =
-            result.textoAP || "";
-
-            showTab("resolucion");
-
-            alert(
-                "Registro guardado correctamente.\nFila: "
-                + result.fila
-            );
-
-        }else{
-
-            alert(
-                "Error:\n" +
-                JSON.stringify(
-                    result,
-                    null,
-                    2
-                )
-            );
-        }
-
-    }catch(error){
-
-        console.error(error);
-
-        alert(
-            "Error de conexión:\n" +
-            error.message
-        );
-    }
-
-});
 
 </script>
 
