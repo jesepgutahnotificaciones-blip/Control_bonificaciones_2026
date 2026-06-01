@@ -154,16 +154,16 @@ textarea{
 
 <div class="tabs">
 
-    <button
-    type="button"
-    onclick="showTab('registro')">
+<button type="button" onclick="showTab('registro')">
     Registro
     </button>
 
-    <button
-    type="button"
-    onclick="showTab('resolucion')">
+    <button type="button" onclick="showTab('resolucion')">
     Resolución
+    </button>
+
+    <button type="button" onclick="showTab('consulta')">
+    Consultar
     </button>
 
 </div>
@@ -357,6 +357,45 @@ class="btn-save">
 id="resolucion"
 class="tabcontent">
 
+<div id="consulta" class="tabcontent">
+
+    <h3>Consultar Registro</h3>
+
+    <div class="grid">
+
+        <div class="form-group">
+            <label>Cédula Titular</label>
+            <input
+                type="text"
+                id="cedulaBuscar"
+                inputmode="numeric">
+        </div>
+
+    </div>
+
+    <br>
+
+    <button
+        type="button"
+        class="btn-save"
+        onclick="buscarRegistro()">
+
+        🔍 Buscar
+
+    </button>
+
+    <br><br>
+
+    <label>Texto AP</label>
+
+    <textarea
+        id="textoConsulta"
+        style="width:100%;height:300px"
+        readonly>
+    </textarea>
+
+</div>
+
 <h3>Texto AP</h3>
 
 <textarea
@@ -422,6 +461,60 @@ document
 
         AT: document.getElementById("proyectoResolucion").value
     };
+
+    async function buscarRegistro(){
+
+    const cedula =
+        document.getElementById("cedulaBuscar").value;
+
+    if(!cedula){
+
+        alert("Ingrese una cédula");
+
+        return;
+    }
+
+    try{
+
+        const url =
+            WEBAPP_URL +
+            "?action=buscar&cedula=" +
+            encodeURIComponent(cedula);
+
+        const response =
+            await fetch(url);
+
+        const result =
+            await response.json();
+
+        console.log(result);
+
+        if(result.success){
+
+            document
+                .getElementById("textoConsulta")
+                .value =
+                result.textoAP || "";
+
+        }else{
+
+            alert(
+                result.error ||
+                "No se encontró información"
+            );
+
+        }
+
+    }catch(error){
+
+        alert(
+            "Error de conexión:\n" +
+            error.message
+        );
+
+    }
+
+}
 
     try{
 
