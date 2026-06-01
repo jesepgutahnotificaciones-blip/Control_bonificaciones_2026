@@ -127,24 +127,23 @@ document
 
         const result = await response.json();
 
-        if(result.success){
+        console.log(result);
 
-            document.getElementById("textoAP").value =
-            result.textoAP || "";
+if(result.success){
 
-            alert(
-                "Registro guardado correctamente\nFila: " +
-                result.fila
-            );
+    document.getElementById("textoAP").value =
+    result.textoAP || '';
 
-        } else {
+    alert('Registro guardado correctamente. Fila: ' + result.fila);
 
-            alert(
-                "Error:\n" +
-                result.error
-            );
+}else{
 
-        }
+    alert(
+        'Respuesta recibida:\n' +
+        JSON.stringify(result,null,2)
+    );
+
+}
 
     } catch(error){
 
