@@ -41,13 +41,28 @@ gap:20px;
 
 .card{background:#fff;border-radius:15px;padding:20px;}
 
+.tabs{
+margin-bottom:15px;
+}
+
+.tabs button{
+padding:10px 15px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+margin-right:5px;
+background:#ddd;
+font-weight:600;
+}
+
+.tabcontent{display:none;}
+.tabcontent.active{display:block;}
+
 .grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
 gap:15px;
 }
-
-.form-group{display:flex;flex-direction:column;}
 
 input,select,textarea{
 padding:10px;
@@ -73,9 +88,6 @@ cursor:pointer;
 background:var(--verde);
 font-weight:600;
 }
-
-.tabcontent{display:none;}
-.tabcontent.active{display:block;}
 </style>
 </head>
 
@@ -103,6 +115,7 @@ font-weight:600;
 <div class="grid">
 
 <input id="cedulaTitular" placeholder="Cédula Titular">
+
 <select id="tramite">
 <option>RECONOCER</option>
 <option>DISMINUIR</option>
@@ -132,9 +145,16 @@ font-weight:600;
 
 <input id="nombreBeneficiario">
 <input id="cedulaBeneficiario">
+
 <select id="sexo"><option>M</option><option>F</option></select>
 <input type="date" id="fechaNacimiento">
-<select id="tipoDocumento"><option>CC</option><option>TI</option><option>RC</option><option>RM</option></select>
+
+<select id="tipoDocumento">
+<option>CC</option>
+<option>TI</option>
+<option>RC</option>
+<option>RM</option>
+</select>
 
 <select id="documentoSoporte">
 <option>Acta de Conciliación</option>
@@ -154,7 +174,6 @@ font-weight:600;
 </div>
 
 <button class="btn-save">GUARDAR</button>
-
 </form>
 </div>
 
@@ -186,11 +205,13 @@ document.getElementById(id).classList.add("active");
 }
 
 /* =========================
-   GENERADOR AUTOMÁTICO AP
+   GENERAR TEXTO AP
 ========================= */
-function generarTextoAP(){
+function v(id){
+return document.getElementById(id).value || "";
+}
 
-const v = id => document.getElementById(id).value || "";
+function generarTextoAP(){
 
 const texto =
 `📄 ACTO ADMINISTRATIVO - BONIFICACIÓN FAMILIAR
@@ -210,46 +231,45 @@ Expedido por: ${v("expedidoPor")} - ${v("ciudadSede")}
 Fecha documento: ${v("fechaDocumento")}
 Acto: ${v("actoAdministrativo")}
 
-Este documento es de carácter administrativo.`;
+Documento generado automáticamente.`;
 
 document.getElementById("textoAP").value = texto;
 }
 
-/* =========================
-   ACTIVAR AUTO-GENERACIÓN
-========================= */
+/* AUTO GENERACIÓN */
 document.querySelectorAll("input, select").forEach(el=>{
 el.addEventListener("input", generarTextoAP);
 el.addEventListener("change", generarTextoAP);
 });
 
-/* =========================
-   GUARDAR (GET)
-========================= */
+/* INIT */
+window.addEventListener("load", generarTextoAP);
+
+/* GUARDAR */
 document.getElementById("formBonificacion").addEventListener("submit", async (e)=>{
 e.preventDefault();
 
 const params = new URLSearchParams({
 action:"guardar",
-E:cedulaTitular.value,
-F:concepto.value,
-H:observaciones.value,
-I:estado.value,
-J:fechaJ.value,
-K:fechaK.value,
-O:cedulaTitular.value,
-P:beneficiario.value,
-Y:nombreBeneficiario.value,
-Z:cedulaBeneficiario.value,
-AA:sexo.value,
-AC:fechaNacimiento.value,
-AE:tipoDocumento.value,
-AH:documentoSoporte.value,
-AI:expedidoPor.value,
-AJ:ciudadSede.value,
-AK:fechaDocumento.value,
-AL:actoAdministrativo.value,
-AT:proyectoResolucion.value
+E:v("cedulaTitular"),
+F:v("concepto"),
+H:v("observaciones"),
+I:v("estado"),
+J:v("fechaJ"),
+K:v("fechaK"),
+O:v("cedulaTitular"),
+P:v("beneficiario"),
+Y:v("nombreBeneficiario"),
+Z:v("cedulaBeneficiario"),
+AA:v("sexo"),
+AC:v("fechaNacimiento"),
+AE:v("tipoDocumento"),
+AH:v("documentoSoporte"),
+AI:v("expedidoPor"),
+AJ:v("ciudadSede"),
+AK:v("fechaDocumento"),
+AL:v("actoAdministrativo"),
+AT:v("proyectoResolucion")
 });
 
 try{
@@ -257,10 +277,10 @@ const res = await fetch(WEBAPP_URL + "?" + params.toString());
 const data = await res.json();
 
 if(data.success){
-alert("Guardado en fila: " + data.fila);
+alert("Guardado fila: " + data.fila);
 document.getElementById("textoAP").value = data.textoAP || "";
 }else{
-alert(data.error || "Error al guardar");
+alert(data.error || "Error");
 }
 
 }catch(err){
@@ -268,32 +288,17 @@ alert("Error conexión: " + err.message);
 }
 });
 
-/* =========================
-   BUSCAR
-========================= */
+/* BUSCAR */
 async function buscarRegistro(){
 
-const cedula = document.getElementById("cedulaBuscar").value.trim();
-if(!cedula){ alert("Ingrese cédula"); return; }
-
-try{
+const cedula = v("cedulaBuscar");
+if(!cedula){alert("Ingrese cédula");return;}
 
 const res = await fetch(WEBAPP_URL + "?action=buscar&cedula=" + encodeURIComponent(cedula));
 const data = await res.json();
 
-let txt = "";
-
-if(data.success){
-txt = "FILA: " + data.fila + "\n\n" + data.textoAP;
-}else{
-txt = data.error;
-}
-
-document.getElementById("textoConsulta").value = txt;
-
-}catch(err){
-alert("Error conexión: " + err.message);
-}
+document.getElementById("textoConsulta").value =
+data.success ? ("FILA: " + data.fila + "\n\n" + data.textoAP) : data.error;
 }
 
 </script>
