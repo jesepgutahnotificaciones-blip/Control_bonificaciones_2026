@@ -2,460 +2,376 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>BONIFICACIÓN FAMILIAR 2026</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>BONIFICACIÓN FAMILIAR 2026</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
-    <style>
-        :root {
-            --azul1: #13567F;
-            --azul2: #1A2746;
-            --azul3: #1B2744;
-            --verde: #A1F40C;
-            --amarillo: #FFC000;
-        }
+<style>
+:root{
+--azul1:#13567F;
+--azul2:#1A2746;
+--azul3:#1B2744;
+--verde:#A1F40C;
+}
 
-        * {
-            box-sizing: border-box;
-            font-family: Poppins, sans-serif;
-        }
+*{box-sizing:border-box;font-family:Poppins,sans-serif}
 
-        body {
-            margin: 0;
-            background:
-                linear-gradient(rgba(10, 20, 40, .85), rgba(10, 20, 40, .9)),
-                url('1-fescol-policia-abuso-cilives-1.jpg');
-            background-size: cover;
-            background-position: center;
-            min-height: 100vh;
-        }
+body{
+margin:0;
+background:linear-gradient(rgba(10,20,40,.85),rgba(10,20,40,.9)),
+url('1-fescol-policia-abuso-cilives-1.jpg');
+background-size:cover;
+min-height:100vh;
+}
 
-        .header {
-            background: linear-gradient(90deg, var(--azul3), var(--azul1));
-            padding: 20px;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
+.header{
+background:linear-gradient(90deg,var(--azul3),var(--azul1));
+padding:20px;
+color:#fff;
+display:flex;
+align-items:center;
+gap:20px;
+}
 
-        .logo {
-            width: 90px;
-        }
+.logo{width:90px}
 
-        .container {
-            width: 95%;
-            max-width: 1400px;
-            margin: 20px auto;
-        }
+.container{
+width:95%;
+max-width:1400px;
+margin:20px auto;
+}
 
-        .card {
-            background: #fff;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, .15);
-        }
+.card{
+background:#fff;
+padding:20px;
+border-radius:15px;
+}
 
-        .tabs {
-            margin-bottom: 20px;
-        }
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:15px;
+}
 
-        .tabs button {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-right: 5px;
-            font-weight: 600;
-        }
+.form-group{
+display:flex;
+flex-direction:column;
+}
 
-        .tabcontent {
-            display: none;
-        }
+label{font-weight:500;margin-bottom:5px}
 
-        .tabcontent.active {
-            display: block;
-        }
+input,select,textarea{
+padding:10px;
+border:1px solid #ccc;
+border-radius:8px;
+}
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-        }
+.section{
+background:var(--azul2);
+color:var(--verde);
+padding:10px;
+margin:15px 0;
+border-radius:8px;
+font-weight:600;
+}
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
+.btn-save{
+margin-top:20px;
+padding:12px 20px;
+border:none;
+background:var(--verde);
+font-weight:600;
+border-radius:8px;
+cursor:pointer;
+}
 
-        label {
-            margin-bottom: 5px;
-            font-weight: 500;
-        }
+.tabcontent{display:none}
+.tabcontent.active{display:block}
+</style>
 
-        input,
-        select,
-        textarea {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-        }
-
-        .section {
-            background: var(--azul2);
-            color: var(--verde);
-            padding: 10px;
-            border-radius: 8px;
-            margin: 15px 0;
-            font-weight: 600;
-        }
-
-        .btn-save {
-            margin-top: 20px;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            background: var(--verde);
-            font-weight: 600;
-        }
-    </style>
 </head>
 
 <body>
 
-    <div class="header">
+<div class="header">
+<img class="logo" src="Escudo_Policía_Nacional_de_Colombia.png">
+<h1>BONIFICACIÓN FAMILIAR 2026</h1>
+</div>
+
+<div class="container">
+<div class="card">
+
+<!-- TABS -->
+<div class="tabs">
+<button type="button" onclick="showTab('registro')">Registro</button>
+<button type="button" onclick="showTab('resolucion')">Resolución</button>
+<button type="button" onclick="showTab('consulta')">Consultar</button>
+</div>
+
+<!-- REGISTRO -->
+<div id="registro" class="tabcontent active">
+
+<form id="formBonificacion">
+
+<div class="grid">
+
+<div class="form-group">
+<label>Cédula Titular</label>
+<input id="cedulaTitular" required>
+</div>
+
+<div class="form-group">
+<label>Trámite</label>
+<select id="tramite">
+<option>RECONOCER</option>
+<option>DISMINUIR</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Concepto</label>
+<select id="concepto">
+<option>BONIFICACION PARA LA ASISTENCIA FAMILIAR</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Estado</label>
+<select id="estado">
+<option>OK</option>
+<option>FALTA REGISTRAR</option>
+</select>
+</div>
+
+</div>
+
+<div class="section">Fechas</div>
+
+<div class="grid">
+
+<div class="form-group">
+<label>Fecha J</label>
+<input type="date" id="fechaJ">
+</div>
+
+<div class="form-group">
+<label>Fecha K</label>
+<input type="date" id="fechaK">
+</div>
+
+<div class="form-group">
+<label>Observación</label>
+<input id="observaciones">
+</div>
+
+</div>
+
+<div class="section">Beneficiario</div>
+
+<div class="grid">
+
+<div class="form-group">
+<label>Beneficiario</label>
+<select id="beneficiario">
+<option>HIJO1</option>
+<option>HIJA1</option>
+<option>COMPAÑERO</option>
+<option>COMPAÑERA</option>
+<option>CÓNYUGE</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Nombre</label>
+<input id="nombreBeneficiario">
+</div>
+
+<div class="form-group">
+<label>Cédula</label>
+<input id="cedulaBeneficiario">
+</div>
+
+<div class="form-group">
+<label>Sexo</label>
+<select id="sexo">
+<option>M</option>
+<option>F</option>
+</select>
+</div>
 
-        <img class="logo" src="Escudo_Policía_Nacional_de_Colombia.png" alt="Logo Policía Nacional de Colombia" />
+<div class="form-group">
+<label>Nacimiento</label>
+<input type="date" id="fechaNacimiento">
+</div>
 
-        <div>
-            <h1>BONIFICACIÓN FAMILIAR 2026</h1>
-        </div>
+<div class="form-group">
+<label>Tipo Documento</label>
+<select id="tipoDocumento">
+<option>CC</option>
+<option>TI</option>
+<option>RC</option>
+<option>RM</option>
+</select>
+</div>
 
-    </div>
-
-    <div class="container">
+</div>
 
-        <div class="card">
-
-            <div class="tabs">
-
-                <button type="button" onclick="showTab('registro')">Registro</button>
-                <button type="button" onclick="showTab('resolucion')">Resolución</button>
-                <button type="button" onclick="showTab('consulta')">Consultar</button>
-
-            </div>
-
-            <!-- PESTAÑA REGISTRO -->
-            <div id="registro" class="tabcontent active">
-
-                <form id="formBonificacion">
-
-                    <div class="grid">
-
-                        <div class="form-group">
-                            <label>Cédula Titular</label>
-                            <input type="text" id="cedulaTitular" inputmode="numeric" required />
-                        </div>
-
-                        <div class="form-group">
-                            <label>Tipo Trámite</label>
-                            <select id="tramite">
-                                <option>RECONOCER</option>
-                                <option>DISMINUIR</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Concepto</label>
-                            <select id="concepto">
-                                <option>BONIFICACION PARA LA ASISTENCIA FAMILIAR</option>
-                                <option>PRIMA DE ORDEN PUBLICO</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Estado</label>
-                            <select id="estado">
-                                <option>OK</option>
-                                <option>FALTA REGISTRAR</option>
-                            </select>
-                        </div>
-
-                    </div>
-
-                    <div class="section">
-                        Fechas y Observaciones
-                    </div>
-
-                    <div class="grid">
-
-                        <div class="form-group">
-                            <label>Fecha Fiscal de Reconocimiento</label>
-                            <input type="date" id="fechaJ" />
-                        </div>
-
-                        <div class="form-group">
-                            <label>Fecha Oficio GEPOL</label>
-                            <input type="date" id="fechaK" />
-                        </div>
-
-                        <div class="form-group">
-                            <label>Nro. GEPOL</label>
-                            <input type="text" id="observaciones" />
-                        </div>
-
-                    </div>
-
-                    <div class="section">
-                        Información Beneficiario
-                    </div>
-
-                    <div class="grid">
-
-                        <div class="form-group">
-                            <label>Tipo Beneficiario</label>
-                            <select id="beneficiario">
-                                <option>HIJO1</option>
-                                <option>HIJA1</option>
-                                <option>COMPAÑERO</option>
-                                <option>COMPAÑERA</option>
-                                <option>CÓNYUGE</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Nombres y Apellidos</label>
-                            <input type="text" id="nombreBeneficiario" />
-                        </div>
-
-                        <div class="form-group">
-                            <label>Número Documento Beneficiario</label>
-                            <input type="text" id="cedulaBeneficiario" inputmode="numeric" />
-                        </div>
-
-                        <div class="form-group">
-                            <label>Sexo</label>
-                            <select id="sexo">
-                                <option>M</option>
-                                <option>F</option>
-                            </select>
-                        </div>
+<!-- 🔥 SOPORTES AGREGADO -->
+<div class="section">Soportes</div>
 
-                        <div class="form-group">
-                            <label>Fecha Nacimiento</label>
-                            <input type="date" id="fechaNacimiento" />
-                        </div>
+<div class="grid">
 
-                        <div class="form-group">
-                            <label>Tipo Documento</label>
-                            <select id="tipoDocumento">
-                                <option>CC</option>
-                                <option>TI</option>
-                                <option>RC</option>
-                                <option>RM</option>
-                            </select>
-                        </div>
+<div class="form-group">
+<label>Documento Soporte</label>
+<select id="documentoSoporte">
+<option>Acta de Conciliación</option>
+<option>Registro Civil de Nacimiento</option>
+<option>Registro Civil de Matrimonio</option>
+<option>Certificado Escolar</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Expedido por</label>
+<input id="expedidoPor">
+</div>
+
+<div class="form-group">
+<label>Ciudad Sede</label>
+<input id="ciudadSede">
+</div>
+
+<div class="form-group">
+<label>Fecha Documento</label>
+<input type="date" id="fechaDocumento">
+</div>
+
+<div class="form-group">
+<label>N° Acto Administrativo</label>
+<input id="actoAdministrativo">
+</div>
+
+<div class="form-group">
+<label>Incluido Proyecto Resolución</label>
+<select id="proyectoResolucion">
+<option>SI</option>
+<option>NO</option>
+</select>
+</div>
 
-                    </div>
+</div>
 
-                    <div class="section">
-                        Soportes
-                    </div>
+<button class="btn-save" type="submit">💾 Guardar</button>
+
+</form>
+
+</div>
+
+<!-- CONSULTA -->
+<div id="consulta" class="tabcontent">
 
-                    <div class="grid">
+<input id="cedulaBuscar" placeholder="Cédula">
+<button class="btn-save" onclick="buscarRegistro()">Buscar</button>
 
-                        <div class="form-group">
-                            <label>Documento Soporte</label>
-                            <select id="documentoSoporte">
-                                <option>Acta de Conciliación</option>
-                                <option>Certificado de matrícula de la institución educativa</option>
-                                <option>Registro Civil de Nacimiento</option>
-                                <option>Registro Civil de Matrimonio</option>
-                            </select>
-                        </div>
+<textarea id="textoConsulta" style="width:100%;height:300px"></textarea>
 
-                        <div class="form-group">
-                            <label>Expedido por</label>
-                            <input type="text" id="expedidoPor" />
-                        </div>
+</div>
 
-                        <div class="form-group">
-                            <label>Ciudad Sede</label>
-                            <input type="text" id="ciudadSede" />
-                        </div>
+<!-- RESOLUCIÓN -->
+<div id="resolucion" class="tabcontent">
+<textarea id="textoAP" style="width:100%;height:300px" readonly></textarea>
+</div>
 
-                        <div class="form-group">
-                            <label>Fecha Documento</label>
-                            <input type="date" id="fechaDocumento" />
-                        </div>
+</div>
+</div>
 
-                        <div class="form-group">
-                            <label>N° Acto Administrativo</label>
-                            <input type="text" id="actoAdministrativo" />
-                        </div>
+<script>
 
-                        <div class="form-group">
-                            <label>Incluido Proyecto Resolución</label>
-                            <select id="proyectoResolucion">
-                                <option>SI</option>
-                                <option>NO</option>
-                            </select>
-                        </div>
+const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbz8DyZGRhugSLe9PwlDS_x9LMvY8jL7lhPc3ZXg9y49R-xnA8vGtIhqzYtXOy6Jv9dM/exec";
 
-                    </div>
+function showTab(id){
+document.querySelectorAll(".tabcontent").forEach(t=>t.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+}
 
-                    <button type="submit" class="btn-save">💾 Guardar Registro</button>
+document.getElementById("formBonificacion").addEventListener("submit", async (e)=>{
 
-                </form>
+e.preventDefault();
 
-            </div>
+const data = {
+action:"guardar",
 
-            <!-- PESTAÑA RESOLUCIÓN -->
-            <div id="resolucion" class="tabcontent">
+E:tramite.value,
+F:concepto.value,
+H:observaciones.value,
+I:estado.value,
+J:fechaJ.value,
+K:fechaK.value,
 
-                <h3>Texto AP</h3>
+O:cedulaTitular.value,
+P:beneficiario.value,
 
-                <textarea id="textoAP" style="width:100%;height:300px" readonly></textarea>
+Y:nombreBeneficiario.value,
+Z:cedulaBeneficiario.value,
 
-            </div>
+AA:sexo.value,
+AC:fechaNacimiento.value,
+AE:tipoDocumento.value,
 
-            <!-- PESTAÑA CONSULTA -->
-            <div id="consulta" class="tabcontent">
+// 🔥 SOPORTES
+AH:documentoSoporte.value,
+AI:expedidoPor.value,
+AJ:ciudadSede.value,
+AK:fechaDocumento.value,
+AL:actoAdministrativo.value,
+AT:proyectoResolucion.value
+};
 
-                <h3>Consultar Registro</h3>
+try{
 
-                <div class="grid">
+const res = await fetch(WEBAPP_URL,{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify(data)
+});
 
-                    <div class="form-group">
-                        <label>Cédula Titular</label>
-                        <input type="text" id="cedulaBuscar" inputmode="numeric" />
-                    </div>
+const json = await res.json();
 
-                </div>
+if(json.success){
+alert("Guardado en fila: "+json.fila);
+textoAP.value = json.textoAP || "";
+}else{
+alert(json.error || "Error al guardar");
+}
 
-                <button type="button" class="btn-save" onclick="buscarRegistro()">🔍 Buscar</button>
+}catch(err){
+alert("Error conexión: "+err.message);
+}
 
-                <br /><br />
+});
 
-                <label>Resultados</label>
+async function buscarRegistro(){
 
-                <textarea id="textoConsulta" style="width:100%;height:350px" readonly></textarea>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <script>
-        const WEBAPP_URL =
-            "https://script.google.com/macros/s/AKfycbwANKlB2QJg6-AxSPRqtWOBlI8uhLIil9kyfEgngj04eUOmkBJ4XYJ_-j38hMMUgiCD/exec";
-        
-
-        function showTab(id) {
-            document
-                .querySelectorAll(".tabcontent")
-                .forEach(tab => tab.classList.remove("active"));
-
-            document.getElementById(id).classList.add("active");
-        }
-
-        document.getElementById("formBonificacion").addEventListener("submit", async function (e) {
-            e.preventDefault();
-
-            const data = {
-                action: "guardar",
-
-                E: document.getElementById("tramite").value,
-                F: document.getElementById("concepto").value,
-                H: document.getElementById("observaciones").value,
-                I: document.getElementById("estado").value,
-                J: document.getElementById("fechaJ").value,
-                K: document.getElementById("fechaK").value,
-
-                O: document.getElementById("cedulaTitular").value,
-                P: document.getElementById("beneficiario").value,
-
-                Y: document.getElementById("nombreBeneficiario").value,
-                Z: document.getElementById("cedulaBeneficiario").value,
-
-                AA: document.getElementById("sexo").value,
-                AC: document.getElementById("fechaNacimiento").value,
-                AE: document.getElementById("tipoDocumento").value,
-
-                AH: document.getElementById("documentoSoporte").value,
-                AI: document.getElementById("expedidoPor").value,
-                AJ: document.getElementById("ciudadSede").value,
-                AK: document.getElementById("fechaDocumento").value,
-                AL: document.getElementById("actoAdministrativo").value,
-
-                AT: document.getElementById("proyectoResolucion").value,
-            };
-
-            // Aquí podrías agregar el código para enviar `data` al servidor o API
-            // Por ejemplo, usando fetch:
-            try {
-                const response = await fetch(WEBAPP_URL, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(data),
-                });
-
-                const result = await response.json();
-
-                alert(result.message || "Registro guardado correctamente.");
-            } catch (error) {
-                alert("Error al guardar: " + error.message);
-            }
-        });
-
-        async function buscarRegistro() {
-            const cedula = document.getElementById("cedulaBuscar").value.trim();
-
-            if (!cedula) {
-                alert("Ingrese una cédula");
-                return;
-            }
-
-            try {
-                const response = await fetch(
-                    WEBAPP_URL + "?action=buscar&cedula=" + encodeURIComponent(cedula)
-                );
-
-                const result = await response.json();
-
-                let texto = "";
-
-                if (result.success) {
-                    texto += "RESULTADOS ENCONTRADOS: " + result.total + "\n\n";
-
-                    result.registros.forEach((item, index) => {
-                        texto += "RESULTADO #" + (index + 1) + "\n";
-                        texto += "FILA: " + item.fila + "\n";
-                        texto += "CEDULA TITULAR: " + item.cedula + "\n";
-                        texto += "TIPO BENEFICIARIO: " + item.beneficiario + "\n";
-                        texto += "NOMBRE BENEFICIARIO: " + item.nombreBeneficiario + "\n";
-                        texto += "DOCUMENTO BENEFICIARIO: " + item.documentoBeneficiario + "\n";
-                        texto += "SEXO: " + item.sexo + "\n";
-                        texto += "ESTADO: " + item.estado + "\n";
-                        texto += "---------------------------------\n";
-                    });
-                } else {
-                    texto = result.error || "No se encontraron registros";
-                }
-
-                document.getElementById("textoConsulta").value = texto;
-            } catch (error) {
-                alert("Error de conexión:\n" + error.message);
-            }
-        }
-    </script>
+const res = await fetch(WEBAPP_URL+"?action=buscar&cedula="+cedulaBuscar.value);
+const json = await res.json();
+
+let txt="";
+
+if(json.success){
+json.registros.forEach((r,i)=>{
+txt+=`#${i+1}\nCEDULA:${r.cedula}\nNOMBRE:${r.nombreBeneficiario}\n\n`;
+});
+}else{
+txt="Sin resultados";
+}
+
+textoConsulta.value=txt;
+
+}
+
+</script>
 
 </body>
-
 </html>
