@@ -9,11 +9,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
 <style>
-:root{
---azul1:#13567F;
---azul2:#1A2746;
---azul3:#1B2744;
---verde:#A1F40C;
+:root {
+  --azul1:#13567F;
+  --azul2:#1A2746;
+  --azul3:#1B2744;
+  --verde:#A1F40C;
+  --amarillo:#FFC000;
 }
 
 *{box-sizing:border-box;font-family:Poppins,sans-serif;}
@@ -39,30 +40,22 @@ gap:20px;
 
 .container{width:95%;max-width:1400px;margin:20px auto;}
 
-.card{background:#fff;border-radius:15px;padding:20px;}
-
-.tabs{
-margin-bottom:15px;
+.card{
+background:#fff;
+border-radius:15px;
+padding:20px;
+box-shadow:0 4px 15px rgba(0,0,0,.15);
 }
-
-.tabs button{
-padding:10px 15px;
-border:none;
-border-radius:8px;
-cursor:pointer;
-margin-right:5px;
-background:#ddd;
-font-weight:600;
-}
-
-.tabcontent{display:none;}
-.tabcontent.active{display:block;}
 
 .grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
 gap:15px;
 }
+
+.form-group{display:flex;flex-direction:column;}
+
+label{font-weight:500;margin-bottom:5px;}
 
 input,select,textarea{
 padding:10px;
@@ -88,17 +81,21 @@ cursor:pointer;
 background:var(--verde);
 font-weight:600;
 }
+
+.tabcontent{display:none;}
+.tabcontent.active{display:block;}
 </style>
 </head>
 
 <body>
 
 <div class="header">
-<img class="logo" src="Escudo_Policía_Nacional_de_Colombia.png">
+<img class="logo" src="Escudo_Policía_Nacional_de_Colombia.png" />
 <h1>BONIFICACIÓN FAMILIAR 2026</h1>
 </div>
 
 <div class="container">
+
 <div class="card">
 
 <div class="tabs">
@@ -107,34 +104,71 @@ font-weight:600;
 <button onclick="showTab('consulta')">Consultar</button>
 </div>
 
-<!-- REGISTRO -->
+<!-- ================= REGISTRO ================= -->
 <div id="registro" class="tabcontent active">
 
 <form id="formBonificacion">
 
+<!-- TITULAR -->
+<div class="section">Información del Titular</div>
+
 <div class="grid">
+<div class="form-group">
+<label>Cédula Titular</label>
+<input type="text" id="cedulaTitular" />
+</div>
 
-<input id="cedulaTitular" placeholder="Cédula Titular">
-
+<div class="form-group">
+<label>Tipo Trámite</label>
 <select id="tramite">
 <option>RECONOCER</option>
 <option>DISMINUIR</option>
 </select>
+</div>
 
+<div class="form-group">
+<label>Concepto</label>
 <select id="concepto">
 <option>BONIFICACION PARA LA ASISTENCIA FAMILIAR</option>
 <option>PRIMA DE ORDEN PUBLICO</option>
 </select>
+</div>
 
+<div class="form-group">
+<label>Estado</label>
 <select id="estado">
 <option>OK</option>
 <option>FALTA REGISTRAR</option>
 </select>
+</div>
+</div>
 
-<input type="date" id="fechaJ">
-<input type="date" id="fechaK">
-<input id="observaciones" placeholder="Nro GEPOL">
+<!-- FECHAS -->
+<div class="section">Fechas y Observaciones</div>
 
+<div class="grid">
+<div class="form-group">
+<label>Fecha Fiscal de Reconocimiento</label>
+<input type="date" id="fechaJ" />
+</div>
+
+<div class="form-group">
+<label>Fecha Oficio GEPOL</label>
+<input type="date" id="fechaK" />
+</div>
+
+<div class="form-group">
+<label>Nro. GEPOL</label>
+<input type="text" id="observaciones" />
+</div>
+</div>
+
+<!-- BENEFICIARIO -->
+<div class="section">Información Beneficiario</div>
+
+<div class="grid">
+<div class="form-group">
+<label>Tipo Beneficiario</label>
 <select id="beneficiario">
 <option>HIJO1</option>
 <option>HIJA1</option>
@@ -142,38 +176,81 @@ font-weight:600;
 <option>COMPAÑERA</option>
 <option>CÓNYUGE</option>
 </select>
+</div>
 
-<input id="nombreBeneficiario">
-<input id="cedulaBeneficiario">
+<div class="form-group">
+<label>Nombres y Apellidos</label>
+<input type="text" id="nombreBeneficiario" />
+</div>
 
+<div class="form-group">
+<label>Documento Beneficiario</label>
+<input type="text" id="cedulaBeneficiario" />
+</div>
+
+<div class="form-group">
+<label>Sexo</label>
 <select id="sexo"><option>M</option><option>F</option></select>
-<input type="date" id="fechaNacimiento">
+</div>
 
+<div class="form-group">
+<label>Fecha Nacimiento</label>
+<input type="date" id="fechaNacimiento" />
+</div>
+
+<div class="form-group">
+<label>Tipo Documento</label>
 <select id="tipoDocumento">
-<option>CC</option>
-<option>TI</option>
-<option>RC</option>
-<option>RM</option>
+<option>CC</option><option>TI</option><option>RC</option><option>RM</option>
 </select>
+</div>
+</div>
 
+<!-- SOPORTES -->
+<div class="section">Soportes Documentales</div>
+
+<div class="grid">
+<div class="form-group">
+<label>Documento Soporte</label>
 <select id="documentoSoporte">
 <option>Acta de Conciliación</option>
+<option>Certificado de matrícula</option>
 <option>Registro Civil de Nacimiento</option>
+<option>Registro Civil de Matrimonio</option>
 </select>
+</div>
 
-<input id="expedidoPor">
-<input id="ciudadSede">
-<input type="date" id="fechaDocumento">
-<input id="actoAdministrativo">
+<div class="form-group">
+<label>Expedido por</label>
+<input type="text" id="expedidoPor" />
+</div>
 
+<div class="form-group">
+<label>Ciudad Sede</label>
+<input type="text" id="ciudadSede" />
+</div>
+
+<div class="form-group">
+<label>Fecha Documento</label>
+<input type="date" id="fechaDocumento" />
+</div>
+
+<div class="form-group">
+<label>N° Acto Administrativo</label>
+<input type="text" id="actoAdministrativo" />
+</div>
+
+<div class="form-group">
+<label>Proyecto Resolución</label>
 <select id="proyectoResolucion">
 <option>SI</option>
 <option>NO</option>
 </select>
-
+</div>
 </div>
 
-<button class="btn-save">GUARDAR</button>
+<button type="submit" class="btn-save">💾 Guardar Registro</button>
+
 </form>
 </div>
 
@@ -185,10 +262,10 @@ font-weight:600;
 <!-- CONSULTA -->
 <div id="consulta" class="tabcontent">
 
-<input id="cedulaBuscar" placeholder="Cédula">
+<input id="cedulaBuscar" placeholder="Cédula Titular" />
 <button class="btn-save" type="button" onclick="buscarRegistro()">Buscar</button>
 
-<textarea id="textoConsulta" style="width:100%;height:300px" readonly></textarea>
+<textarea id="textoConsulta" style="width:100%;height:350px" readonly></textarea>
 
 </div>
 
@@ -199,77 +276,75 @@ font-weight:600;
 
 const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbz8DyZGRhugSLe9PwlDS_x9LMvY8jL7lhPc3ZXg9y49R-xnA8vGtIhqzYtXOy6Jv9dM/exec";
 
+/* ================= TAB ================= */
 function showTab(id){
 document.querySelectorAll(".tabcontent").forEach(t=>t.classList.remove("active"));
 document.getElementById(id).classList.add("active");
 }
 
-/* =========================
-   GENERAR TEXTO AP
-========================= */
-function v(id){
-return document.getElementById(id).value || "";
-}
-
+/* ================= TEXTO AP ================= */
 function generarTextoAP(){
 
-const texto =
-`📄 ACTO ADMINISTRATIVO - BONIFICACIÓN FAMILIAR
+let texto = "";
 
-Se procede a ${v("tramite")} el concepto ${v("concepto")} con estado ${v("estado")}.
+texto += "📄 ACTO ADMINISTRATIVO BONIFICACIÓN FAMILIAR\n\n";
 
-Titular: C.C ${v("cedulaTitular")}
+texto += "Trámite: " + document.getElementById("tramite").value + "\n";
+texto += "Concepto: " + document.getElementById("concepto").value + "\n";
+texto += "Estado: " + document.getElementById("estado").value + "\n\n";
 
-Beneficiario: ${v("beneficiario")} - ${v("nombreBeneficiario")} (${v("cedulaBeneficiario")})
+texto += "Titular C.C: " + document.getElementById("cedulaTitular").value + "\n\n";
 
-Fechas:
-- Reconocimiento: ${v("fechaJ")}
-- Oficio GEPOL: ${v("fechaK")}
+texto += "Beneficiario: " + document.getElementById("beneficiario").value + "\n";
+texto += "Nombre: " + document.getElementById("nombreBeneficiario").value + "\n";
+texto += "Documento: " + document.getElementById("cedulaBeneficiario").value + "\n\n";
 
-Soporte: ${v("documentoSoporte")}
-Expedido por: ${v("expedidoPor")} - ${v("ciudadSede")}
-Fecha documento: ${v("fechaDocumento")}
-Acto: ${v("actoAdministrativo")}
+texto += "Fechas:\n";
+texto += "- Reconocimiento: " + document.getElementById("fechaJ").value + "\n";
+texto += "- Oficio GEPOL: " + document.getElementById("fechaK").value + "\n\n";
 
-Documento generado automáticamente.`;
+texto += "Soporte: " + document.getElementById("documentoSoporte").value + "\n";
+texto += "Expedido por: " + document.getElementById("expedidoPor").value + "\n";
+texto += "Ciudad: " + document.getElementById("ciudadSede").value + "\n";
+texto += "Fecha documento: " + document.getElementById("fechaDocumento").value + "\n";
+texto += "Acto: " + document.getElementById("actoAdministrativo").value + "\n\n";
+
+texto += "Documento sujeto a verificación institucional.";
 
 document.getElementById("textoAP").value = texto;
 }
 
-/* AUTO GENERACIÓN */
+/* ================= AUTO UPDATE ================= */
 document.querySelectorAll("input, select").forEach(el=>{
 el.addEventListener("input", generarTextoAP);
 el.addEventListener("change", generarTextoAP);
 });
 
-/* INIT */
-window.addEventListener("load", generarTextoAP);
-
-/* GUARDAR */
+/* ================= GUARDAR ================= */
 document.getElementById("formBonificacion").addEventListener("submit", async (e)=>{
 e.preventDefault();
 
 const params = new URLSearchParams({
 action:"guardar",
-E:v("cedulaTitular"),
-F:v("concepto"),
-H:v("observaciones"),
-I:v("estado"),
-J:v("fechaJ"),
-K:v("fechaK"),
-O:v("cedulaTitular"),
-P:v("beneficiario"),
-Y:v("nombreBeneficiario"),
-Z:v("cedulaBeneficiario"),
-AA:v("sexo"),
-AC:v("fechaNacimiento"),
-AE:v("tipoDocumento"),
-AH:v("documentoSoporte"),
-AI:v("expedidoPor"),
-AJ:v("ciudadSede"),
-AK:v("fechaDocumento"),
-AL:v("actoAdministrativo"),
-AT:v("proyectoResolucion")
+E:tramite.value,
+F:concepto.value,
+H:observaciones.value,
+I:estado.value,
+J:fechaJ.value,
+K:fechaK.value,
+O:cedulaTitular.value,
+P:beneficiario.value,
+Y:nombreBeneficiario.value,
+Z:cedulaBeneficiario.value,
+AA:sexo.value,
+AC:fechaNacimiento.value,
+AE:tipoDocumento.value,
+AH:documentoSoporte.value,
+AI:expedidoPor.value,
+AJ:ciudadSede.value,
+AK:fechaDocumento.value,
+AL:actoAdministrativo.value,
+AT:proyectoResolucion.value
 });
 
 try{
@@ -277,28 +352,35 @@ const res = await fetch(WEBAPP_URL + "?" + params.toString());
 const data = await res.json();
 
 if(data.success){
-alert("Guardado fila: " + data.fila);
+alert("Guardado en fila " + data.fila);
 document.getElementById("textoAP").value = data.textoAP || "";
 }else{
 alert(data.error || "Error");
 }
-
 }catch(err){
-alert("Error conexión: " + err.message);
+alert(err.message);
 }
 });
 
-/* BUSCAR */
+/* ================= BUSCAR ================= */
 async function buscarRegistro(){
 
-const cedula = v("cedulaBuscar");
-if(!cedula){alert("Ingrese cédula");return;}
+const cedula = cedulaBuscar.value.trim();
 
+if(!cedula) return alert("Ingrese cédula");
+
+try{
 const res = await fetch(WEBAPP_URL + "?action=buscar&cedula=" + encodeURIComponent(cedula));
 const data = await res.json();
 
-document.getElementById("textoConsulta").value =
-data.success ? ("FILA: " + data.fila + "\n\n" + data.textoAP) : data.error;
+textoConsulta.value =
+data.success
+? "FILA: " + data.fila + "\n\n" + data.textoAP
+: data.error;
+
+}catch(err){
+alert(err.message);
+}
 }
 
 </script>
