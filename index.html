@@ -9,11 +9,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
 <style>
-:root {
-  --azul1:#13567F;
-  --azul2:#1A2746;
-  --azul3:#1B2744;
-  --verde:#A1F40C;
+:root{
+--azul1:#13567F;
+--azul2:#1A2746;
+--azul3:#1B2744;
+--verde:#A1F40C;
 }
 
 *{box-sizing:border-box;font-family:Poppins,sans-serif;}
@@ -73,6 +73,7 @@ cursor:pointer;
 background:var(--verde);
 font-weight:600;
 }
+
 .tabcontent{display:none;}
 .tabcontent.active{display:block;}
 </style>
@@ -159,7 +160,7 @@ font-weight:600;
 
 <!-- RESOLUCION -->
 <div id="resolucion" class="tabcontent">
-<textarea id="textoAP" style="width:100%;height:300px" readonly></textarea>
+<textarea id="textoAP" style="width:100%;height:350px" readonly></textarea>
 </div>
 
 <!-- CONSULTA -->
@@ -185,7 +186,45 @@ document.getElementById(id).classList.add("active");
 }
 
 /* =========================
-   GUARDAR (AHORA GET)
+   GENERADOR AUTOMÁTICO AP
+========================= */
+function generarTextoAP(){
+
+const v = id => document.getElementById(id).value || "";
+
+const texto =
+`📄 ACTO ADMINISTRATIVO - BONIFICACIÓN FAMILIAR
+
+Se procede a ${v("tramite")} el concepto ${v("concepto")} con estado ${v("estado")}.
+
+Titular: C.C ${v("cedulaTitular")}
+
+Beneficiario: ${v("beneficiario")} - ${v("nombreBeneficiario")} (${v("cedulaBeneficiario")})
+
+Fechas:
+- Reconocimiento: ${v("fechaJ")}
+- Oficio GEPOL: ${v("fechaK")}
+
+Soporte: ${v("documentoSoporte")}
+Expedido por: ${v("expedidoPor")} - ${v("ciudadSede")}
+Fecha documento: ${v("fechaDocumento")}
+Acto: ${v("actoAdministrativo")}
+
+Este documento es de carácter administrativo.`;
+
+document.getElementById("textoAP").value = texto;
+}
+
+/* =========================
+   ACTIVAR AUTO-GENERACIÓN
+========================= */
+document.querySelectorAll("input, select").forEach(el=>{
+el.addEventListener("input", generarTextoAP);
+el.addEventListener("change", generarTextoAP);
+});
+
+/* =========================
+   GUARDAR (GET)
 ========================= */
 document.getElementById("formBonificacion").addEventListener("submit", async (e)=>{
 e.preventDefault();
@@ -230,16 +269,12 @@ alert("Error conexión: " + err.message);
 });
 
 /* =========================
-   BUSCAR (AJUSTADO A GS)
+   BUSCAR
 ========================= */
 async function buscarRegistro(){
 
 const cedula = document.getElementById("cedulaBuscar").value.trim();
-
-if(!cedula){
-alert("Ingrese cédula");
-return;
-}
+if(!cedula){ alert("Ingrese cédula"); return; }
 
 try{
 
@@ -249,8 +284,7 @@ const data = await res.json();
 let txt = "";
 
 if(data.success){
-txt += "FILA: " + data.fila + "\n";
-txt += "TEXTO AP:\n" + data.textoAP;
+txt = "FILA: " + data.fila + "\n\n" + data.textoAP;
 }else{
 txt = data.error;
 }
