@@ -2,113 +2,47 @@
 <html lang="es">
 
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>BONIFICACIÓN FAMILIAR 2026</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bonificación Familiar 2026</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
-:root{
---azul1:#13567F;
---azul2:#1A2746;
---azul3:#1B2744;
---verde:#A1F40C;
-}
+body{font-family:Poppins;background:#0f1c2e;color:#fff;margin:0}
+.header{padding:20px;background:#13567F;display:flex;gap:15px;align-items:center}
+.logo{width:70px}
+.container{padding:20px;max-width:1200px;margin:auto}
+.card{background:#fff;color:#000;padding:20px;border-radius:10px}
 
-*{box-sizing:border-box;font-family:Poppins,sans-serif}
-
-body{
-margin:0;
-background:linear-gradient(rgba(10,20,40,.85),rgba(10,20,40,.9)),
-url('1-fescol-policia-abuso-cilives-1.jpg');
-background-size:cover;
-min-height:100vh;
-}
-
-.header{
-background:linear-gradient(90deg,var(--azul3),var(--azul1));
-padding:20px;
-color:#fff;
-display:flex;
-align-items:center;
-gap:20px;
-}
-
-.logo{width:90px}
-
-.container{
-width:95%;
-max-width:1400px;
-margin:20px auto;
-}
-
-.card{
-background:#fff;
-padding:20px;
-border-radius:15px;
-}
-
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:15px;
-}
-
-.form-group{
-display:flex;
-flex-direction:column;
-}
-
-label{font-weight:500;margin-bottom:5px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
 
 input,select,textarea{
-padding:10px;
-border:1px solid #ccc;
-border-radius:8px;
+padding:10px;border:1px solid #ccc;border-radius:6px;width:100%;
 }
 
-.section{
-background:var(--azul2);
-color:var(--verde);
-padding:10px;
-margin:15px 0;
-border-radius:8px;
-font-weight:600;
-}
+.section{background:#1A2746;color:#A1F40C;padding:10px;margin:15px 0;border-radius:6px}
 
-.btn-save{
-margin-top:20px;
-padding:12px 20px;
-border:none;
-background:var(--verde);
-font-weight:600;
-border-radius:8px;
-cursor:pointer;
-}
+button{padding:10px 15px;border:0;border-radius:6px;background:#A1F40C;font-weight:bold;cursor:pointer}
 
 .tabcontent{display:none}
 .tabcontent.active{display:block}
 </style>
-
 </head>
 
 <body>
 
 <div class="header">
-<img class="logo" src="Escudo_Policía_Nacional_de_Colombia.png">
-<h1>BONIFICACIÓN FAMILIAR 2026</h1>
+<img src="Escudo_Policía_Nacional_de_Colombia.png" class="logo">
+<h2>Bonificación Familiar 2026</h2>
 </div>
 
 <div class="container">
 <div class="card">
 
-<!-- TABS -->
-<div class="tabs">
-<button type="button" onclick="showTab('registro')">Registro</button>
-<button type="button" onclick="showTab('resolucion')">Resolución</button>
-<button type="button" onclick="showTab('consulta')">Consultar</button>
-</div>
+<!-- BOTONES -->
+<button onclick="showTab('registro')">Registro</button>
+<button onclick="showTab('consulta')">Consultar</button>
 
 <!-- REGISTRO -->
 <div id="registro" class="tabcontent active">
@@ -117,63 +51,36 @@ cursor:pointer;
 
 <div class="grid">
 
-<div class="form-group">
-<label>Cédula Titular</label>
-<input id="cedulaTitular" required>
-</div>
+<input id="cedulaTitular" placeholder="Cédula Titular">
 
-<div class="form-group">
-<label>Trámite</label>
 <select id="tramite">
 <option>RECONOCER</option>
 <option>DISMINUIR</option>
 </select>
-</div>
 
-<div class="form-group">
-<label>Concepto</label>
 <select id="concepto">
-<option>BONIFICACION PARA LA ASISTENCIA FAMILIAR</option>
+<option>BONIFICACION FAMILIAR</option>
 </select>
-</div>
 
-<div class="form-group">
-<label>Estado</label>
 <select id="estado">
 <option>OK</option>
 <option>FALTA REGISTRAR</option>
 </select>
-</div>
 
 </div>
 
 <div class="section">Fechas</div>
 
 <div class="grid">
-
-<div class="form-group">
-<label>Fecha J</label>
 <input type="date" id="fechaJ">
-</div>
-
-<div class="form-group">
-<label>Fecha K</label>
 <input type="date" id="fechaK">
-</div>
-
-<div class="form-group">
-<label>Observación</label>
-<input id="observaciones">
-</div>
-
+<input id="observaciones" placeholder="Observaciones">
 </div>
 
 <div class="section">Beneficiario</div>
 
 <div class="grid">
 
-<div class="form-group">
-<label>Beneficiario</label>
 <select id="beneficiario">
 <option>HIJO1</option>
 <option>HIJA1</option>
@@ -181,107 +88,65 @@ cursor:pointer;
 <option>COMPAÑERA</option>
 <option>CÓNYUGE</option>
 </select>
-</div>
 
-<div class="form-group">
-<label>Nombre</label>
-<input id="nombreBeneficiario">
-</div>
+<input id="nombreBeneficiario" placeholder="Nombre">
+<input id="cedulaBeneficiario" placeholder="Cédula">
 
-<div class="form-group">
-<label>Cédula</label>
-<input id="cedulaBeneficiario">
-</div>
-
-<div class="form-group">
-<label>Sexo</label>
 <select id="sexo">
 <option>M</option>
 <option>F</option>
 </select>
-</div>
 
-<div class="form-group">
-<label>Nacimiento</label>
 <input type="date" id="fechaNacimiento">
-</div>
 
-<div class="form-group">
-<label>Tipo Documento</label>
 <select id="tipoDocumento">
 <option>CC</option>
 <option>TI</option>
 <option>RC</option>
 <option>RM</option>
 </select>
-</div>
 
 </div>
 
-<!-- 🔥 SOPORTES AGREGADO -->
 <div class="section">Soportes</div>
 
 <div class="grid">
 
-<div class="form-group">
-<label>Documento Soporte</label>
 <select id="documentoSoporte">
 <option>Acta de Conciliación</option>
-<option>Registro Civil de Nacimiento</option>
-<option>Registro Civil de Matrimonio</option>
+<option>Registro Civil</option>
 <option>Certificado Escolar</option>
 </select>
-</div>
 
-<div class="form-group">
-<label>Expedido por</label>
-<input id="expedidoPor">
-</div>
-
-<div class="form-group">
-<label>Ciudad Sede</label>
-<input id="ciudadSede">
-</div>
-
-<div class="form-group">
-<label>Fecha Documento</label>
+<input id="expedidoPor" placeholder="Expedido por">
+<input id="ciudadSede" placeholder="Ciudad Sede">
 <input type="date" id="fechaDocumento">
-</div>
+<input id="actoAdministrativo" placeholder="N° Acto Administrativo">
 
-<div class="form-group">
-<label>N° Acto Administrativo</label>
-<input id="actoAdministrativo">
-</div>
-
-<div class="form-group">
-<label>Incluido Proyecto Resolución</label>
 <select id="proyectoResolucion">
 <option>SI</option>
 <option>NO</option>
 </select>
-</div>
 
 </div>
 
-<button class="btn-save" type="submit">💾 Guardar</button>
+<br>
+
+<button type="submit">Guardar</button>
 
 </form>
-
 </div>
 
 <!-- CONSULTA -->
 <div id="consulta" class="tabcontent">
 
 <input id="cedulaBuscar" placeholder="Cédula">
-<button class="btn-save" onclick="buscarRegistro()">Buscar</button>
+<button onclick="buscarRegistro()">Buscar</button>
+
+<br><br>
 
 <textarea id="textoConsulta" style="width:100%;height:300px"></textarea>
 
-</div>
-
-<!-- RESOLUCIÓN -->
-<div id="resolucion" class="tabcontent">
-<textarea id="textoAP" style="width:100%;height:300px" readonly></textarea>
 </div>
 
 </div>
@@ -289,38 +154,36 @@ cursor:pointer;
 
 <script>
 
-const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzJmUhVnyVREj47Nf4rqb5RfodyBVrTCTKS33Bp8Sv3ulBd8GvzzNQzSKI5TUYJ2z8D/exec";
+const WEBAPP_URL =
+"https://script.google.com/macros/s/AKfycbz8DyZGRhugSLe9PwlDS_x9LMvY8jL7lhPc3ZXg9y49R-xnA8vGtIhqzYtXOy6Jv9dM/exec";
 
 function showTab(id){
 document.querySelectorAll(".tabcontent").forEach(t=>t.classList.remove("active"));
 document.getElementById(id).classList.add("active");
 }
 
+// ======================================================
+// 💾 GUARDAR (VERSIÓN ESTABLE GET)
+// ======================================================
 document.getElementById("formBonificacion").addEventListener("submit", async (e)=>{
 
 e.preventDefault();
 
 const data = {
 action:"guardar",
-
-E:tramite.value,
+E:cedulaTitular.value,
 F:concepto.value,
 H:observaciones.value,
 I:estado.value,
 J:fechaJ.value,
 K:fechaK.value,
-
 O:cedulaTitular.value,
 P:beneficiario.value,
-
 Y:nombreBeneficiario.value,
 Z:cedulaBeneficiario.value,
-
 AA:sexo.value,
 AC:fechaNacimiento.value,
 AE:tipoDocumento.value,
-
-// 🔥 SOPORTES
 AH:documentoSoporte.value,
 AI:expedidoPor.value,
 AJ:ciudadSede.value,
@@ -329,45 +192,59 @@ AL:actoAdministrativo.value,
 AT:proyectoResolucion.value
 };
 
+// 🔥 ENVIAR POR GET (SIN POST)
+const url = WEBAPP_URL + "?" + new URLSearchParams(data);
+
 try{
 
-const res = await fetch(WEBAPP_URL,{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify(data)
-});
-
+const res = await fetch(url);
 const json = await res.json();
 
 if(json.success){
-alert("Guardado en fila: "+json.fila);
-textoAP.value = json.textoAP || "";
+alert("Guardado en fila: " + json.fila);
 }else{
 alert(json.error || "Error al guardar");
 }
 
 }catch(err){
-alert("Error conexión: "+err.message);
+alert("Error conexión: " + err.message);
 }
 
 });
 
+// ======================================================
+// 🔍 BUSCAR + AUTOLLENADO
+// ======================================================
 async function buscarRegistro(){
 
-const res = await fetch(WEBAPP_URL+"?action=buscar&cedula="+cedulaBuscar.value);
+const cedula = cedulaBuscar.value.trim();
+
+const url = WEBAPP_URL + "?action=buscar&cedula=" + cedula;
+
+const res = await fetch(url);
 const json = await res.json();
 
-let txt="";
-
-if(json.success){
-json.registros.forEach((r,i)=>{
-txt+=`#${i+1}\nCEDULA:${r.cedula}\nNOMBRE:${r.nombreBeneficiario}\n\n`;
-});
-}else{
-txt="Sin resultados";
+if(!json.success || json.registros.length === 0){
+textoConsulta.value = "No encontrado";
+return;
 }
 
-textoConsulta.value=txt;
+const r = json.registros[0];
+
+// 🔥 AUTOLLENADO
+cedulaTitular.value = r.cedula || "";
+beneficiario.value = r.beneficiario || "";
+nombreBeneficiario.value = r.nombreBeneficiario || "";
+cedulaBeneficiario.value = r.documentoBeneficiario || "";
+sexo.value = r.sexo || "";
+estado.value = r.estado || "";
+observaciones.value = r.observaciones || "";
+fechaJ.value = r.fechaJ || "";
+fechaK.value = r.fechaK || "";
+
+textoConsulta.value = JSON.stringify(json.registros, null, 2);
+
+alert("Datos cargados");
 
 }
 
