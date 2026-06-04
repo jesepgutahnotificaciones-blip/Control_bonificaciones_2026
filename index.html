@@ -329,30 +329,32 @@
 
                 <div class="grid">
 
-                    <div class="form-group">
-                        <label>Cédula Titular</label>
-                        <input type="text" id="cedulaBuscar" inputmode="numeric" />
-                    </div>
-
+                <div class="form-group">
+                    <label>Cédula Titular</label>
+                    <input type="text" id="cedulaBuscar" inputmode="numeric" />
                 </div>
 
-                <button type="button" class="btn-save" onclick="buscarRegistro()">🔍 Buscar</button>
-
-                <br /><br />
-
-                <label>Resultados</label>
-
-                <textarea id="textoConsulta" style="width:100%;height:350px" readonly></textarea>
+                <div class="form-group">
+                    <label>Nuevo Estado</label>
+                    <select id="nuevoEstado">
+                        <option value="OK">OK</option>
+                        <option value="FALTA REGISTRAR">FALTA REGISTRAR</option>
+                    </select>
+                </div>
 
             </div>
 
-        </div>
+            <button type="button" class="btn-save" onclick="buscarRegistro()">
+                🔍 Buscar
+            </button>
 
-    </div>
+            <button type="button" class="btn-save" onclick="actualizarEstado()">
+                ✏️ Actualizar Estado
+            </button>
 
     <script>
         const WEBAPP_URL =
-            "https://script.google.com/macros/s/AKfycbx38pSduJwerhimsOR4xucFgEg9_lRZdbOqe7A2SCrHR7crACHnFKaTyWAVWWUJH7fP/exec";
+            "https://script.google.com/macros/s/AKfycbxozlHLdHD9T0ya_sBuO6KVj9ucPC1jijZpWMg8jR3V_SWjCAotpyrGukWj18s2d8Yc/exec";
 
         function showTab(id) {
             document
@@ -552,6 +554,61 @@
         alert(
             "Error conexión: " +
             err.message
+        );
+    }
+}
+
+async function actualizarEstado() {
+
+    const cedula =
+        document.getElementById("cedulaBuscar")
+        .value
+        .trim();
+
+    const estado =
+        document.getElementById("nuevoEstado")
+        .value;
+
+    if (!cedula) {
+
+        alert("Ingrese la cédula titular");
+        return;
+    }
+
+    try {
+
+        const res = await fetch(
+            WEBAPP_URL +
+            "?action=actualizarEstado" +
+            "&cedula=" +
+            encodeURIComponent(cedula) +
+            "&estado=" +
+            encodeURIComponent(estado)
+        );
+
+        const data = await res.json();
+
+        if (data.success) {
+
+            alert(
+                "Estado actualizado correctamente"
+            );
+
+            buscarRegistro();
+
+        } else {
+
+            alert(
+                data.error ||
+                "No fue posible actualizar"
+            );
+        }
+
+    } catch (error) {
+
+        alert(
+            "Error: " +
+            error.message
         );
     }
 }
