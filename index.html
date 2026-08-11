@@ -409,7 +409,7 @@
 
     <script>
         const WEBAPP_URL =
-            "https://script.google.com/macros/s/AKfycbw-MDNdINDQa1Xqib18UE_WVRhs8iyVfhPUNS3mw4Nml09KbVp05T8qzTWGuswj2YiV/exec";
+            "https://script.google.com/macros/s/AKfycbwhNeofcef15Q5z5tJEqPNU9_WaP3ol2MCDDzs-Fc6CQP4JBbYa9DQoOftyH8QWQjEK/exec";
 
         function showTab(id) {
             document
@@ -437,7 +437,18 @@
             try {
 
                 const res = await fetch(WEBAPP_URL + "?action=contar");
-                const data = await res.json();
+                const raw = await res.text();
+
+                let data;
+
+                try {
+                    data = JSON.parse(raw);
+                } catch (parseErr) {
+                    console.error("Respuesta no es JSON válido:", raw);
+                    totalEl.textContent = "Error";
+                    proximaEl.textContent = "Ver consola (F12)";
+                    return;
+                }
 
                 if (data.success) {
 
@@ -448,14 +459,16 @@
 
                 } else {
 
-                    totalEl.textContent = "N/D";
-                    proximaEl.textContent = "N/D";
+                    console.error("Backend respondió error:", data.error);
+                    totalEl.textContent = "Error";
+                    proximaEl.textContent = data.error || "Ver consola (F12)";
                 }
 
             } catch (err) {
 
-                totalEl.textContent = "N/D";
-                proximaEl.textContent = "N/D";
+                console.error("Error de red/fetch en actualizarContador:", err);
+                totalEl.textContent = "Sin conexión";
+                proximaEl.textContent = err.message;
             }
         }
 
