@@ -121,6 +121,31 @@
             background: var(--verde);
             font-weight: 600;
         }
+
+        .contador-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .contador-item {
+            background: var(--azul1);
+            color: #fff;
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-weight: 600;
+            flex: 1;
+            min-width: 220px;
+            text-align: center;
+        }
+
+        .contador-item span {
+            display: block;
+            font-size: 22px;
+            color: var(--amarillo);
+            margin-top: 4px;
+        }
     </style>
 </head>
 
@@ -151,6 +176,20 @@
             <!-- PESTAÑA REGISTRO -->
             <div id="registro" class="tabcontent active">
 
+                <div class="contador-box">
+
+                    <div class="contador-item">
+                        Registros actuales en la tabla
+                        <span id="totalRegistros">…</span>
+                    </div>
+
+                    <div class="contador-item">
+                        Este registro se guardará en la fila
+                        <span id="proximaFila">…</span>
+                    </div>
+
+                </div>
+
                 <form id="formBonificacion">
 
                     <div class="grid">
@@ -173,6 +212,7 @@
                             <select id="tramite">
                                 <option>RECONOCER</option>
                                 <option>DISMINUIR</option>
+                                <option>DISOLUCIÓN DE LA SOCIEDAD CONYUGAL</option>
                             </select>
                         </div>
 
@@ -348,7 +388,7 @@
                 🔍 Buscar
             </button>
 
-            <<button type="button" class="btn-save" onclick="actualizarEstado()">
+            <button type="button" class="btn-save" onclick="actualizarEstado()">
     ✏️ Actualizar Estado
 </button>
 
@@ -377,6 +417,46 @@
                 .forEach(tab => tab.classList.remove("active"));
 
             document.getElementById(id).classList.add("active");
+
+            if (id === "registro") {
+                actualizarContador();
+            }
+        }
+
+        // Consulta al backend cuántos registros existen y cuál será el próximo
+        // Requiere que el Apps Script soporte action=contar y responda
+        // { success: true, total: <numero> }
+        async function actualizarContador() {
+
+            const totalEl = document.getElementById("totalRegistros");
+            const proximaEl = document.getElementById("proximaFila");
+
+            totalEl.textContent = "…";
+            proximaEl.textContent = "…";
+
+            try {
+
+                const res = await fetch(WEBAPP_URL + "?action=contar");
+                const data = await res.json();
+
+                if (data.success) {
+
+                    const total = Number(data.total) || 0;
+
+                    totalEl.textContent = total;
+                    proximaEl.textContent = "Fila " + (total + 1);
+
+                } else {
+
+                    totalEl.textContent = "N/D";
+                    proximaEl.textContent = "N/D";
+                }
+
+            } catch (err) {
+
+                totalEl.textContent = "N/D";
+                proximaEl.textContent = "N/D";
+            }
         }
 
         document.getElementById("formBonificacion").addEventListener("submit", async function (e) {
@@ -430,6 +510,9 @@
                 result.textoAP || "";
 
             showTab("resolucion");
+
+            // Refresca el contador para reflejar el nuevo total
+            actualizarContador();
 
         } else {
 
@@ -627,6 +710,9 @@ async function actualizarEstado() {
         );
     }
 }
+
+        // Carga el contador al abrir la página (pestaña Registro está activa por defecto)
+        actualizarContador();
 
     </script>
 
