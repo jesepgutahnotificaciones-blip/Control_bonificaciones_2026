@@ -1,739 +1,406 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>BONIFICACIÓN FAMILIAR 2026</title>
-
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-
-    <style>
-        :root {
-            --azul1: #13567F;
-            --azul2: #1A2746;
-            --azul3: #1B2744;
-            --verde: #A1F40C;
-            --amarillo: #FFC000;
-        }
-
-        * {
-            box-sizing: border-box;
-            font-family: Poppins, sans-serif;
-        }
-
-        body {
-            margin: 0;
-            background:
-                linear-gradient(rgba(10, 20, 40, .85), rgba(10, 20, 40, .9)),
-                url('1-fescol-policia-abuso-cilives-1.jpg');
-            background-size: cover;
-            background-position: center;
-            min-height: 100vh;
-        }
-
-        .header {
-            background: linear-gradient(90deg, var(--azul3), var(--azul1));
-            padding: 20px;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .logo {
-            width: 90px;
-        }
-
-        .container {
-            width: 95%;
-            max-width: 1400px;
-            margin: 20px auto;
-        }
-
-        .card {
-            background: #fff;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, .15);
-        }
-
-        .tabs {
-            margin-bottom: 20px;
-        }
-
-        .tabs button {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-right: 5px;
-            font-weight: 600;
-        }
-
-        .tabcontent {
-            display: none;
-        }
-
-        .tabcontent.active {
-            display: block;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            margin-bottom: 5px;
-            font-weight: 500;
-        }
-
-        input,
-        select,
-        textarea {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-        }
-
-        .section {
-            background: var(--azul2);
-            color: var(--verde);
-            padding: 10px;
-            border-radius: 8px;
-            margin: 15px 0;
-            font-weight: 600;
-        }
-
-        .btn-save {
-            margin-top: 20px;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            background: var(--verde);
-            font-weight: 600;
-        }
-
-        .contador-box {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        .contador-item {
-            background: var(--azul1);
-            color: #fff;
-            padding: 12px 18px;
-            border-radius: 10px;
-            font-weight: 600;
-            flex: 1;
-            min-width: 220px;
-            text-align: center;
-        }
-
-        .contador-item span {
-            display: block;
-            font-size: 22px;
-            color: var(--amarillo);
-            margin-top: 4px;
-        }
-    </style>
-</head>
-
-<body>
-
-    <div class="header">
-
-        <img class="logo" src="Escudo_Policía_Nacional_de_Colombia.png" alt="Logo Policía Nacional de Colombia" />
-
-        <div>
-            <h1>BONIFICACIÓN FAMILIAR 2026 JESEP</h1>
-        </div>
-
-    </div>
-
-    <div class="container">
-
-        <div class="card">
-
-            <div class="tabs">
-
-                <button type="button" onclick="showTab('registro')">Registro</button>
-                <button type="button" onclick="showTab('resolucion')">Resolución</button>
-                <button type="button" onclick="showTab('consulta')">Consultar</button>
-
-            </div>
-
-            <!-- PESTAÑA REGISTRO -->
-            <div id="registro" class="tabcontent active">
-
-                <div class="contador-box">
-
-                    <div class="contador-item">
-                        Registros actuales en la tabla
-                        <span id="totalRegistros">…</span>
-                    </div>
-
-                    <div class="contador-item">
-                        Este registro se guardará en la fila
-                        <span id="proximaFila">…</span>
-                    </div>
-
-                </div>
-
-                <form id="formBonificacion">
-
-                    <div class="grid">
-
-                        <div class="form-group">
-                            <label>Cédula Titular</label>
-                            <input type="text" id="cedulaTitular" inputmode="numeric" required />
-                        </div>
-
-                        <div class="form-group">
-                            <label>Sexo</label>
-                            <select id="sexo">
-                                <option>M</option>
-                                <option>F</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Tipo Trámite</label>
-                            <select id="tramite">
-                                <option>RECONOCER</option>
-                                <option>DISMINUIR</option>
-                                <option>DISOLUCIÓN DE LA SOCIEDAD CONYUGAL</option>
-                                <option>CONTINUIDAD BONIFICACION FAMILIAR</option>
-                                <option>EXTINCION DE LA BONIFICACION PARA LA ASISTENCIA FAMILIAR</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Concepto</label>
-                            <select id="concepto">
-                                <option>BONIFICACION PARA LA ASISTENCIA FAMILIAR</option>
-                                <option>PRIMA DE ORDEN PUBLICO</option>
-                                <option>EXTINCION DE LA BONIFICACION PARA LA ASISTENCIA FAMILIAR</option>
-                                <option>CONTINUIDAD BONIFICACION FAMILIAR</option>
-                                <option>DISOLUCIÓN DE LA SOCIEDAD CONYUGAL</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Estado</label>
-                            <select id="estado">
-                                <option>OK</option>
-                                <option>FALTA REGISTRAR</option>
-                            </select>
-                        </div>
-
-                    </div>
-
-                    <div class="section">
-                        Fechas y Observaciones
-                    </div>
-
-                    <div class="grid">
-
-                        <div class="form-group">
-                            <label>Fecha Fiscal de Reconocimiento</label>
-                            <input type="date" id="fechaJ" />
-                        </div>
-
-                        <div class="form-group">
-                            <label>Fecha Oficio GEPOL</label>
-                            <input type="date" id="fechaK" />
-                        </div>
-
-                        <div class="form-group">
-                            <label>Nro. GEPOL</label>
-                            <input type="text" id="observaciones" />
-                        </div>
-
-                    </div>
-
-                    <div class="section">
-                        Información Beneficiario
-                    </div>
-
-                    <div class="grid">
-
-                        <div class="form-group">
-                            <label>Tipo Beneficiario</label>
-                            <select id="beneficiario">
-                                <option>HIJO1</option>
-                                <option>HIJA1</option>
-                                <option>COMPAÑERO</option>
-                                <option>COMPAÑERA</option>
-                                <option>CÓNYUGE</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Nombres y Apellidos</label>
-                            <input type="text" id="nombreBeneficiario" />
-                        </div>
-
-                        <div class="form-group">
-                            <label>Número Documento Beneficiario</label>
-                            <input type="text" id="cedulaBeneficiario" inputmode="numeric" />
-                        </div>
-
-                        <div class="form-group">
-                            <label>Fecha Nacimiento</label>
-                            <input type="date" id="fechaNacimiento" />
-                        </div>
-
-                        <div class="form-group">
-                            <label>Tipo Documento</label>
-                            <select id="tipoDocumento">
-                                <option>CC</option>
-                                <option>TI</option>
-                                <option>RC</option>
-                                <option>RM</option>
-                            </select>
-                        </div>
-
-                    </div>
-
-                    <div class="section">
-                        Soportes
-                    </div>
-
-                    <div class="grid">
-
-                        <div class="form-group">
-                            <label>Documento Soporte</label>
-                            <select id="documentoSoporte">
-                                <option>Acta de Conciliación</option>
-                                <option>Certificado de matrícula de la institución educativa</option>
-                                <option>Registro Civil de Nacimiento</option>
-                                <option>Registro Civil de Matrimonio</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Expedido por</label>
-                            <input type="text" id="expedidoPor" />
-                        </div>
-
-                        <div class="form-group">
-                            <label>Ciudad Sede</label>
-                            <input type="text" id="ciudadSede" />
-                        </div>
-
-                        <div class="form-group">
-                            <label>Fecha Documento</label>
-                            <input type="date" id="fechaDocumento" />
-                        </div>
-
-                        <div class="form-group">
-                            <label>N° Acto Administrativo</label>
-                            <input type="text" id="actoAdministrativo" />
-                        </div>
-
-                        <div class="form-group">
-                            <label>Incluido Proyecto Resolución</label>
-                            <select id="proyectoResolucion">
-                                <option>SI</option>
-                                <option>NO</option>
-                            </select>
-                        </div>
-
-                    </div>
-
-                    <button type="submit" class="btn-save">💾 Guardar Registro</button>
-
-                </form>
-
-            </div>
-
-            <!-- PESTAÑA RESOLUCIÓN -->
-            <div id="resolucion" class="tabcontent">
-
-                <h3>Texto AP</h3>
-
-                <textarea id="textoAP" style="width:100%;height:300px" readonly></textarea>
-
-            </div>
-
-            <!-- PESTAÑA CONSULTA -->
-            <div id="consulta" class="tabcontent">
-
-                <h3>Consultar Registro</h3>
-
-                <div class="grid">
-
-                <div class="form-group">
-                    <label>Cédula Titular</label>
-                    <input type="text" id="cedulaBuscar" inputmode="numeric" />
-                </div>
-
-                <div class="form-group">
-                    <label>Nuevo Estado</label>
-                    <select id="nuevoEstado">
-                        <option value="OK">OK</option>
-                        <option value="FALTA REGISTRAR">FALTA REGISTRAR</option>
-                    </select>
-                </div>
-
-            </div>
-
-            <button type="button" class="btn-save" onclick="buscarRegistro()">
-                🔍 Buscar
-            </button>
-
-            <button type="button" class="btn-save" onclick="actualizarEstado()">
-    ✏️ Actualizar Estado
-</button>
-
-<br><br>
-
-<label>Resultados</label>
-
-<textarea
-    id="textoConsulta"
-    style="width:100%;height:350px"
-    readonly>
-</textarea>
-
-</div> <!-- consulta -->
-</div> <!-- card -->
-</div> <!-- container -->
-
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Resoluciones - Policía Nacional de Colombia</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome para Iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
-        const WEBAPP_URL =
-            "https://script.google.com/macros/s/AKfycbyTSAbPHhWpIccDZheN2J9a7pSHstHELYve9B4y5WQQKBNFaZUKu3GpeMLqPGpj4cfu/exec";
+        // URL DE TU WEB APP DE GOOGLE APPS SCRIPT ACTUALIZADA
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx1VE9Ewlk3pH99a5RVBJ5KiUWB0cjJ1AEZGgDgpBFt5o-TL5H43xzUP4x1d2CpYZY8/exec";
+    </script>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen pb-12">
 
-        function showTab(id) {
-            document
-                .querySelectorAll(".tabcontent")
-                .forEach(tab => tab.classList.remove("active"));
+    <!-- Header Institucional -->
+    <header class="bg-emerald-900 text-white shadow-md py-4 px-6 mb-8 border-b-4 border-amber-500">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fa-solid fa-shield-halved text-amber-400 text-3xl"></i>
+                <div>
+                    <h1 class="text-lg font-bold tracking-wider">POLICÍA NACIONAL DE COLOMBIA</h1>
+                    <p class="text-xs text-emerald-200">Jefatura Nacional del Servicio de Policía - Sistema de Resoluciones</p>
+                </div>
+            </div>
+            <div class="mt-2 md:mt-0 text-xs bg-emerald-800 px-3 py-1.5 rounded-full border border-emerald-700">
+                <i class="fa-solid fa-folder-open text-amber-400 mr-1"></i> Carpeta Drive: <strong>CREA RESOLUCION DE BONIFICACIONES</strong>
+            </div>
+        </div>
+    </header>
 
-            document.getElementById(id).classList.add("active");
+    <main class="max-w-5xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <!-- Formulario de Ingreso -->
+        <section class="md:col-span-2 bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+            <h2 class="text-md font-bold text-slate-700 mb-4 pb-2 border-b border-slate-100 flex items-center">
+                <i class="fa-solid fa-pen-to-square text-emerald-700 mr-2"></i> Datos del Uniformado y Solicitud
+            </h2>
 
-            if (id === "registro") {
-                actualizarContador();
+            <form id="resolucionForm" class="space-y-4">
+                
+                <!-- Tipo de Acción -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-slate-600 mb-1">Tipo de Acción</label>
+                        <div class="flex space-x-4">
+                            <label class="flex items-center text-sm"><input type="radio" name="tipoAccion" value="RECONOCIMIENTO" checked class="mr-1.5 accent-emerald-800"> Reconocimiento</label>
+                            <label class="flex items-center text-sm"><input type="radio" name="tipoAccion" value="ACTUALIZACION" class="mr-1.5 accent-emerald-800"> Actualización</label>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-slate-600 mb-1">Categoría Resolución</label>
+                        <div class="flex space-x-4">
+                            <label class="flex items-center text-sm"><input type="radio" name="tipoResolucion" value="PP" checked class="mr-1.5 accent-emerald-800"> Patrulleros (PP)</label>
+                            <label class="flex items-center text-sm"><input type="radio" name="tipoResolucion" value="EJECUTIVO" class="mr-1.5 accent-emerald-800"> Nivel Ejecutivo</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Porcentaje a Reconocer -->
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-600 mb-1">Porcentaje de Asistencia Familiar</label>
+                    <div class="flex space-x-6 bg-slate-50 p-2.5 rounded-lg border border-slate-200">
+                        <label class="flex items-center text-sm cursor-pointer"><input type="radio" name="tipoPorcentaje" value="30" checked onchange="toggleCamposPorcentaje()" class="mr-2 accent-emerald-800"> 30% (Compañera / Unión Marital)</label>
+                        <label class="flex items-center text-sm cursor-pointer"><input type="radio" name="tipoPorcentaje" value="3" onchange="toggleCamposPorcentaje()" class="mr-2 accent-emerald-800"> 3% (Hija - Primer hijo)</label>
+                        <label class="flex items-center text-sm cursor-pointer"><input type="radio" name="tipoPorcentaje" value="2" onchange="toggleCamposPorcentaje()" class="mr-2 accent-emerald-800"> 2% (Hijo adicional)</label>
+                    </div>
+                </div>
+
+                <!-- Datos Uniformado -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Grado</label>
+                        <select id="grado" class="w-full text-sm border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
+                            <option value="Patrullero">Patrullero</option>
+                            <option value="Subintendente">Subintendente</option>
+                            <option value="Intendente">Intendente</option>
+                            <option value="Intendente Jefe">Intendente Jefe</option>
+                            <option value="Comisario">Comisario</option>
+                            <option value="Subcomisario">Subcomisario</option>
+                        </select>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre Completo Uniformado</label>
+                        <input type="text" id="nombreUniformado" required placeholder="EJ: FABIAN ANDRES CAMACHO TAVERA" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Cédula Uniformado</label>
+                        <input type="text" id="cedulaUniformado" required placeholder="Ej: 1005148477" class="w-full text-sm border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Fecha del Hecho</label>
+                        <input type="date" id="fechaHecho" required class="w-full text-sm border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
+                    </div>
+                </div>
+
+                <!-- Campos dinámicos según porcentaje -->
+                <div id="seccionConyuge" class="bg-emerald-50/50 p-3 rounded-lg border border-emerald-100 space-y-3">
+                    <p class="text-xs font-bold text-emerald-900 uppercase"><i class="fa-solid fa-heart mr-1"></i> Datos de la Compañera (Unión Marital)</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre Compañera</label>
+                            <input type="text" id="nombreConyuge" placeholder="Nombres y Apellidos" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Cédula Compañera</label>
+                            <input type="text" id="cedulaConyuge" placeholder="Número de cédula" class="w-full text-sm border border-slate-300 rounded-lg p-2 focus:outline-none">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Tipo Documento</label>
+                            <select id="tipoDocumento" class="w-full text-sm border border-slate-300 rounded-lg p-2 bg-white">
+                                <option value="Escritura Pública">Escritura Pública</option>
+                                <option value="Acta de Conciliación">Acta de Conciliación</option>
+                                <option value="Sentencia Judicial">Sentencia Judicial</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Nro. Documento / Acta</label>
+                            <input type="text" id="numeroDocumento" placeholder="Número" class="w-full text-sm border border-slate-300 rounded-lg p-2">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Ente Emisor (Notaría/Despacho)</label>
+                            <input type="text" id="enteEmisor" placeholder="Ej: Notaria Segunda" class="w-full text-sm border border-slate-300 rounded-lg p-2 uppercase">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="seccionHijo" class="bg-amber-50/50 p-3 rounded-lg border border-amber-100 space-y-3 hidden">
+                    <p class="text-xs font-bold text-amber-900 uppercase"><i class="fa-solid fa-child mr-1"></i> Datos del Hijo(a)</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre del Hijo(a)</label>
+                            <input type="text" id="nombreHijo" placeholder="Nombres y Apellidos" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Nro. Registro Civil de Nacimiento</label>
+                            <input type="text" id="registroCivil" placeholder="Número de Serial" class="w-full text-sm border border-slate-300 rounded-lg p-2">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Radicación -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 border-t border-slate-100">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Comunicado Oficial de Radicación</label>
+                        <input type="text" id="comunicadoRadicacion" required placeholder="Ej: GS-2026-001234" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Fecha Radicación</label>
+                        <input type="date" id="fechaRadicacion" required class="w-full text-sm border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
+                    </div>
+                </div>
+
+                <!-- Botón de Envío -->
+                <button type="submit" id="btnProcesar" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white font-semibold py-2.5 px-4 rounded-lg shadow transition duration-200 flex items-center justify-center space-x-2 text-sm">
+                    <i class="fa-solid fa-gears"></i>
+                    <span>Procesar y Registrar en Google Sheets</span>
+                </button>
+            </form>
+        </section>
+
+        <!-- Panel de Resultados y Acumulador RESUELVE -->
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col justify-between">
+            <div>
+                <h2 class="text-md font-bold text-slate-700 mb-3 pb-2 border-b border-slate-100 flex items-center justify-between">
+                    <span><i class="fa-solid fa-list-check text-amber-500 mr-2"></i> Artículos RESUELVE</span>
+                    <span id="contadorArticulos" class="text-xs bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded-full">0</span>
+                </h2>
+
+                <div id="contenedorResultado" class="space-y-3 mb-4 max-h-[350px] overflow-y-auto pr-1">
+                    <p class="text-xs text-slate-400 text-center py-8 italic">No hay registros agregados todavía. Complete el formulario y procese el primer uniformado.</p>
+                </div>
+            </div>
+
+            <!-- Acciones Finales -->
+            <div class="space-y-2 pt-4 border-t border-slate-100">
+                <button onclick="generarDocumentoWord()" id="btnGenerarWord" disabled class="w-full bg-blue-700 hover:bg-blue-800 disabled:bg-slate-300 text-white font-semibold py-2.5 px-4 rounded-lg shadow transition duration-200 flex items-center justify-center space-x-2 text-sm">
+                    <i class="fa-solid fa-file-word"></i>
+                    <span>Generar Proyecto en Word (Con Firmas)</span>
+                </button>
+                <button onclick="reiniciarTodo()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold py-2 px-4 rounded-lg text-xs transition duration-200">
+                    <i class="fa-solid fa-rotate-right mr-1"></i> Limpiar Todo / Nuevo Lote
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Script de Funcionalidad -->
+    <script>
+        let listaResuelveAcumulada = [];
+
+        function toggleCamposPorcentaje() {
+            const porcentaje = document.querySelector('input[name="tipoPorcentaje"]:checked').value;
+            const seccionConyuge = document.getElementById('seccionConyuge');
+            const seccionHijo = document.getElementById('seccionHijo');
+
+            if (porcentaje === "30") {
+                seccionConyuge.classList.remove('hidden');
+                seccionHijo.classList.add('hidden');
+            } else {
+                seccionConyuge.classList.add('hidden');
+                seccionHijo.classList.remove('hidden');
             }
         }
 
-        // Consulta al backend cuántos registros existen y cuál será el próximo
-        // Requiere que el Apps Script soporte action=contar y responda
-        // { success: true, total: <numero> }
-        async function actualizarContador() {
+        document.getElementById('resolucionForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
 
-            const totalEl = document.getElementById("totalRegistros");
-            const proximaEl = document.getElementById("proximaFila");
+            const btn = document.getElementById('btnProcesar');
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Registrando en Google Sheets...`;
 
-            totalEl.textContent = "…";
-            proximaEl.textContent = "…";
+            const porcentaje = document.querySelector('input[name="tipoPorcentaje"]:checked').value;
+            
+            const payload = {
+                tipoAccion: document.querySelector('input[name="tipoAccion"]:checked').value,
+                tipoResolucion: document.querySelector('input[name="tipoResolucion"]:checked').value,
+                tipoPorcentaje: porcentaje,
+                grado: document.getElementById('grado').value,
+                nombreUniformado: document.getElementById('nombreUniformado').value.trim().toUpperCase(),
+                cedulaUniformado: document.getElementById('cedulaUniformado').value.trim(),
+                nombreConyuge: porcentaje === "30" ? document.getElementById('nombreConyuge').value.trim().toUpperCase() : "",
+                cedulaConyuge: porcentaje === "30" ? document.getElementById('cedulaConyuge').value.trim() : "",
+                tipoDocumento: porcentaje === "30" ? document.getElementById('tipoDocumento').value : "",
+                numeroDocumento: porcentaje === "30" ? document.getElementById('numeroDocumento').value.trim() : "",
+                enteEmisor: porcentaje === "30" ? document.getElementById('enteEmisor').value.trim().toUpperCase() : "",
+                nombreHijo: porcentaje !== "30" ? document.getElementById('nombreHijo').value.trim().toUpperCase() : "",
+                registroCivil: porcentaje !== "30" ? document.getElementById('registroCivil').value.trim() : "",
+                fechaHecho: document.getElementById('fechaHecho').value,
+                comunicadoRadicacion: document.getElementById('comunicadoRadicacion').value.trim().toUpperCase(),
+                fechaRadicacion: document.getElementById('fechaRadicacion').value
+            };
 
             try {
+                const respuesta = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
 
-                const res = await fetch(WEBAPP_URL + "?action=contar");
-                const raw = await res.text();
-
-                let data;
-
-                try {
-                    data = JSON.parse(raw);
-                } catch (parseErr) {
-                    console.error("Respuesta no es JSON válido:", raw);
-                    totalEl.textContent = "Error";
-                    proximaEl.textContent = "Ver consola (F12)";
-                    return;
-                }
-
-                if (data.success) {
-
-                    const total = Number(data.total) || 0;
-
-                    totalEl.textContent = total;
-                    proximaEl.textContent = "Fila " + (total + 1);
-
+                const resData = await respuesta.json();
+                
+                if (resData.status === "success") {
+                    // Texto idéntico calculado por el backend (incluyendo la validación de 90 días hábiles)
+                    const textoResuelveGenerado = construirTextoResuelveConDiasHabiles(payload);
+                    listaResuelveAcumulada.push(textoResuelveGenerado);
+                    actualizarVistaAcumulador();
+                    
+                    document.getElementById('nombreUniformado').value = '';
+                    document.getElementById('cedulaUniformado').value = '';
+                    document.getElementById('comunicadoRadicacion').value = '';
+                    alert("¡Registro guardado en Google Sheets y agregado al RESUELVE con éxito!");
                 } else {
-
-                    console.error("Backend respondió error:", data.error);
-                    totalEl.textContent = "Error";
-                    proximaEl.textContent = data.error || "Ver consola (F12)";
+                    alert("Aviso del servidor: " + (resData.message || "No se pudo registrar."));
                 }
-
             } catch (err) {
+                alert("Error de conexión con Google Sheets: " + err);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-gears"></i> Procesar y Registrar en Google Sheets`;
+            }
+        });
 
-                console.error("Error de red/fetch en actualizarContador:", err);
-                totalEl.textContent = "Sin conexión";
-                proximaEl.textContent = err.message;
+        // Función auxiliar exacta para calcular días hábiles en JS para la vista previa
+        function construirTextoResuelveConDiasHabiles(p) {
+            const fHechoTxt = formatearFechaTexto(p.fechaHecho);
+            const fRadicacionTxt = formatearFechaTexto(p.fechaRadicacion);
+            
+            const d1 = new Date(p.fechaHecho + "T00:00:00");
+            const d2 = new Date(p.fechaRadicacion + "T00:00:00");
+            
+            let diasHabiles = 0;
+            let act = new Date(d1.getTime());
+            act.setDate(act.getDate() + 1);
+            
+            while (act <= d2) {
+                const day = act.getDay();
+                // Omitir fines de semana (Sábado y Domingo)
+                if (day !== 0 && day !== 6) {
+                    diasHabiles++;
+                }
+                act.setDate(act.getDate() + 1);
+            }
+
+            const esDentroPlazo = diasHabiles <= 90;
+
+            let textoPlazo = esDentroPlazo 
+                ? `Al haberse presentado dentro del término legal (90) días hábiles, los efectos fiscales se reconocerán a partir de la fecha del hecho que lo motiva, esto es, desde el ${fHechoTxt}.`
+                : `teniendo en cuenta que la solicitud fue presentada por fuera de los (90) días hábiles. Los efectos fiscales se reconocerán a partir de la fecha de su radicación, esto es, desde el ${fRadicacionTxt}, de conformidad con la norma aplicable.`;
+
+            let texto = `${p.grado} ${p.nombreUniformado}, identificado con cédula de ciudadanía nro. ${p.cedulaUniformado}, causa derecho al reconocimiento del `;
+            if (p.tipoPorcentaje === "30") {
+                texto += `30% de la asignación básica correspondiente a su grado, por haber constituido unión marital de hecho con la señora ${p.nombreConyuge}, identificada con cédula de ciudadanía nro. ${p.cedulaConyuge}, conforme al ${p.tipoDocumento} ${p.numeroDocumento} del ${p.enteEmisor} del ${fHechoTxt}. `;
+            } else {
+                const pct = p.tipoPorcentaje === "3" ? "3%" : "2%";
+                texto += `${pct} de la asignación básica correspondiente a su grado, por concepto de su hija (${p.nombreHijo}), conforme al registro civil de nacimiento nro. ${p.registroCivil}, que acredita su nacimiento el ${fHechoTxt}. `;
+            }
+            texto += `La solicitud fue radicada mediante el comunicado oficial ${p.comunicadoRadicacion} del ${fRadicacionTxt}. ${textoPlazo}`;
+            return texto;
+        }
+
+        function formatearFechaTexto(fechaStr) {
+            const meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+            const partes = fechaStr.split("-");
+            if (partes.length !== 3) return fechaStr;
+            return `${parseInt(partes[2], 10)} de ${meses[parseInt(partes[1], 10) - 1]} del ${partes[0]}`;
+        }
+
+        function actualizarVistaAcumulador() {
+            const contenedor = document.getElementById('contenedorResultado');
+            const contador = document.getElementById('contadorArticulos');
+            const btnGenerar = document.getElementById('btnGenerarWord');
+
+            contador.textContent = listaResuelveAcumulada.length;
+            btnGenerar.disabled = listaResuelveAcumulada.length === 0;
+
+            if (listaResuelveAcumulada.length === 0) {
+                contenedor.innerHTML = `<p class="text-xs text-slate-400 text-center py-8 italic">No hay registros agregados todavía.</p>`;
+                return;
+            }
+
+            contenedor.innerHTML = "";
+            listaResuelveAcumulada.forEach((texto, idx) => {
+                const div = document.createElement('div');
+                div.className = "bg-slate-50 border border-slate-200 p-3 rounded-lg text-xs relative group";
+                div.innerHTML = `
+                    <span class="font-bold text-emerald-900 block mb-1">ARTÍCULO ${idx + 1}°.</span>
+                    <p class="text-slate-600 mb-2">${texto}</p>
+                    <div class="flex justify-end space-x-2">
+                        <button onclick="copiarTextoResuelve('${texto.replace(/'/g, "\\'")}')" class="text-slate-500 hover:text-emerald-800 text-[11px] font-semibold"><i class="fa-solid fa-copy mr-1"></i> Copiar</button>
+                        <button onclick="eliminarArticulo(${idx})" class="text-red-500 hover:text-red-700 text-[11px] font-semibold"><i class="fa-solid fa-trash mr-1"></i> Eliminar</button>
+                    </div>
+                `;
+                contenedor.appendChild(div);
+            });
+        }
+
+        function copiarTextoResuelve(texto) {
+            navigator.clipboard.writeText(texto);
+            alert("¡Artículo copiado al portapapeles!");
+        }
+
+        function eliminarArticulo(index) {
+            listaResuelveAcumulada.splice(index, 1);
+            actualizarVistaAcumulador();
+        }
+
+        async function generarDocumentoWord() {
+            if (listaResuelveAcumulada.length === 0) return;
+
+            const btn = document.getElementById('btnGenerarWord');
+            const textoOriginal = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Generando en Drive...`;
+
+            const tipoResolucionSeleccionada = document.querySelector('input[name="tipoResolucion"]:checked').value;
+
+            const payloadGlobal = {
+                accion: "GENERAR_DOCUMENTO_COMPLETO",
+                tipoResolucion: tipoResolucionSeleccionada,
+                numeroResolucion: "0000",
+                fechaResolucion: new Date().toLocaleDateString('es-CO'),
+                listaResuelve: listaResuelveAcumulada
+            };
+
+            try {
+                const respuesta = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payloadGlobal)
+                });
+                
+                const resData = await respuesta.json();
+                
+                if (resData.status === "success" && resData.downloadUrl) {
+                    window.open(resData.downloadUrl, '_blank');
+                } else {
+                    alert("Aviso: " + (resData.message || "No se pudo generar el documento."));
+                }
+            } catch (err) {
+                alert("Error al conectar: " + err);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = textoOriginal;
             }
         }
 
-        document.getElementById("formBonificacion").addEventListener("submit", async function (e) {
-
-    e.preventDefault();
-
-    const params = new URLSearchParams({
-
-        action: "guardar",
-
-        E: document.getElementById("tramite").value,
-        F: document.getElementById("concepto").value,
-        H: document.getElementById("observaciones").value,
-        I: document.getElementById("estado").value,
-        J: document.getElementById("fechaJ").value,
-        K: document.getElementById("fechaK").value,
-
-        O: document.getElementById("cedulaTitular").value,
-        P: document.getElementById("beneficiario").value,
-
-        Y: document.getElementById("nombreBeneficiario").value,
-        Z: document.getElementById("cedulaBeneficiario").value,
-
-        AA: document.getElementById("sexo").value,
-        AC: document.getElementById("fechaNacimiento").value,
-        AE: document.getElementById("tipoDocumento").value,
-
-        AH: document.getElementById("documentoSoporte").value,
-        AI: document.getElementById("expedidoPor").value,
-        AJ: document.getElementById("ciudadSede").value,
-        AK: document.getElementById("fechaDocumento").value,
-        AL: document.getElementById("actoAdministrativo").value,
-
-        AT: document.getElementById("proyectoResolucion").value
-
-    });
-
-    try {
-
-        const response = await fetch(
-            WEBAPP_URL + "?" + params.toString()
-        );
-
-        const result = await response.json();
-
-        if(result.success){
-
-            alert("Registro guardado en fila: " + result.fila);
-
-            document.getElementById("textoAP").value =
-                result.textoAP || "";
-
-            showTab("resolucion");
-
-            // Refresca el contador para reflejar el nuevo total
-            actualizarContador();
-
-        } else {
-
-            alert(result.error || "Error al guardar");
+        function reiniciarTodo() {
+            if (confirm("¿Desea limpiar todos los artículos acumulados y reiniciar el formulario?")) {
+                listaResuelveAcumulada = [];
+                actualizarVistaAcumulador();
+                document.getElementById('resolucionForm').reset();
+                toggleCamposPorcentaje();
+            }
         }
-
-    } catch (error) {
-
-        alert("Error al guardar: " + error.message);
-    }
-});
-
-        async function buscarRegistro() {
-
-    const cedula =
-        document.getElementById("cedulaBuscar")
-        .value
-        .trim();
-
-    if (!cedula) {
-
-        alert("Ingrese cédula");
-        return;
-
-    }
-
-    try {
-
-        const res = await fetch(
-            WEBAPP_URL +
-            "?action=buscar&cedula=" +
-            encodeURIComponent(cedula)
-        );
-
-        const data = await res.json();
-
-        let txt = "";
-
-        if (data.success) {
-
-            txt +=
-                "TOTAL REGISTROS ENCONTRADOS: " +
-                data.total +
-                "\n\n";
-
-            data.registros.forEach((item, index) => {
-
-                txt +=
-                    "══════════════════════════════════════\n";
-
-                txt +=
-                    "REGISTRO #" +
-                    (index + 1) +
-                    "\n";
-
-                txt +=
-                    "══════════════════════════════════════\n";
-
-                txt +=
-                    "FILA: " +
-                    item.fila +
-                    "\n";
-
-                txt +=
-                    "FECHA GEPOL: " +
-                    item.fechaGepol +
-                    "\n";
-
-                txt +=
-                    "CÉDULA TITULAR: " +
-                    item.cedulaTitular +
-                    "\n";
-
-                txt +=
-                    "TIPO TRÁMITE: " +
-                    item.tramite +
-                    "\n";
-
-                txt +=
-                    "CONCEPTO: " +
-                    item.concepto +
-                    "\n";
-
-                txt +=
-                    "ESTADO: " +
-                    item.estado +
-                    "\n";
-
-                txt +=
-                    "BENEFICIARIO: " +
-                    item.beneficiario +
-                    "\n";
-
-                txt +=
-                    "NOMBRE BENEFICIARIO: " +
-                    item.nombreBeneficiario +
-                    "\n";
-
-                txt +=
-                    "DOCUMENTO BENEFICIARIO: " +
-                    item.documentoBeneficiario +
-                    "\n";
-
-                txt +=
-                    "TIPO DOCUMENTO: " +
-                    item.tipoDocumento +
-                    "\n";
-
-                txt +=
-                    "DOCUMENTO SOPORTE: " +
-                    item.documentoSoporte +
-                    "\n\n";
-
-                txt +=
-                    "TEXTO AP:\n";
-
-                txt +=
-                    (item.textoAP || "Sin información");
-
-                txt +=
-                    "\n\n";
-            });
-
-        } else {
-
-            txt =
-                data.error ||
-                "No se encontraron registros";
-        }
-
-        document.getElementById(
-            "textoConsulta"
-        ).value = txt;
-
-    } catch (err) {
-
-        alert(
-            "Error conexión: " +
-            err.message
-        );
-    }
-}
-
-async function actualizarEstado() {
-
-    const cedula =
-        document.getElementById("cedulaBuscar")
-        .value
-        .trim();
-
-    const estado =
-        document.getElementById("nuevoEstado")
-        .value;
-
-    if (!cedula) {
-
-        alert("Ingrese la cédula titular");
-        return;
-    }
-
-    try {
-
-        const res = await fetch(
-            WEBAPP_URL +
-            "?action=actualizarEstado" +
-            "&cedula=" +
-            encodeURIComponent(cedula) +
-            "&estado=" +
-            encodeURIComponent(estado)
-        );
-
-        const data = await res.json();
-
-        if (data.success) {
-
-            alert(
-                "Estado actualizado correctamente"
-            );
-
-            buscarRegistro();
-
-        } else {
-
-            alert(
-                data.error ||
-                "No fue posible actualizar"
-            );
-        }
-
-    } catch (error) {
-
-        alert(
-            "Error: " +
-            error.message
-        );
-    }
-}
-
-        // Carga el contador al abrir la página (pestaña Registro está activa por defecto)
-        actualizarContador();
-
     </script>
-
 </body>
-
 </html>
