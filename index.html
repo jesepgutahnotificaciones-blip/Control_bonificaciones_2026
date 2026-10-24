@@ -11,6 +11,7 @@
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzU-3l-Ia2T84YJ_ke8TxdP7NjCpsuycZUAsVE5b7Ha7eFp_KfmO-iJNJWjGYVPJaZs/exec";
     </script>
+
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans min-h-screen pb-12">
 
@@ -228,12 +229,20 @@
 
     </main>
 
-    <!-- Script de Control -->
+    <!-- Script de Control y Conversión -->
     <script>
         let listaResuelveAcumulada = [];
 
+        // Ejecutar al cargar la página para establecer el estado inicial
+        document.addEventListener("DOMContentLoaded", function() {
+            toggleTipoAccion();
+        });
+
         function toggleTipoAccion() {
-            const tipoAccion = document.querySelector('input[name="tipoAccion"]:checked').value;
+            const tipoAccionEl = document.querySelector('input[name="tipoAccion"]:checked');
+            if (!tipoAccionEl) return;
+            
+            const tipoAccion = tipoAccionEl.value;
             const bloquePorcentaje = document.getElementById('bloquePorcentaje');
             const bloqueCategoria = document.getElementById('bloqueCategoria');
             const seccionExtincion = document.getElementById('seccionExtincion');
@@ -255,10 +264,13 @@
         }
 
         function toggleCamposPorcentaje() {
-            const tipoAccion = document.querySelector('input[name="tipoAccion"]:checked').value;
-            if (tipoAccion === "EXTINCION") return;
+            const tipoAccionEl = document.querySelector('input[name="tipoAccion"]:checked');
+            if (tipoAccionEl && tipoAccionEl.value === "EXTINCION") return;
 
-            const porcentaje = document.querySelector('input[name="tipoPorcentaje"]:checked').value;
+            const porcentajeEl = document.querySelector('input[name="tipoPorcentaje"]:checked');
+            if (!porcentajeEl) return;
+
+            const porcentaje = porcentajeEl.value;
             const seccionConyuge = document.getElementById('seccionConyuge');
             const seccionHijo = document.getElementById('seccionHijo');
 
@@ -269,6 +281,61 @@
                 seccionConyuge.classList.add('hidden');
                 seccionHijo.classList.remove('hidden');
             }
+        }
+
+        // Conversor automático de números a letras en pesos colombianos
+        function convertirValorALetras(valor) {
+            let limpio = valor.replace(/[^0-9.]/g, '');
+            if (!limpio) {
+                document.getElementById('textoValorDescuento').value = "";
+                return;
+            }
+
+            let partes = limpio.split('.');
+            let entero = parseInt(partes[0], 10) || 0;
+            let centavos = partes[1] ? partes[1].padEnd(2, '0').substring(0, 2) : '00';
+
+            let enLetras = numeroALetras(entero).toUpperCase();
+            let resultadoFinal = `${enLetras} PESOS M/CTE CON ${centavos}/100 CENTAVOS`;
+            
+            document.getElementById('textoValorDescuento').value = resultadoFinal;
+        }
+
+        function numeroALetras(num) {
+            if (num === 0) return "CERO";
+            const unidades = ["", "UN", "DOS", "TRES", "CUATRO", "CINCO", "SEIS", "SIETE", "OCHO", "NUEVE"];
+            const decenas = ["", "DIEZ", "VEINTE", "TREINTA", "CUARENTA", "CINCUENTA", "SESENTA", "SETENTA", "OCHENTA", "NOVENTA"];
+            const especiales = {11:"ONCE", 12:"DOCE", 13:"TRECE", 14:"CATORCE", 15:"QUINCE", 20:"VEINTE", 21:"VEINTIUNO", 22:"VEINTIDOS", 23:"VEINTITRES", 24:"VEINTICUATRO", 25:"VEINTICINCO", 26:"VEINTISEIS", 27:"VEINTISIETE", 28:"VEINTIOCHO", 29:"VEINTINUEVE"};
+
+            function convertirGrupo(n) {
+                if (n === 0) return "";
+                if (n === 100) return "CIEN";
+                if (n < 10) return unidades[n];
+                if (especiales[n]) return especiales[n];
+                if (n < 100) {
+                    let d = Math.floor(n / 10), u = n % 10;
+                    return decenas[d] + (u > 0 ? " Y " + unidades[u] : "");
+                }
+                let c = Math.floor(n / 100), resto = n % 100;
+                let centenasStr = c === 1 ? "CIENTO" : unidades[c] + "CIENTOS";
+                return centenasStr + (resto > 0 ? " " + convertirGrupo(resto) : "");
+            }
+
+            let res = "";
+            if (num >= 1000000) {
+                let m = Math.floor(num / 1000000);
+                res += (m === 1 ? "UN MILLÓN " : convertirGrupo(m) + " MILLONES ");
+                num %= 1000000;
+            }
+            if (num >= 1000) {
+                let m = Math.floor(num / 1000);
+                res += (m === 1 ? "MIL " : convertirGrupo(m) + " MIL ");
+                num %= 1000;
+            }
+            if (num > 0) {
+                res += convertirGrupo(num);
+            }
+            return res.trim();
         }
 
         document.getElementById('resolucionForm').addEventListener('submit', async function(e) {
@@ -292,11 +359,11 @@
                 comunicadoRadicacion: document.getElementById('comunicadoRadicacion').value.trim().toUpperCase(),
                 // Campos extinción
                 resolucionAnterior: tipoAccion === "EXTINCION" ? document.getElementById('resolucionAnterior').value.trim() : "",
-                fechaResolucionAnterior: tipoAccion === "EXTINCION" ? document.getElementById('fechaResolucionAnterior').value.trim() : "",
+                fechaResolucionAnterior: tipoAccion === "EXTINCION" ? document.getElementById('fechaResolucionAnterior').value : "",
                 nombreConyugeExtincion: tipoAccion === "EXTINCION" ? document.getElementById('nombreConyugeExtincion').value.trim().toUpperCase() : "",
                 cedulaConyugeExtincion: tipoAccion === "EXTINCION" ? document.getElementById('cedulaConyugeExtincion').value.trim() : "",
                 valorDescuento: tipoAccion === "EXTINCION" ? document.getElementById('valorDescuento').value.trim() : "",
-                textoValorDescuento: tipoAccion === "EXTINCION" ? document.getElementById('textoValorDescuento').value.trim().toUpperCase() : "",
+                textoValorDescuento: tipoAccion === "EXTINCION" ? document.getElementById('textoValorDescuento').value.trim() : "",
                 // Campos regulares
                 nombreConyuge: tipoAccion !== "EXTINCION" && document.querySelector('input[name="tipoPorcentaje"]:checked').value === "30" ? document.getElementById('nombreConyuge').value.trim().toUpperCase() : "",
                 cedulaConyuge: tipoAccion !== "EXTINCION" && document.querySelector('input[name="tipoPorcentaje"]:checked').value === "30" ? document.getElementById('cedulaConyuge').value.trim() : "",
@@ -341,7 +408,8 @@
             const fRadicacionTxt = formatearFechaTexto(p.fechaRadicacion);
 
             if (p.tipoAccion === "EXTINCION") {
-                return `Dejar sin efectos la resolución nro. ${p.resolucionAnterior} del ${p.fechaResolucionAnterior}, y ordenar la extinción, actualización y descuento de la Bonificación para la Asistencia Familiar reconocida al señor ${p.grado} ${p.nombreUniformado}, identificado con cédula de ciudadanía nro. ${p.cedulaUniformado}, en lo correspondiente al porcentaje otorgado por razón de su ex compañera permanente, la señora ${p.nombreConyugeExtincion}, identificada con cédula nro. ${p.cedulaConyugeExtincion}, con efectos a partir del ${fHechoTxt}. En virtud de lo anterior, disponer el descuento de ${p.valorDescuento} (${p.textoValorDescuento}) valores reconocidos sin causar derecho a partir del ${fHechoTxt} al ${fRadicacionTxt}.`;
+                const fResAntTxt = formatearFechaTexto(p.fechaResolucionAnterior);
+                return `Dejar sin efectos la resolución nro. ${p.resolucionAnterior} del ${fResAntTxt}, y ordenar la extinción, actualización y descuento de la Bonificación para la Asistencia Familiar reconocida al señor ${p.grado} ${p.nombreUniformado}, identificado con cédula de ciudadanía nro. ${p.cedulaUniformado}, en lo correspondiente al porcentaje otorgado por razón de su ex compañera permanente, la señora ${p.nombreConyugeExtincion}, identificada con cédula nro. ${p.cedulaConyugeExtincion}, con efectos a partir del ${fHechoTxt}. En virtud de lo anterior, disponer el descuento de $ ${p.valorDescuento} (${p.textoValorDescuento}) valores reconocidos sin causar derecho a partir del ${fHechoTxt} al ${fRadicacionTxt}.`;
             } else {
                 const d1 = new Date(p.fechaHecho + "T00:00:00");
                 const d2 = new Date(p.fechaRadicacion + "T00:00:00");
@@ -369,9 +437,9 @@
         }
 
         function formatearFechaTexto(fechaStr) {
+            if (!fechaStr || !fechaStr.includes("-")) return fechaStr || "";
             const meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
             const partes = fechaStr.split("-");
-            if (partes.length !== 3) return fechaStr;
             return `${parseInt(partes[2], 10)} de ${meses[parseInt(partes[1], 10) - 1]} del ${partes[0]}`;
         }
 
@@ -423,7 +491,7 @@
             btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Generando...`;
 
             const tipoAccionSel = document.querySelector('input[name="tipoAccion"]:checked').value;
-            const tipoResSel = document.querySelector('input[name="tipoResolucion"]:checked').value;
+            const tipoResSel = document.querySelector('input[name="tipoResolucion"]:checked') ? document.querySelector('input[name="tipoResolucion"]:checked').value : "PP";
 
             const payloadGlobal = {
                 accion: "GENERAR_DOCUMENTO_COMPLETO",
