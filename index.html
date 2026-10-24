@@ -94,7 +94,7 @@
                         <input type="text" id="cedulaUniformado" required placeholder="Ej: 1105693437" class="w-full text-sm border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1" id="lblFechaHecho">Fecha del Hecho</label>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1" id="lblFechaHecho">Fecha del Hecho (Disolución)</label>
                         <input type="date" id="fechaHecho" required class="w-full text-sm border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
                     </div>
                 </div>
@@ -364,7 +364,6 @@
                 fechaHecho: document.getElementById('fechaHecho').value,
                 fechaRadicacion: document.getElementById('fechaRadicacion').value,
                 comunicadoRadicacion: document.getElementById('comunicadoRadicacion').value.trim().toUpperCase(),
-                // Campos extinción
                 resolucionAnterior: tipoAccion === "EXTINCION" ? document.getElementById('resolucionAnterior').value.trim() : "",
                 fechaResolucionAnterior: tipoAccion === "EXTINCION" ? document.getElementById('fechaResolucionAnterior').value : "",
                 nombreConyugeExtincion: tipoAccion === "EXTINCION" ? document.getElementById('nombreConyugeExtincion').value.trim().toUpperCase() : "",
@@ -373,7 +372,6 @@
                 numeroActaSoporte: tipoAccion === "EXTINCION" ? document.getElementById('numeroActaSoporte').value.trim() : "",
                 valorDescuento: tipoAccion === "EXTINCION" ? document.getElementById('valorDescuento').value.trim() : "",
                 textoValorDescuento: tipoAccion === "EXTINCION" ? document.getElementById('textoValorDescuento').value.trim() : "",
-                // Campos regulares
                 nombreConyuge: tipoAccion !== "EXTINCION" && document.querySelector('input[name="tipoPorcentaje"]:checked').value === "30" ? document.getElementById('nombreConyuge').value.trim().toUpperCase() : "",
                 cedulaConyuge: tipoAccion !== "EXTINCION" && document.querySelector('input[name="tipoPorcentaje"]:checked').value === "30" ? document.getElementById('cedulaConyuge').value.trim() : "",
                 tipoDocumento: tipoAccion !== "EXTINCION" ? document.getElementById('tipoDocumento').value : "",
@@ -502,7 +500,7 @@
             const tipoAccionSel = document.querySelector('input[name="tipoAccion"]:checked').value;
             const tipoResSel = document.querySelector('input[name="tipoResolucion"]:checked') ? document.querySelector('input[name="tipoResolucion"]:checked').value : "PP";
 
-            // Se incluye toda la información del formulario activo para evitar N/N en el documento
+            // Se aseguran los datos del uniformado (nombre y cédula) en el paquete global
             const payloadGlobal = {
                 accion: "GENERAR_DOCUMENTO_COMPLETO",
                 tipoAccion: tipoAccionSel,
