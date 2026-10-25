@@ -9,8 +9,7 @@
     <!-- FontAwesome para Iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
-        // URL de despliegue actualizada
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxuowNEuGvhksDA99VMPaPcgXA3IpMU_jtnHNrvRb-9KafsJijBg7ygZI5Sg2Uu0x_p/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxBRk_j_IaNBBQJr-sdcFBQrquF-DdAAh8u8tbiEiWAstsNztsh0APhjeEExnEZKw_3/exec";
     </script>
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans min-h-screen pb-12">
@@ -54,8 +53,8 @@
                     <div id="bloqueCategoria">
                         <label class="block text-xs font-semibold uppercase text-slate-600 mb-1">Categoría Resolución</label>
                         <div class="flex space-x-4 pt-1">
-                            <label class="flex items-center text-sm cursor-pointer"><input type="radio" name="tipoResolucion" value="PP" checked class="mr-1.5 accent-emerald-800"> Patrulleros (PP)</label>
-                            <label class="flex items-center text-sm cursor-pointer"><input type="radio" name="tipoResolucion" value="EJECUTIVO" class="mr-1.5 accent-emerald-800"> Nivel Ejecutivo</label>
+                            <label class="flex items-center text-sm cursor-pointer"><input type="radio" name="tipoResolucion" value="PP" checked onchange="toggleCategoriaResolucion()" class="mr-1.5 accent-emerald-800"> Patrulleros (PP)</label>
+                            <label class="flex items-center text-sm cursor-pointer"><input type="radio" name="tipoResolucion" value="EJECUTIVO" onchange="toggleCategoriaResolucion()" class="mr-1.5 accent-emerald-800"> Nivel Ejecutivo</label>
                         </div>
                     </div>
                 </div>
@@ -74,8 +73,8 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 mb-1">Grado</label>
-                        <select id="grado" class="w-full text-sm border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
-                            <option value="Patrullero">Patrullero</option>
+                        <select id="grado" class="w-full text-sm border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none bg-slate-100" disabled>
+                            <option value="Patrullero de Policía">Patrullero de Policía</option>
                             <option value="Subintendente">Subintendente</option>
                             <option value="Intendente">Intendente</option>
                             <option value="Intendente Jefe">Intendente Jefe</option>
@@ -94,8 +93,9 @@
                         <label class="block text-xs font-semibold text-slate-600 mb-1">Cédula Uniformado</label>
                         <input type="text" id="cedulaUniformado" required placeholder="Ej: 1105693437" class="w-full text-sm border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
                     </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1" id="lblFechaHecho">Fecha del Hecho (Disolución)</label>
+                    <!-- Contenedor dinámico Fecha del Hecho -->
+                    <div id="contenedorFechaHecho">
+                        <label class="block text-xs font-semibold text-slate-600 mb-1" id="lblFechaHecho">Fecha del Hecho (Unión Marital / Nacimiento)</label>
                         <input type="date" id="fechaHecho" required class="w-full text-sm border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
                     </div>
                 </div>
@@ -158,7 +158,30 @@
                             <input type="text" id="cedulaConyuge" placeholder="Número de cédula" class="w-full text-sm border border-slate-300 rounded-lg p-2 focus:outline-none">
                         </div>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+
+                    <!-- PREGUNTA CENTRO DE CONCILIACIÓN POLICÍA NACIONAL -->
+                    <div class="bg-white p-3 rounded-lg border border-emerald-200 space-y-2">
+                        <label class="block text-xs font-semibold text-slate-700">¿Es del Centro de Conciliación de la Policía Nacional?</label>
+                        <div class="flex space-x-6">
+                            <label class="flex items-center text-sm cursor-pointer"><input type="radio" name="esCentroPonal" value="SI" checked onchange="toggleCentroPonal()" class="mr-1.5 accent-emerald-800"> Sí</label>
+                            <label class="flex items-center text-sm cursor-pointer"><input type="radio" name="esCentroPonal" value="NO" onchange="toggleCentroPonal()" class="mr-1.5 accent-emerald-800"> No</label>
+                        </div>
+                    </div>
+
+                    <!-- SI ES SÍ: Muestra Sede y Número de Acta -->
+                    <div id="bloqueSiPonal" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Sede Centro de Conciliación</label>
+                            <input type="text" id="sedePonal" placeholder="EJ: IBAGUÉ (TOLIMA)" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Nro. Acta de Conciliación</label>
+                            <input type="text" id="numeroActaPonal" placeholder="Número de Acta" class="w-full text-sm border border-slate-300 rounded-lg p-2">
+                        </div>
+                    </div>
+
+                    <!-- SI ES NO: Muestra Tipo Doc, Nro. Doc y Ente Emisor -->
+                    <div id="bloqueNoPonal" class="grid grid-cols-1 md:grid-cols-3 gap-3 hidden">
                         <div>
                             <label class="block text-xs font-semibold text-slate-600 mb-1">Tipo Documento</label>
                             <select id="tipoDocumento" class="w-full text-sm border border-slate-300 rounded-lg p-2 bg-white">
@@ -176,6 +199,13 @@
                             <input type="text" id="enteEmisor" placeholder="Ej: Notaria Segunda" class="w-full text-sm border border-slate-300 rounded-lg p-2 uppercase">
                         </div>
                     </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Fecha del Acto Administrativo / Unión Marital</label>
+                            <input type="date" id="fechaActoConyuge" class="w-full text-sm border border-slate-300 rounded-lg p-2 bg-white">
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Campos dinámicos Reconocimiento (Hijos) -->
@@ -189,6 +219,13 @@
                         <div>
                             <label class="block text-xs font-semibold text-slate-600 mb-1">Nro. Registro Civil de Nacimiento</label>
                             <input type="text" id="registroCivil" placeholder="Número de Serial" class="w-full text-sm border border-slate-300 rounded-lg p-2">
+                        </div>
+                    </div>
+                    <!-- NUEVO CAMPO: Fecha de Nacimiento del Hijo(a) -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Fecha de Nacimiento del Hijo(a)</label>
+                            <input type="date" id="fechaNacimientoHijo" class="w-full text-sm border border-slate-300 rounded-lg p-2 bg-white">
                         </div>
                     </div>
                 </div>
@@ -208,7 +245,7 @@
                 <!-- Botón de Envío -->
                 <button type="submit" id="btnProcesar" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white font-semibold py-2.5 px-4 rounded-lg shadow transition duration-200 flex items-center justify-center space-x-2 text-sm">
                     <i class="fa-solid fa-gears"></i>
-                    <span>Procesar y Registrar en Google Sheets</span>
+                    <span>Procesar</span>
                 </button>
             </form>
         </section>
@@ -245,6 +282,8 @@
 
         document.addEventListener("DOMContentLoaded", function() {
             toggleTipoAccion();
+            toggleCentroPonal();
+            toggleCategoriaResolucion();
         });
 
         function toggleTipoAccion() {
@@ -257,6 +296,9 @@
             const seccionExtincion = document.getElementById('seccionExtincion');
             const seccionConyuge = document.getElementById('seccionConyuge');
             const seccionHijo = document.getElementById('seccionHijo');
+            const contenedorFechaHecho = document.getElementById('contenedorFechaHecho');
+            const inputFechaHecho = document.getElementById('fechaHecho');
+            const lblFechaHecho = document.getElementById('lblFechaHecho');
 
             if (tipoAccion === "EXTINCION") {
                 bloquePorcentaje.classList.add('hidden');
@@ -264,11 +306,50 @@
                 seccionExtincion.classList.remove('hidden');
                 seccionConyuge.classList.add('hidden');
                 seccionHijo.classList.add('hidden');
+                
+                contenedorFechaHecho.classList.remove('hidden');
+                inputFechaHecho.required = true;
+                lblFechaHecho.textContent = "Fecha del Hecho (Disolución)";
             } else {
                 bloquePorcentaje.classList.remove('hidden');
                 bloqueCategoria.classList.remove('hidden');
                 seccionExtincion.classList.add('hidden');
                 toggleCamposPorcentaje();
+                
+                contenedorFechaHecho.classList.remove('hidden');
+                inputFechaHecho.required = true;
+                lblFechaHecho.textContent = tipoAccion === "RECONOCIMIENTO" ? "Fecha del Hecho (Unión Marital / Nacimiento)" : "Fecha del Hecho";
+            }
+        }
+
+        function toggleCategoriaResolucion() {
+            const tipoRes = document.querySelector('input[name="tipoResolucion"]:checked').value;
+            const selectGrado = document.getElementById('grado');
+
+            if (tipoRes === "PP") {
+                selectGrado.value = "Patrullero de Policía";
+                selectGrado.disabled = true;
+                selectGrado.classList.add('bg-slate-100');
+            } else {
+                selectGrado.disabled = false;
+                selectGrado.classList.remove('bg-slate-100');
+                if (selectGrado.value === "Patrullero de Policía") {
+                    selectGrado.value = "Subintendente";
+                }
+            }
+        }
+
+        function toggleCentroPonal() {
+            const esPonal = document.querySelector('input[name="esCentroPonal"]:checked').value === "SI";
+            const bloqueSi = document.getElementById('bloqueSiPonal');
+            const bloqueNo = document.getElementById('bloqueNoPonal');
+
+            if (esPonal) {
+                bloqueSi.classList.remove('hidden');
+                bloqueNo.classList.add('hidden');
+            } else {
+                bloqueSi.classList.add('hidden');
+                bloqueNo.classList.remove('hidden');
             }
         }
 
@@ -354,6 +435,7 @@
             btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Procesando...`;
 
             const tipoAccion = document.querySelector('input[name="tipoAccion"]:checked').value;
+            const esCentroPonal = tipoAccion !== "EXTINCION" && document.querySelector('input[name="tipoPorcentaje"]:checked').value === "30" ? document.querySelector('input[name="esCentroPonal"]:checked').value === "SI" : false;
             
             const payload = {
                 tipoAccion: tipoAccion,
@@ -375,11 +457,16 @@
                 textoValorDescuento: tipoAccion === "EXTINCION" ? document.getElementById('textoValorDescuento').value.trim() : "",
                 nombreConyuge: tipoAccion !== "EXTINCION" && document.querySelector('input[name="tipoPorcentaje"]:checked').value === "30" ? document.getElementById('nombreConyuge').value.trim().toUpperCase() : "",
                 cedulaConyuge: tipoAccion !== "EXTINCION" && document.querySelector('input[name="tipoPorcentaje"]:checked').value === "30" ? document.getElementById('cedulaConyuge').value.trim() : "",
-                tipoDocumento: tipoAccion !== "EXTINCION" ? document.getElementById('tipoDocumento').value : "",
-                numeroDocumento: tipoAccion !== "EXTINCION" ? document.getElementById('numeroDocumento').value.trim() : "",
-                enteEmisor: tipoAccion !== "EXTINCION" ? document.getElementById('enteEmisor').value.trim().toUpperCase() : "",
+                esCentroPonal: esCentroPonal,
+                sedePonal: esCentroPonal ? document.getElementById('sedePonal').value.trim().toUpperCase() : "",
+                numeroActaPonal: esCentroPonal ? document.getElementById('numeroActaPonal').value.trim() : "",
+                tipoDocumento: !esCentroPonal && tipoAccion !== "EXTINCION" ? document.getElementById('tipoDocumento').value : "",
+                numeroDocumento: !esCentroPonal && tipoAccion !== "EXTINCION" ? document.getElementById('numeroDocumento').value.trim() : "",
+                enteEmisor: !esCentroPonal && tipoAccion !== "EXTINCION" ? document.getElementById('enteEmisor').value.trim().toUpperCase() : "",
+                fechaActoConyuge: tipoAccion !== "EXTINCION" && document.querySelector('input[name="tipoPorcentaje"]:checked').value === "30" ? document.getElementById('fechaActoConyuge').value : "",
                 nombreHijo: tipoAccion !== "EXTINCION" && document.querySelector('input[name="tipoPorcentaje"]:checked').value !== "30" ? document.getElementById('nombreHijo').value.trim().toUpperCase() : "",
-                registroCivil: tipoAccion !== "EXTINCION" && document.querySelector('input[name="tipoPorcentaje"]:checked').value !== "30" ? document.getElementById('registroCivil').value.trim() : ""
+                registroCivil: tipoAccion !== "EXTINCION" && document.querySelector('input[name="tipoPorcentaje"]:checked').value !== "30" ? document.getElementById('registroCivil').value.trim() : "",
+                fechaNacimientoHijo: tipoAccion !== "EXTINCION" && document.querySelector('input[name="tipoPorcentaje"]:checked').value !== "30" ? document.getElementById('fechaNacimientoHijo').value : ""
             };
 
             try {
@@ -396,10 +483,13 @@
                     listaResuelveAcumulada.push(textoResuelveGenerado);
                     actualizarVistaAcumulador();
                     
-                    document.getElementById('nombreUniformado').value = '';
-                    document.getElementById('cedulaUniformado').value = '';
-                    document.getElementById('comunicadoRadicacion').value = '';
-                    alert("¡Registro guardado exitosamente!");
+                    // Limpiar formulario completo para el siguiente registro y restaurar estado PP por defecto
+                    document.getElementById('resolucionForm').reset();
+                    toggleTipoAccion();
+                    toggleCentroPonal();
+                    toggleCategoriaResolucion();
+                    
+                    alert("¡Registro procesado y guardado con éxito!");
                 } else {
                     alert("Aviso: " + (resData.message || "No se pudo registrar."));
                 }
@@ -407,37 +497,112 @@
                 alert("Error de conexión: " + err);
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = `<i class="fa-solid fa-gears"></i> Procesar y Registrar en Google Sheets`;
+                btn.innerHTML = `<i class="fa-solid fa-gears"></i> Procesar`;
             }
         });
+
+        function contarDiasHabilesColombia(fechaInicio, fechaFin) {
+            if (!fechaInicio || !fechaFin || isNaN(fechaInicio.getTime()) || isNaN(fechaFin.getTime())) return 0;
+            let contador = 0;
+            let fechaActual = new Date(fechaInicio.getTime());
+            fechaActual.setDate(fechaActual.getDate() + 1);
+            while (fechaActual <= fechaFin) {
+                if (esDiaHabilColombia(fechaActual)) contador++;
+                fechaActual.setDate(fechaActual.getDate() + 1);
+            }
+            return contador;
+        }
+
+        function esDiaHabilColombia(fecha) {
+            if (!fecha) return false;
+            const diaSemana = fecha.getDay();
+            if (diaSemana === 0 || diaSemana === 6) return false;
+            return !obtenerFestivosColombia(fecha.getFullYear()).includes(formatearFechaISO(fecha));
+        }
+
+        function obtenerFestivosColombia(year) {
+            let festivos = [`${year}-01-01`, `${year}-05-01`, `${year}-07-20`, `${year}-08-07`, `${year}-12-08`, `${year}-12-25`];
+            const pascua = calcularPascua(year);
+            const leyEmiliani = [
+                moverALunesDate(new Date(year, 0, 6)), moverALunesDate(new Date(year, 2, 19)),
+                moverALunesDate(new Date(year, 5, 29)), moverALunesDate(new Date(year, 7, 15)),
+                moverALunesDate(new Date(year, 9, 12)), moverALunesDate(new Date(year, 10, 1)),
+                moverALunesDate(new Date(year, 10, 11))
+            ];
+            return festivos.concat(leyEmiliani, [
+                formatearFechaISO(sumarDias(pascua, -3)), 
+                formatearFechaISO(sumarDias(pascua, -2)),
+                formatearFechaISO(moverALunesDate(sumarDias(pascua, 39))),
+                formatearFechaISO(moverALunesDate(sumarDias(pascua, 60))),
+                formatearFechaISO(moverALunesDate(sumarDias(pascua, 68)))
+            ]);
+        }
+
+        function moverALunesDate(fecha) {
+            const dia = fecha.getDay();
+            if (dia !== 1) fecha.setDate(fecha.getDate() + ((8 - dia) % 7));
+            return fecha;
+        }
+
+        function sumarDias(fecha, dias) {
+            const res = new Date(fecha.getTime());
+            res.setDate(res.getDate() + dias);
+            return res;
+        }
+
+        function calcularPascua(year) {
+            const a = year % 19, b = Math.floor(year / 100), c = year % 100;
+            const d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25);
+            const g = Math.floor((b - f + 1) / 3), h = (19 * a + b - d - g + 15) % 30;
+            const i = Math.floor(c / 4), k = c % 4, L = (32 + 2 * e + 2 * i - h - k) % 7;
+            const m = Math.floor((a + 11 * h + 22 * L) / 451);
+            const mes = Math.floor((h + L - 7 * m + 114) / 31);
+            const dia = ((h + L - 7 * m + 114) % 31) + 1;
+            return new Date(year, mes - 1, dia);
+        }
+
+        function parseFechaLocal(fechaStr) {
+            if (!fechaStr || !fechaStr.includes("-")) return new Date();
+            const p = fechaStr.split("-");
+            return new Date(parseInt(p[0]), parseInt(p[1]) - 1, parseInt(p[2]));
+        }
+
+        function formatearFechaISO(fecha) {
+            const y = fecha.getFullYear();
+            const m = String(fecha.getMonth() + 1).padStart(2, "0");
+            const d = String(fecha.getDate()).padStart(2, "0");
+            return `${y}-${m}-${d}`;
+        }
 
         function construirTextoResuelve(p) {
             const fHechoTxt = formatearFechaTexto(p.fechaHecho);
             const fRadicacionTxt = formatearFechaTexto(p.fechaRadicacion);
+            const fActoConyugeTxt = formatearFechaTexto(p.fechaActoConyuge);
 
             if (p.tipoAccion === "EXTINCION") {
                 const fResAntTxt = formatearFechaTexto(p.fechaResolucionAnterior);
                 return `Dejar sin efectos la resolución nro. ${p.resolucionAnterior} del ${fResAntTxt}, y ordenar la extinción, actualización y descuento de la Bonificación para la Asistencia Familiar reconocida al señor ${p.grado} ${p.nombreUniformado}, identificado con cédula de ciudadanía nro. ${p.cedulaUniformado}, en lo correspondiente al porcentaje otorgado por razón de su ex compañera permanente, la señora ${p.nombreConyugeExtincion}, identificada con cédula nro. ${p.cedulaConyugeExtincion}, con efectos a partir del ${fHechoTxt}. En virtud de lo anterior, disponer el descuento de $ ${p.valorDescuento} (${p.textoValorDescuento}) valores reconocidos sin causar derecho a partir del ${fHechoTxt} al ${fRadicacionTxt}.`;
             } else {
-                const d1 = new Date(p.fechaHecho + "T00:00:00");
-                const d2 = new Date(p.fechaRadicacion + "T00:00:00");
-                let diasHabiles = 0, act = new Date(d1.getTime());
-                act.setDate(act.getDate() + 1);
-                while (act <= d2) {
-                    if (act.getDay() !== 0 && act.getDay() !== 6) diasHabiles++;
-                    act.setDate(act.getDate() + 1);
-                }
-                const esDentroPlazo = diasHabiles <= 90;
+                const fechaHechoObj = parseFechaLocal(p.fechaHecho);
+                const fechaRadicacionObj = parseFechaLocal(p.fechaRadicacion);
+                const diasHabilesContados = contarDiasHabilesColombia(fechaHechoObj, fechaRadicacionObj);
+                const esDentroPlazo = diasHabilesContados <= 90;
+
                 let textoPlazo = esDentroPlazo 
                     ? `Al haberse presentado dentro del término legal (90) días hábiles, los efectos fiscales se reconocerán a partir de la fecha del hecho que lo motiva, esto es, desde el ${fHechoTxt}.`
                     : `teniendo en cuenta que la solicitud fue presentada por fuera de los (90) días hábiles. Los efectos fiscales se reconocerán a partir de la fecha de su radicación, esto es, desde el ${fRadicacionTxt}, de conformidad con la norma aplicable.`;
 
                 let texto = `${p.grado} ${p.nombreUniformado}, identificado con cédula de ciudadanía nro. ${p.cedulaUniformado}, causa derecho al reconocimiento del `;
                 if (p.tipoPorcentaje === "30") {
-                    texto += `30% de la asignación básica correspondiente a su grado, por haber constituido unión marital de hecho con la señora ${p.nombreConyuge}, identificada con cédula de ciudadanía nro. ${p.cedulaConyuge}, conforme al ${p.tipoDocumento} ${p.numeroDocumento} del ${p.enteEmisor} del ${fHechoTxt}. `;
+                    if (p.esCentroPonal) {
+                        texto += `30% de la asignación básica correspondiente a su grado, por haber constituido unión marital de hecho con la señora ${p.nombreConyuge}, identificada con cédula de ciudadanía nro. ${p.cedulaConyuge}, conforme al acta de conciliación nro. ${p.numeroActaPonal} del ${fActoConyugeTxt}, suscrita ante el Centro de Conciliación de la Policía Nacional sede ${p.sedePonal}. `;
+                    } else {
+                        texto += `30% de la asignación básica correspondiente a su grado, por haber constituido unión marital de hecho con la señora ${p.nombreConyuge}, identificada con cédula de ciudadanía nro. ${p.cedulaConyuge}, conforme al ${p.tipoDocumento} ${p.numeroDocumento} del ${p.enteEmisor} del ${fActoConyugeTxt}. `;
+                    }
                 } else {
                     const pct = p.tipoPorcentaje === "3" ? "3%" : "2%";
-                    texto += `${pct} de la asignación básica correspondiente a su grado, por concepto de su hija (${p.nombreHijo}), conforme al registro civil de nacimiento nro. ${p.registroCivil}, que acredita su nacimiento el ${fHechoTxt}. `;
+                    const fNacHijoTxt = formatearFechaTexto(p.fechaNacimientoHijo);
+                    texto += `${pct} de la asignación básica correspondiente a su grado, por concepto de su hija o hijo (${p.nombreHijo}), conforme al registro civil de nacimiento nro. ${p.registroCivil}, que acredita su nacimiento el ${fNacHijoTxt}. `;
                 }
                 texto += `La solicitud fue radicada mediante el comunicado oficial ${p.comunicadoRadicacion} del ${fRadicacionTxt}. ${textoPlazo}`;
                 return texto;
@@ -501,7 +666,6 @@
             const tipoAccionSel = document.querySelector('input[name="tipoAccion"]:checked').value;
             const tipoResSel = document.querySelector('input[name="tipoResolucion"]:checked') ? document.querySelector('input[name="tipoResolucion"]:checked').value : "PP";
 
-            // Se empaquetan correctamente los datos generales del uniformado
             const payloadGlobal = {
                 accion: "GENERAR_DOCUMENTO_COMPLETO",
                 tipoAccion: tipoAccionSel,
@@ -514,12 +678,12 @@
                 fechaHecho: document.getElementById('fechaHecho').value,
                 fechaRadicacion: document.getElementById('fechaRadicacion').value,
                 comunicadoRadicacion: document.getElementById('comunicadoRadicacion').value.trim().toUpperCase(),
-                resolucionAnterior: document.getElementById('resolucionAnterior').value.trim(),
-                fechaResolucionAnterior: document.getElementById('fechaResolucionAnterior').value,
-                nombreConyugeExtincion: document.getElementById('nombreConyugeExtincion').value.trim().toUpperCase(),
-                cedulaConyugeExtincion: document.getElementById('cedulaConyugeExtincion').value.trim(),
-                lugarSuscripcion: document.getElementById('lugarSuscripcion').value.trim().toUpperCase(),
-                numeroActaSoporte: document.getElementById('numeroActaSoporte').value.trim(),
+                resolucionAnterior: tipoAccionSel === "EXTINCION" ? document.getElementById('resolucionAnterior').value.trim() : "",
+                fechaResolucionAnterior: tipoAccionSel === "EXTINCION" ? document.getElementById('fechaResolucionAnterior').value : "",
+                nombreConyugeExtincion: tipoAccionSel === "EXTINCION" ? document.getElementById('nombreConyugeExtincion').value.trim().toUpperCase() : "",
+                cedulaConyugeExtincion: tipoAccionSel === "EXTINCION" ? document.getElementById('cedulaConyugeExtincion').value.trim() : "",
+                lugarSuscripcion: tipoAccionSel === "EXTINCION" ? document.getElementById('lugarSuscripcion').value.trim().toUpperCase() : "",
+                numeroActaSoporte: tipoAccionSel === "EXTINCION" ? document.getElementById('numeroActaSoporte').value.trim() : "",
                 listaResuelve: listaResuelveAcumulada
             };
 
@@ -551,6 +715,8 @@
                 actualizarVistaAcumulador();
                 document.getElementById('resolucionForm').reset();
                 toggleTipoAccion();
+                toggleCentroPonal();
+                toggleCategoriaResolucion();
             }
         }
     </script>
