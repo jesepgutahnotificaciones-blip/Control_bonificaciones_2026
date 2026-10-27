@@ -41,43 +41,25 @@ function procesarYGuardarRegistro(datos) {
     sheet.appendRow([
       "Fecha Registro", "Acción", "Categoría", "Porcentaje", "Grado", 
       "Nombre Uniformado", "Cédula", "Comunicado Radicación", "Fecha Radicación", 
-      "Fecha Hecho", "Días Hábiles", "¿Dentro Plazo?", "Párrafo RESUELVE"
+      "Fecha Hecho", "Días Hábiles", "¿Dentro Plazo?", "Párrafo RESUELVE", "Sede Centro de Conciliación"
     ]);
-    sheet.getRange(1, 1, 1, 13).setFontWeight("bold").setBackground("#d9ead3");
+    sheet.getRange(1, 1, 1, 14).setFontWeight("bold").setBackground("#d9ead3");
+  } else if (!sheet.getRange(1, 14).getValue()) {
+    // Hoja ya existente: agrega el encabezado de la nueva columna N sin mover los datos previos
+    sheet.getRange(1, 14).setValue("Sede Centro de Conciliación").setFontWeight("bold").setBackground("#d9ead3");
   }
 
-  let textoResuelve = "";
+  let textoResuelve = datos.textoResuelveCustom || "";
   let diasHabilesContados = 0;
   let esDentroPlazo = true;
 
-  if (datos.tipoAccion === "EXTINCION") {
-    const fHechoTxt = formatearFechaTexto(datos.fechaHecho);
-    textoResuelve = `EXTINGUIR. Ordenar la extinción del reconocimiento de la Bonificación para la Asistencia Familiar correspondiente al porcentaje del treinta por ciento (30 %) otorgado por razón de la unión marital de hecho entre la señora ${datos.grado} ${datos.nombreUniformado}, identificada con cédula de ciudadanía nro. ${datos.cedulaUniformado}, y el señor ${datos.nombreConyugeExtincion}, identificado con cédula de ciudadanía nro. ${datos.cedulaConyugeExtincion}, a partir del ${fHechoTxt}.`;
-  } else if (datos.tipoAccion === "CONTINUIDADES") {
-    const fInicioCont = formatearFechaTexto(datos.fechaInicioContinuidad);
-    const fFinCont = formatearFechaTexto(datos.fechaFinContinuidad);
-    const fCertCont = formatearFechaTexto(datos.fechaCertificadoContinuidad);
-    const fRadicacionTxt = formatearFechaTexto(datos.fechaRadicacion);
-    textoResuelve = `${datos.grado} ${datos.nombreUniformado}, identificado con cédula de ciudadanía N°. ${datos.cedulaUniformado}. Continuidad en el reconocimiento de la bonificación desde el ${fInicioCont} hasta el ${fFinCont}, equivalente al ${datos.porcentajeContinuidad} de la asignación básica del grado correspondiente, por su hijo ${datos.nombreHijoContinuidad}, identificado con cédula de ciudadanía N°. ${datos.cedulaHijoContinuidad}.`;
-  } else {
+  // Realizar el cálculo exacto de días hábiles si hay fecha de hecho y de radicación
+  if (datos.fechaHecho && datos.fechaRadicacion && datos.tipoAccion !== "EXTINCION" && datos.tipoAccion !== "CONTINUIDADES") {
     const fechaHecho = parseFechaLocal(datos.fechaHecho);
     const fechaRadicacion = parseFechaLocal(datos.fechaRadicacion);
+    
     diasHabilesContados = contarDiasHabilesColombia(fechaHecho, fechaRadicacion);
     esDentroPlazo = diasHabilesContados <= 90;
-
-    const fHechoTxt = formatearFechaTexto(datos.fechaHecho);
-    const fRadicacionTxt = formatearFechaTexto(datos.fechaRadicacion);
-
-    let textoPlazo = esDentroPlazo 
-      ? `Al haberse presentado dentro del término legal (90) días hábiles, los efectos fiscales se reconocerán a partir de la fecha del hecho que lo motiva, esto es, desde el ${fHechoTxt}.`
-      : `teniendo en cuenta que la solicitud fue presentada por fuera de los (90) días hábiles. Los efectos fiscales se reconocerán a partir de la fecha de su radicación, esto es, desde el ${fRadicacionTxt}, de conformidad con la norma aplicable.`;
-
-    if (datos.tipoPorcentaje === "30") {
-      textoResuelve = `${datos.grado} ${datos.nombreUniformado}, identificado con cédula de ciudadanía nro. ${datos.cedulaUniformado}, causa derecho al reconocimiento del 30% de la asignación básica correspondiente a su grado, por haber constituido unión marital de hecho con la señora ${datos.nombreConyuge}, identificada con cédula de ciudadanía nro. ${datos.cedulaConyuge}. ${textoPlazo}`;
-    } else {
-      const pctTexto = datos.tipoPorcentaje === "3" ? "3%" : "2%";
-      textoResuelve = `${datos.grado} ${datos.nombreUniformado}, identificado con cédula de ciudadanía nro. ${datos.cedulaUniformado}, causa derecho al reconocimiento del ${pctTexto} de la asignación básica correspondiente a su grado, por concepto de su hija (${datos.nombreHijo}). ${textoPlazo}`;
-    }
   }
 
   sheet.appendRow([
@@ -93,17 +75,27 @@ function procesarYGuardarRegistro(datos) {
     datos.fechaHecho || "N/A", 
     diasHabilesContados, 
     esDentroPlazo ? "SÍ" : "NO", 
-    textoResuelve
+    textoResuelve,
+    datos.sedeConciliacion || "N/A"
   ]);
 }
 
+/**
+ * CÁLCULO PRECISO DE DÍAS HÁBILES EN COLOMBIA (EXCLUYE FINES DE SEMANA Y FESTIVOS)
+ */
 function contarDiasHabilesColombia(fechaInicio, fechaFin) {
   if (!fechaInicio || !fechaFin || isNaN(fechaInicio.getTime()) || isNaN(fechaFin.getTime())) return 0;
+  
   let contador = 0;
   let fechaActual = new Date(fechaInicio.getTime());
+  
+  // Se empieza a contar a partir del día siguiente a la fecha del hecho
   fechaActual.setDate(fechaActual.getDate() + 1);
+  
   while (fechaActual <= fechaFin) {
-    if (esDiaHabilColombia(fechaActual)) contador++;
+    if (esDiaHabilColombia(fechaActual)) {
+      contador++;
+    }
     fechaActual.setDate(fechaActual.getDate() + 1);
   }
   return contador;
@@ -111,44 +103,63 @@ function contarDiasHabilesColombia(fechaInicio, fechaFin) {
 
 function esDiaHabilColombia(fecha) {
   if (!fecha) return false;
-  if (typeof fecha === 'string') fecha = parseFechaLocal(fecha);
-  if (!fecha || typeof fecha.getFullYear !== 'function') return false;
-  
   const diaSemana = fecha.getDay();
+  // Sábado (6) y Domingo (0) no son hábiles
   if (diaSemana === 0 || diaSemana === 6) return false;
-  return !obtenerFestivosColombia(fecha.getFullYear()).includes(formatearFechaISO(fecha));
+  
+  const anio = fecha.getFullYear();
+  const isoStr = formatearFechaISO(fecha);
+  
+  return !obtenerFestivosColombia(anio).includes(isoStr);
 }
 
 function obtenerFestivosColombia(year) {
-  let festivos = [`${year}-01-01`, `${year}-05-01`, `${year}-07-20`, `${year}-08-07`, `${year}-12-08`, `${year}-12-25`];
-  const pascua = calcularPascua(year);
-  const leyEmiliani = [
-    moverALunesDate(new Date(year, 0, 6)), moverALunesDate(new Date(year, 2, 19)),
-    moverALunesDate(new Date(year, 5, 29)), moverALunesDate(new Date(year, 7, 15)),
-    moverALunesDate(new Date(year, 9, 12)), moverALunesDate(new Date(year, 10, 1)),
-    moverALunesDate(new Date(year, 10, 11))
+  let festivos = [
+    `${year}-01-01`, `${year}-05-01`, `${year}-07-20`, 
+    `${year}-08-07`, `${year}-12-08`, `${year}-12-25`
   ];
-  return festivos.concat(leyEmiliani, [
-    formatearFechaISO(sumarDias(pascua, -3)), 
-    formatearFechaISO(sumarDias(pascua, -2)),
-    formatearFechaISO(moverALunesDate(sumarDias(pascua, 39))),
-    formatearFechaISO(moverALunesDate(sumarDias(pascua, 60))),
-    formatearFechaISO(moverALunesDate(sumarDias(pascua, 68)))
-  ]);
+  
+  const pascua = calcularPascua(year);
+  
+  // Ley Emiliani y festivos religiosos móviles basados en pascua
+  const leyEmiliani = [
+    moverALunesDate(new Date(year, 0, 6)),   // Reyes Magos
+    moverALunesDate(new Date(year, 2, 19)),  // San José
+    moverALunesDate(new Date(year, 5, 29)),  // San Pedro y San Pablo
+    moverALunesDate(new Date(year, 7, 15)),  // Asunción de la Virgen
+    moverALunesDate(new Date(year, 9, 12)),  // Día de la Raza
+    moverALunesDate(new Date(year, 10, 1)),  // Todos los Santos
+    moverALunesDate(new Date(year, 10, 11))  // Independencia de Cartagena
+  ];
+
+  const festivosMoviles = [
+    formatearFechaISO(sumarDias(pascua, -3)), // Jueves Santo
+    formatearFechaISO(sumarDias(pascua, -2)), // Viernes Santo
+    formatearFechaISO(moverALunesDate(sumarDias(pascua, 39))), // Ascensión del Señor
+    formatearFechaISO(moverALunesDate(sumarDias(pascua, 60))), // Corpus Christi
+    formatearFechaISO(moverALunesDate(sumarDias(pascua, 68)))  // Sagrado Corazón
+  ];
+
+  let todosFestivos = festivos.concat(festivosMoviles);
+  leyEmiliani.forEach(f => todosFestivos.push(formatearFechaISO(f)));
+  
+  return todosFestivos;
 }
 
 function moverALunesDate(fecha) {
-  if (!fecha || typeof fecha.getDay !== 'function') return new Date();
-  const dia = fecha.getDay();
-  if (dia !== 1) fecha.setDate(fecha.getDate() + ((8 - dia) % 7));
-  return fecha;
+  const d = new Date(fecha.getTime());
+  const dia = d.getDay();
+  if (dia !== 1) {
+    const diasHastaLunes = (8 - dia) % 7;
+    d.setDate(d.getDate() + diasHastaLunes);
+  }
+  return d;
 }
 
 function sumarDias(fecha, dias) {
-  if (!fecha || typeof fecha.getTime !== 'function') return new Date();
-  const res = new Date(fecha.getTime());
-  res.setDate(res.getDate() + dias);
-  return res;
+  const d = new Date(fecha.getTime());
+  d.setDate(d.getDate() + dias);
+  return d;
 }
 
 function calcularPascua(year) {
@@ -163,15 +174,12 @@ function calcularPascua(year) {
 }
 
 function parseFechaLocal(fechaStr) {
-  if (!fechaStr || typeof fechaStr !== 'string' || !fechaStr.includes("-")) return new Date();
+  if (!fechaStr || !fechaStr.includes("-")) return new Date();
   const p = fechaStr.split("-");
-  return new Date(parseInt(p[0]), parseInt(p[1]) - 1, parseInt(p[2]));
+  return new Date(parseInt(p[0], 10), parseInt(p[1], 10) - 1, parseInt(p[2], 10));
 }
 
 function formatearFechaISO(fecha) {
-  if (!fecha) return "";
-  if (typeof fecha === 'string') return fecha;
-  if (typeof fecha.getFullYear !== 'function') return "";
   const y = fecha.getFullYear();
   const m = String(fecha.getMonth() + 1).padStart(2, "0");
   const d = String(fecha.getDate()).padStart(2, "0");
@@ -179,7 +187,7 @@ function formatearFechaISO(fecha) {
 }
 
 function formatearFechaTexto(fechaStr) {
-  if (!fechaStr || typeof fechaStr !== 'string' || !fechaStr.includes("-")) return fechaStr || "";
+  if (!fechaStr || !fechaStr.includes("-")) return fechaStr || "";
   const meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
   const p = fechaStr.split("-");
   return `${parseInt(p[2], 10)} de ${meses[parseInt(p[1], 10) - 1]} del ${p[0]}`;

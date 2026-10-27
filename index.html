@@ -9,7 +9,7 @@
     <!-- FontAwesome para Iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwJz-y5sJ20V3t4sqyz8x1MGsvPcvw9gI3cuCviH664cOsLX1P1rIFZLo9soQ7diWK-/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzVQlEFpMwJgjtbqMJxD6Fg8ZHnmQWBS4qK6IyjpHjX4yB9KSa7OzrnEf6Of8FHMvvU/exec";
     </script>
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans min-h-screen pb-12">
@@ -25,7 +25,7 @@
                 </div>
             </div>
             <div class="mt-2 md:mt-0 text-xs bg-emerald-800 px-3 py-1.5 rounded-full border border-emerald-700">
-                <i class="fa-solid fa-database text-amber-400 mr-1"></i> Sincronizado con: <strong>PROYECTO_RESOLUCIONES</strong>
+                <i class="fa-solid fa-wand-magic text-amber-400 mr-1"></i> Módulo de Actas y Corrección Automática Activo
             </div>
         </div>
     </header>
@@ -85,7 +85,7 @@
                     </div>
                     <div class="md:col-span-2">
                         <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre Completo Uniformado</label>
-                        <input type="text" id="nombreUniformado" required placeholder="EJ: ESTEFANÍA MUÑOZ SOLORZA" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
+                        <input type="text" id="nombreUniformado" required placeholder="EJ: MATEO DUVAN GÓMEZ SANTANA" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
                     </div>
                 </div>
 
@@ -93,13 +93,13 @@
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 mb-1">Sexo Uniformado</label>
                         <select id="sexoUniformado" class="w-full text-sm border border-slate-300 rounded-lg p-2 bg-white">
-                            <option value="F">Femenino</option>
                             <option value="M">Masculino</option>
+                            <option value="F">Femenino</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 mb-1">Cédula Uniformado</label>
-                        <input type="text" id="cedulaUniformado" required placeholder="Ej: 1006777274" class="w-full text-sm border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
+                        <input type="text" id="cedulaUniformado" required placeholder="Ej: 1004272889" class="w-full text-sm border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
                     </div>
                     <div id="contenedorFechaHecho">
                         <label class="block text-xs font-semibold text-slate-600 mb-1" id="lblFechaHecho">Fecha del Hecho</label>
@@ -177,8 +177,8 @@
                         <div>
                             <label class="block text-xs font-semibold text-slate-600 mb-1">Sexo Hijo(a)</label>
                             <select id="sexoHijoContinuidad" class="w-full text-sm border border-slate-300 rounded-lg p-2 bg-white">
-                                <option value="M">Masculino</option>
                                 <option value="F">Femenino</option>
+                                <option value="M">Masculino</option>
                             </select>
                         </div>
                     </div>
@@ -200,7 +200,8 @@
 
                 <!-- Sección Compañera/o (Reconocimiento 30%) -->
                 <div id="seccionConyuge" class="bg-emerald-50/50 p-3 rounded-lg border border-emerald-100 space-y-3">
-                    <p class="text-xs font-bold text-emerald-900 uppercase"><i class="fa-solid fa-heart mr-1"></i> Datos de la Pareja (Unión Marital)</p>
+                    <p class="text-xs font-bold text-emerald-900 uppercase"><i class="fa-solid fa-heart mr-1"></i> Datos de la Pareja (Unión Marital / Matrimonio)</p>
+                    
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                         <div class="md:col-span-2">
                             <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre Pareja</label>
@@ -214,25 +215,67 @@
                             </select>
                         </div>
                     </div>
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                         <div>
                             <label class="block text-xs font-semibold text-slate-600 mb-1">Cédula Pareja</label>
                             <input type="text" id="cedulaConyuge" placeholder="Número de cédula" class="w-full text-sm border border-slate-300 rounded-lg p-2 focus:outline-none">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-600 mb-1">Fecha de la Unión Marital</label>
-                            <input type="date" id="fechaActoConyuge" class="w-full text-sm border border-slate-300 rounded-lg p-2 bg-white">
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">¿Fue por el Centro de Conciliación de la Policía Nacional?</label>
+                            <div class="flex space-x-6 bg-white p-2.5 rounded-lg border border-slate-300">
+                                <label class="flex items-center text-sm cursor-pointer"><input type="radio" name="porCentroConciliacion" value="SI" onchange="toggleOrigenUnion()" class="mr-2 accent-emerald-800"> SÍ</label>
+                                <label class="flex items-center text-sm cursor-pointer"><input type="radio" name="porCentroConciliacion" value="NO" checked onchange="toggleOrigenUnion()" class="mr-2 accent-emerald-800"> NO</label>
+                            </div>
                         </div>
+                    </div>
+
+                    <!-- SI: Centro de Conciliación de la Policía Nacional -->
+                    <div id="bloqueCentroConciliacion" class="grid grid-cols-1 md:grid-cols-2 gap-3 hidden bg-white p-2.5 rounded-lg border border-emerald-200">
+                        <div class="md:col-span-2">
+                            <span class="text-xs font-bold text-emerald-800"><i class="fa-solid fa-building-shield mr-1"></i> Centro de Conciliación de la Policía Nacional</span>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Seccional / Metropolitana (Opcional)</label>
+                            <input type="text" id="seccionalPolicia" placeholder="Ej: Metropolitana de Bogotá / DEPRO" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Sede del Centro de Conciliación</label>
+                            <input type="text" id="sedeConciliacion" placeholder="Ej: Sede Dirección General / Bogotá" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
+                        </div>
+                    </div>
+
+                    <!-- NO: otro origen de la declaración -->
+                    <div id="bloqueOrigenNoCentro" class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Origen Declaración (Opcional)</label>
+                            <select id="origenUnion" onchange="toggleOrigenUnion()" class="w-full text-sm border border-slate-300 rounded-lg p-2 bg-white">
+                                <option value="">-- Ninguno / No especificar --</option>
+                                <option value="NOTARIA">Notaría Pública</option>
+                                <option value="JUZGADO">Juzgado de Familia</option>
+                                <option value="OTRO">Otro Centro / Entidad</option>
+                            </select>
+                        </div>
+                        <div id="bloqueOtroOrigen" class="hidden">
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre Específico de la Notaría, Juzgado u Otra Entidad (incluya la sede si aplica)</label>
+                            <input type="text" id="otroOrigenTxt" placeholder="Ej: Notaría Primera del Círculo de Bogotá" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2">
+                        </div>
+                    </div>
+
+                    <!-- CAMPO PARA EL NÚMERO DE ACTA -->
+                    <div class="bg-white p-3 rounded-lg border border-emerald-200">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Número de Acta (Opcional)</label>
+                        <input type="text" id="numActaUnion" placeholder="Ej: 045 (solo el número)" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
                     </div>
                 </div>
 
                 <!-- Sección Hijo/a (Reconocimiento 3% o 2%) -->
                 <div id="seccionHijo" class="bg-amber-50/50 p-3 rounded-lg border border-amber-100 space-y-3 hidden">
-                    <p class="text-xs font-bold text-amber-900 uppercase"><i class="fa-solid fa-child mr-1"></i> Datos del Hijo(a)</p>
+                    <p class="text-xs font-bold text-amber-900 uppercase"><i class="fa-solid fa-child mr-1"></i> Datos del Hijo(a) (Nacimiento)</p>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                         <div class="md:col-span-2">
                             <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre del Hijo(a)</label>
-                            <input type="text" id="nombreHijo" placeholder="Nombres y Apellidos" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2">
+                            <input type="text" id="nombreHijo" placeholder="EJ: SOFÍA ISABEL GÓMEZ ALGARÍN" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2">
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-600 mb-1">Sexo Hijo(a)</label>
@@ -245,7 +288,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                         <div>
                             <label class="block text-xs font-semibold text-slate-600 mb-1">Nro. Registro Civil de Nacimiento</label>
-                            <input type="text" id="registroCivil" placeholder="Número de Serial" class="w-full text-sm border border-slate-300 rounded-lg p-2">
+                            <input type="text" id="registroCivil" placeholder="Ej: 1081849279" class="w-full text-sm border border-slate-300 rounded-lg p-2">
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-600 mb-1">Fecha de Nacimiento</label>
@@ -258,7 +301,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 border-t border-slate-100">
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 mb-1">Comunicado Oficial de Radicación</label>
-                        <input type="text" id="comunicadoRadicacion" required placeholder="Ej: GS-2026-XXXXXX-JESEP" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
+                        <input type="text" id="comunicadoRadicacion" required placeholder="Ej: GS-2026-043812-JESEP" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 mb-1">Fecha Radicación</label>
@@ -288,7 +331,7 @@
                 </div>
 
                 <div class="relative">
-                    <textarea id="resultadoTexto" readonly placeholder="Aquí aparecerá el texto estructurado con consideración de género listo para copiar y pegar..." class="w-full h-[450px] text-xs font-mono bg-slate-50 border border-slate-300 rounded-lg p-3 text-slate-700 focus:outline-none resize-none"></textarea>
+                    <textarea id="resultadoTexto" readonly placeholder="Aquí aparecerá el texto estructurado con inclusión de número de acta y corrección ortográfica..." class="w-full h-[450px] text-xs font-mono bg-slate-50 border border-slate-300 rounded-lg p-3 text-slate-700 focus:outline-none resize-none"></textarea>
                 </div>
             </div>
 
@@ -301,12 +344,25 @@
 
     </main>
 
-    <!-- Script de Control -->
+    <!-- Script de Control y Corrección Ortográfica -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             toggleTipoAccion();
             toggleCategoriaResolucion();
+            toggleOrigenUnion();
         });
+
+        function toggleOrigenUnion() {
+            const porCentro = document.querySelector('input[name="porCentroConciliacion"]:checked').value === "SI";
+            const bloqueCentro = document.getElementById('bloqueCentroConciliacion');
+            const bloqueNoCentro = document.getElementById('bloqueOrigenNoCentro');
+            const bloqueOtro = document.getElementById('bloqueOtroOrigen');
+            const val = document.getElementById('origenUnion').value;
+
+            bloqueCentro.classList.toggle('hidden', !porCentro);
+            bloqueNoCentro.classList.toggle('hidden', porCentro);
+            bloqueOtro.classList.toggle('hidden', !(val === "NOTARIA" || val === "JUZGADO" || val === "OTRO"));
+        }
 
         function toggleTipoAccion() {
             const tipoAccionEl = document.querySelector('input[name="tipoAccion"]:checked');
@@ -331,7 +387,6 @@
                 seccionConyuge.classList.add('hidden');
                 seccionHijo.classList.add('hidden');
                 seccionContinuidades.classList.add('hidden');
-                
                 contenedorFechaHecho.classList.remove('hidden');
                 inputFechaHecho.required = true;
                 lblFechaHecho.textContent = "Fecha de la Disolución";
@@ -341,7 +396,6 @@
                 seccionConyuge.classList.add('hidden');
                 seccionHijo.classList.add('hidden');
                 seccionContinuidades.classList.remove('hidden');
-                
                 contenedorFechaHecho.classList.add('hidden');
                 inputFechaHecho.required = false;
             } else {
@@ -349,7 +403,6 @@
                 seccionExtincion.classList.add('hidden');
                 seccionContinuidades.classList.add('hidden');
                 toggleCamposPorcentaje();
-                
                 contenedorFechaHecho.classList.remove('hidden');
                 inputFechaHecho.required = true;
                 lblFechaHecho.textContent = "Fecha del Hecho (Unión Marital / Nacimiento)";
@@ -405,9 +458,7 @@
             let centavos = partes[1] ? partes[1].padEnd(2, '0').substring(0, 2) : '90';
 
             let enLetras = numeroALetras(entero).toUpperCase();
-            let resultadoFinal = `${enLetras} PESOS CON ${centavos} CENTAVOS`;
-            
-            document.getElementById('textoValorDescuento').value = resultadoFinal;
+            document.getElementById('textoValorDescuento').value = `${enLetras} PESOS CON ${centavos} CENTAVOS`;
         }
 
         function numeroALetras(num) {
@@ -447,6 +498,99 @@
             return res.trim();
         }
 
+        // MOTOR DE CORRECCIÓN ORTOGRÁFICA Y TIPOGRÁFICA AUTOMÁTICA
+        function aplicarCorreccionOrtografica(texto) {
+            if (!texto) return "";
+            
+            let limpio = texto
+                .replace(/\s+([,.;:\?!])/g, '$1')
+                .replace(/([,;:])([^\s])/g, '$1 $2')
+                .replace(/\.([A-ZÁÉÍÓÚÑa-záéíóúñ])/g, '. $1')
+                .replace(/\s+/g, ' ');
+
+            limpio = limpio
+                .replace(/\bcedula\b/gi, 'cédula')
+                .replace(/\barticulo\b/gi, 'artículo')
+                .replace(/\bparagrafo\b/gi, 'parágrafo')
+                .replace(/\bcodigo\b/gi, 'código')
+                .replace(/\btramite\b/gi, 'trámite')
+                .replace(/\bregimen\b/gi, 'régimen')
+                .replace(/\buni[oó]n\b/gi, 'unión')
+                .replace(/\bfamiliar\b/gi, 'Familiar');
+
+            return limpio.trim();
+        }
+
+        // CÁLCULO DE DÍAS HÁBILES EN COLOMBIA
+        function contarDiasHabilesColombia(fInicioStr, fFinStr) {
+            if (!fInicioStr || !fFinStr) return 0;
+            let fInicio = new Date(fInicioStr + "T00:00:00");
+            let fFin = new Date(fFinStr + "T00:00:00");
+            if (isNaN(fInicio.getTime()) || isNaN(fFin.getTime()) || fFin <= fInicio) return 0;
+
+            let contador = 0;
+            let actual = new Date(fInicio.getTime());
+            actual.setDate(actual.getDate() + 1);
+
+            while (actual <= fFin) {
+                if (esDiaHabilColombia(actual)) contador++;
+                actual.setDate(actual.getDate() + 1);
+            }
+            return contador;
+        }
+
+        function esDiaHabilColombia(fecha) {
+            const dia = fecha.getDay();
+            if (dia === 0 || dia === 6) return false;
+            const anio = fecha.getFullYear();
+            const iso = fecha.toISOString().substring(0, 10);
+            return !obtenerFestivosColombia(anio).includes(iso);
+        }
+
+        function obtenerFestivosColombia(year) {
+            let festivos = [`${year}-01-01`, `${year}-05-01`, `${year}-07-20`, `${year}-08-07`, `${year}-12-08`, `${year}-12-25`];
+            const pascua = calcularPascua(year);
+            const leyEmiliani = [
+                moverALunesDate(new Date(year, 0, 6)), moverALunesDate(new Date(year, 2, 19)),
+                moverALunesDate(new Date(year, 5, 29)), moverALunesDate(new Date(year, 7, 15)),
+                moverALunesDate(new Date(year, 9, 12)), moverALunesDate(new Date(year, 10, 1)),
+                moverALunesDate(new Date(year, 10, 11))
+            ];
+            const moviles = [
+                sumarDias(pascua, -3), sumarDias(pascua, -2),
+                moverALunesDate(sumarDias(pascua, 39)),
+                moverALunesDate(sumarDias(pascua, 60)),
+                moverALunesDate(sumarDias(pascua, 68))
+            ];
+            let lista = festivos.concat(moviles.map(d => d.toISOString().substring(0, 10)));
+            leyEmiliani.forEach(f => lista.push(f.toISOString().substring(0, 10)));
+            return lista;
+        }
+
+        function moverALunesDate(fecha) {
+            let d = new Date(fecha.getTime());
+            let dia = d.getDay();
+            if (dia !== 1) d.setDate(d.getDate() + ((8 - dia) % 7));
+            return d;
+        }
+
+        function sumarDias(fecha, dias) {
+            let d = new Date(fecha.getTime());
+            d.setDate(d.getDate() + dias);
+            return d;
+        }
+
+        function calcularPascua(year) {
+            const a = year % 19, b = Math.floor(year / 100), c = year % 100;
+            const d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25);
+            const g = Math.floor((b - f + 1) / 3), h = (19 * a + b - d - g + 15) % 30;
+            const i = Math.floor(c / 4), k = c % 4, L = (32 + 2 * e + 2 * i - h - k) % 7;
+            const m = Math.floor((a + 11 * h + 22 * L) / 451);
+            const mes = Math.floor((h + L - 7 * m + 114) / 31);
+            const dia = ((h + L - 7 * m + 114) % 31) + 1;
+            return new Date(year, mes - 1, dia);
+        }
+
         async function procesarYGenerar() {
             const tipoAccion = document.querySelector('input[name="tipoAccion"]:checked').value;
             const grado = document.getElementById('grado').value;
@@ -458,7 +602,7 @@
             const fechaHecho = document.getElementById('fechaHecho').value;
 
             if (!nombreUniformado || !cedulaUniformado || !comunicadoRadicacion || !fechaRadicacion) {
-                alert("Por favor completa al menos los datos básicos del uniformado y la radicación.");
+                alert("Por favor completa los datos básicos obligatorios.");
                 return;
             }
 
@@ -466,10 +610,145 @@
             btn.disabled = true;
             btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Procesando y Guardando...`;
 
-            // Paquete de datos para enviar a Google Sheets
+            const fHechoTxt = formatearFechaTexto(fechaHecho);
+            const fRadicacionTxt = formatearFechaTexto(fechaRadicacion);
+
+            let diasHabiles = 0;
+            let dentroPlazo = true;
+
+            if (tipoAccion !== "EXTINCION" && tipoAccion !== "CONTINUIDADES") {
+                diasHabiles = contarDiasHabilesColombia(fechaHecho, fechaRadicacion);
+                dentroPlazo = diasHabiles <= 90;
+            }
+
+            let textoResuelveExcel = "";
+            let textoFinal = "";
+            let sedeGuardar = "";
+
+            if (tipoAccion === "EXTINCION") {
+                const nombreConyugeExtincion = document.getElementById('nombreConyugeExtincion').value.trim().toUpperCase();
+                const cedulaConyugeExtincion = document.getElementById('cedulaConyugeExtincion').value.trim();
+                textoResuelveExcel = `EXTINGUIR. Ordenar la extinción de la Bonificación para la Asistencia Familiar entre el/la ${grado} ${nombreUniformado} y ${nombreConyugeExtincion}, a partir del ${fHechoTxt}.`;
+
+                const resolucionAnterior = document.getElementById('resolucionAnterior').value.trim() || "00077";
+                const fechaResolucionAnterior = formatearFechaTexto(document.getElementById('fechaResolucionAnterior').value || "2024-08-07");
+                const sexoConyugeExtincion = document.getElementById('sexoConyugeExtincion').value;
+                const artExPareja = sexoConyugeExtincion === "F" ? "la señora" : "el señor";
+                const rolExPareja = sexoConyugeExtincion === "F" ? "excompañera permanente" : "excompañero permanente";
+                const idExPareja = sexoConyugeExtincion === "F" ? "identificada" : "identificado";
+                const valorDesc = document.getElementById('valorDescuento').value.trim() || "2.400.126,90";
+                const textoValorDesc = document.getElementById('textoValorDescuento').value.trim() || "DOS MILLONES CUATROCIENTOS MIL CIENTO VEINTISÉIS PESOS CON NOVENTA CENTAVOS";
+                const valorTotalFormateado = `${textoValorDesc} ($${valorDesc})`;
+                const artUniformadoExt = sexoUniformado === "F" ? "la señora" : "el señor";
+                const idUniformadoExt = sexoUniformado === "F" ? "identificada" : "identificado";
+                const funcionarioExt = sexoUniformado === "F" ? "la funcionaria" : "el funcionario";
+
+                textoFinal = `C O N S I D E R A N D O:\n\n` +
+                `Que mediante comunicación oficial nro. ${comunicadoRadicacion}, de fecha ${fRadicacionTxt}, se solicitó adelantar las actuaciones administrativas correspondientes a la extinción de la Bonificación para la Asistencia Familiar reconocida a ${artUniformadoExt} ${grado} ${nombreUniformado}, ${idUniformadoExt} con cédula de ciudadanía nro. ${cedulaUniformado}, por concepto de su ${rolExPareja}, ${artExPareja} ${nombreConyugeExtincion}, ${idExPareja} con cédula de ciudadanía nro. ${cedulaConyugeExtincion}, con fundamento en la disolución de la unión marital de hecho.\n\n` +
+                `Que, de conformidad con los documentos aportados y obrantes en el expediente administrativo, se acreditó la disolución de la unión marital de hecho entre ${funcionarioExt} y ${artExPareja} ${nombreConyugeExtincion}, con efectos a partir del ${fHechoTxt}, circunstancia que hace necesario verificar la continuidad de las condiciones legales que dieron lugar al reconocimiento de la Bonificación para la Asistencia Familiar.\n\n` +
+                `En mérito de lo expuesto, el suscrito Jefe Nacional del Servicio de Policía en uso de sus facultades legales,\n\n` +
+                `R E S U E L V E:\n\n` +
+                `ARTÍCULO 1. EXTINGUIR. Ordenar la extinción del reconocimiento de la Bonificación para la Asistencia Familiar correspondiente al porcentaje del treinta por ciento (30 %) otorgado por razón de la unión marital de hecho entre ${artUniformadoExt} ${grado} ${nombreUniformado}, ${idUniformadoExt} con cédula de ciudadanía nro. ${cedulaUniformado}, y ${artExPareja} ${nombreConyugeExtincion}, ${idExPareja} con cédula de ciudadanía nro. ${cedulaConyugeExtincion}, a partir del ${fHechoTxt}.\n\n` +
+                `ARTÍCULO 2. DETERMINAR. Establecer que el valor a recuperar asciende a la suma de ${valorTotalFormateado}.\n\n` +
+                `NOTIFÍQUESE Y CÚMPLASE.`;
+
+            } else if (tipoAccion === "CONTINUIDADES") {
+                const porcentajeContinuidad = document.getElementById('porcentajeContinuidad').value;
+                const fechaInicioContinuidad = formatearFechaTexto(document.getElementById('fechaInicioContinuidad').value);
+                const fechaFinContinuidad = formatearFechaTexto(document.getElementById('fechaFinContinuidad').value);
+                const nombreHijoContinuidad = document.getElementById('nombreHijoContinuidad').value.trim().toUpperCase() || "[HIJO/A]";
+                const sexoHijoContinuidad = document.getElementById('sexoHijoContinuidad').value;
+                const cedulaHijoContinuidad = document.getElementById('cedulaHijoContinuidad').value.trim() || "[CÉDULA]";
+                const universidadContinuidad = document.getElementById('universidadContinuidad').value.trim().toUpperCase() || "[UNIVERSIDAD]";
+                const fechaCertificadoContinuidad = formatearFechaTexto(document.getElementById('fechaCertificadoContinuidad').value);
+                const descHijo = sexoHijoContinuidad === "F" ? "su hija" : "su hijo";
+                const idHijo = sexoHijoContinuidad === "F" ? "identificada" : "identificado";
+                const artUniCont = sexoUniformado === "F" ? "la señora" : "el señor";
+                const idUniCont = sexoUniformado === "F" ? "identificada" : "identificado";
+
+                textoResuelveExcel = `${grado} ${nombreUniformado}, identificado/a con cédula N°. ${cedulaUniformado}. Continuidad del ${porcentajeContinuidad}.`;
+
+                textoFinal = `C O N S I D E R A N D O:\n\n` +
+                `Que el artículo 132 de la Ley 2179 del 30 de diciembre de 2021 establece las directrices sobre la Bonificación para la Asistencia Familiar y su continuidad por estudios de los hijos.\n\n` +
+                `Que ${artUniCont} ${grado} ${nombreUniformado}, ${idUniCont} con cédula de ciudadanía nro. ${cedulaUniformado}, solicitó mediante comunicación oficial nro. ${comunicadoRadicacion} del ${fRadicacionTxt} la continuidad en el reconocimiento de la bonificación por ${descHijo} ${nombreHijoContinuidad}.\n\n` +
+                `En mérito de lo expuesto, el suscrito Jefe Nacional del Servicio de Policía en uso de sus facultades legales,\n\n` +
+                `R E S U E L V E:\n\n` +
+                `ARTÍCULO 1. Reconocer la continuidad en el pago de la Bonificación para la Asistencia Familiar equivalente al ${porcentajeContinuidad} de la asignación básica, a favor de ${artUniCont} ${grado} ${nombreUniformado}, ${idUniCont} con cédula nro. ${cedulaUniformado}, por ${descHijo} ${nombreHijoContinuidad}, ${idHijo} con cédula nro. ${cedulaHijoContinuidad}, desde el ${fechaInicioContinuidad} hasta el ${fechaFinContinuidad}, acreditando condición de estudiante conforme a certificación expedida el ${fechaCertificadoContinuidad} por ${universidadContinuidad}.\n\n` +
+                `NOTIFÍQUESE Y CÚMPLASE.`;
+
+            } else {
+                // RECONOCIMIENTO / ACTUALIZACIÓN
+                const pronombresUni = sexoUniformado === "F" ? { id: "identificada" } : { id: "identificado" };
+                const tipoPorcentaje = document.querySelector('input[name="tipoPorcentaje"]:checked').value;
+                let porcentajeTxt = tipoPorcentaje === "30" ? "30%" : (tipoPorcentaje === "3" ? "3%" : "2%");
+                let detalleVinculo = "";
+
+                if (tipoPorcentaje === "30") {
+                    const nombreConyuge = document.getElementById('nombreConyuge').value.trim().toUpperCase() || "[PAREJA]";
+                    const sexoConyuge = document.getElementById('sexoConyuge').value;
+                    const cedulaConyuge = document.getElementById('cedulaConyuge').value.trim() || "[CÉDULA]";
+                    const numActaUnion = document.getElementById('numActaUnion').value.trim().toUpperCase()
+                        .replace(/^(ACTA)?\s*(NRO\.?|N[°º]\.?|NO\.|N\.º|NÚMERO|NUMERO)?\s*/, '').trim();
+                    const artPareja = sexoConyuge === "F" ? "su compañera permanente" : "su compañero permanente";
+                    const artSeñor = sexoConyuge === "F" ? "la señora" : "el señor";
+
+                    const porCentro = document.querySelector('input[name="porCentroConciliacion"]:checked').value === "SI";
+                    const origenVal = porCentro ? "CENTRO_CONCILIACION_PN" : document.getElementById('origenUnion').value;
+
+                    const sede = porCentro ? document.getElementById('sedeConciliacion').value.trim().toUpperCase() : "";
+                    sedeGuardar = sede;
+                    const otroTxt = document.getElementById('otroOrigenTxt').value.trim().toUpperCase();
+
+                    // Entidad que expide / ante quien se declara
+                    let entidad = "";
+                    if (origenVal === "CENTRO_CONCILIACION_PN") {
+                        const seccional = document.getElementById('seccionalPolicia').value.trim().toUpperCase();
+                        entidad = "el Centro de Conciliación de la Policía Nacional";
+                        if (seccional) entidad += ` - ${seccional}`;
+                        if (sede) entidad += `, sede ${sede}`;
+                    } else if ((origenVal === "NOTARIA" || origenVal === "JUZGADO" || origenVal === "OTRO") && otroTxt) {
+                        entidad = otroTxt;
+                    }
+
+                    let sufijoOrigen = "";
+                    if (numActaUnion && entidad) {
+                        sufijoOrigen = ` según mediante acta nro. ${numActaUnion} expedida por ${entidad}`;
+                    } else if (numActaUnion) {
+                        sufijoOrigen = ` según mediante acta nro. ${numActaUnion}`;
+                    } else if (entidad) {
+                        sufijoOrigen = ` ante ${entidad}`;
+                    }
+
+                    detalleVinculo = `${artPareja}, ${artSeñor} ${nombreConyuge}, identificada con cédula de ciudadanía nro. ${cedulaConyuge}, declarada${sufijoOrigen}`;
+
+                } else {
+                    const nombreHijo = document.getElementById('nombreHijo').value.trim().toUpperCase() || "[HIJO/A]";
+                    const sexoHijo = document.getElementById('sexoHijo').value;
+                    const descHijo = sexoHijo === "F" ? "su hija" : "su hijo";
+                    const regCivil = document.getElementById('registroCivil').value.trim() || "[REGISTRO CIVIL]";
+                    detalleVinculo = `${descHijo} ${nombreHijo}, conforme al registro civil de nacimiento nro. ${regCivil}, en el que consta que nació el ${fHechoTxt}`;
+                }
+
+                let textoEfectosFiscales = "";
+                if (dentroPlazo) {
+                    textoEfectosFiscales = `Al haberse presentado dentro del término legal de noventa (90) días hábiles, los efectos fiscales se reconocerán a partir de la fecha del hecho que lo motiva, esto es, desde el ${fHechoTxt}.`;
+                } else {
+                    textoEfectosFiscales = `Teniendo en cuenta que la solicitud fue presentada por fuera del término legal de noventa (90) días hábiles, los efectos fiscales se reconocerán a partir de la fecha de su radicación, esto es, desde el ${fRadicacionTxt}.`;
+                }
+
+                textoResuelveExcel = `${grado} ${nombreUniformado}, ${pronombresUni.id} con cédula nro. ${cedulaUniformado}, causa derecho al reconocimiento del ${porcentajeTxt} por ${detalleVinculo}. Solicitud radicada mediante comunicado ${comunicadoRadicacion} del ${fRadicacionTxt}.`;
+
+                textoFinal = `${grado}. ${nombreUniformado}, ${pronombresUni.id} con cédula de ciudadanía nro. ${cedulaUniformado}, causa derecho al reconocimiento del ${porcentajeTxt} de la asignación básica correspondiente a su grado, por concepto de ${detalleVinculo}. La solicitud fue radicada mediante el comunicado oficial ${comunicadoRadicacion} del ${fRadicacionTxt}. ${textoEfectosFiscales}`;
+            }
+
+            // Aplicar corrección ortográfica y tipográfica final
+            textoFinal = aplicarCorreccionOrtografica(textoFinal);
+            textoResuelveExcel = aplicarCorreccionOrtografica(textoResuelveExcel);
+
+            // Enviar a Apps Script
             const payload = {
                 tipoAccion: tipoAccion,
-                tipoResolucion: tipoAccion === "EXTINCION" ? "EXTINCION" : document.querySelector('input[name="tipoResolucion"]:checked').value,
+                tipoResolucion: document.querySelector('input[name="tipoResolucion"]:checked').value,
                 tipoPorcentaje: tipoAccion === "EXTINCION" || tipoAccion === "CONTINUIDADES" ? "" : document.querySelector('input[name="tipoPorcentaje"]:checked').value,
                 grado: grado,
                 nombreUniformado: nombreUniformado,
@@ -477,13 +756,13 @@
                 fechaHecho: fechaHecho,
                 fechaRadicacion: fechaRadicacion,
                 comunicadoRadicacion: comunicadoRadicacion,
-                nombreConyugeExtincion: tipoAccion === "EXTINCION" ? document.getElementById('nombreConyugeExtincion').value.trim().toUpperCase() : "",
-                nombreConyuge: tipoAccion === "RECONOCIMIENTO" && document.querySelector('input[name="tipoPorcentaje"]:checked').value === "30" ? document.getElementById('nombreConyuge').value.trim().toUpperCase() : "",
-                nombreHijo: tipoAccion === "RECONOCIMIENTO" && document.querySelector('input[name="tipoPorcentaje"]:checked').value !== "30" ? document.getElementById('nombreHijo').value.trim().toUpperCase() : ""
+                sedeConciliacion: sedeGuardar,
+                diasHabiles: diasHabiles,
+                dentroPlazo: dentroPlazo ? "SÍ" : "NO",
+                textoResuelveCustom: textoResuelveExcel
             };
 
             try {
-                // Enviar datos en segundo plano a Google Apps Script
                 await fetch(SCRIPT_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -493,114 +772,12 @@
                 console.error("Error al guardar en hoja:", err);
             }
 
-            // Generar el texto visualmente en pantalla
-            const fRadicacionTxt = formatearFechaTexto(fechaRadicacion);
-            const fHechoTxt = formatearFechaTexto(fechaHecho);
-
-            const artUniformado = sexoUniformado === "F" ? "la señora" : "el señor";
-            const idUniformado = sexoUniformado === "F" ? "identificada" : "identificado";
-            const funcionarioTxt = sexoUniformado === "F" ? "la funcionaria" : "el funcionario";
-
-            let textoFinal = "";
-
-            if (tipoAccion === "EXTINCION") {
-                const resolucionAnterior = document.getElementById('resolucionAnterior').value.trim() || "00077";
-                const fechaResolucionAnterior = formatearFechaTexto(document.getElementById('fechaResolucionAnterior').value || "2024-08-07");
-                
-                const nombreConyugeExtincion = document.getElementById('nombreConyugeExtincion').value.trim().toUpperCase() || "[NOMBRE EX-PAREJA]";
-                const sexoConyugeExtincion = document.getElementById('sexoConyugeExtincion').value;
-                const cedulaConyugeExtincion = document.getElementById('cedulaConyugeExtincion').value.trim() || "[CÉDULA]";
-                
-                const artExPareja = sexoConyugeExtincion === "F" ? "la señora" : "el señor";
-                const rolExPareja = sexoConyugeExtincion === "F" ? "excompañera permanente" : "excompañero permanente";
-                const idExPareja = sexoConyugeExtincion === "F" ? "identificada" : "identificado";
-
-                const valorDesc = document.getElementById('valorDescuento').value.trim() || "2.400.126,90";
-                const textoValorDesc = document.getElementById('textoValorDescuento').value.trim() || "DOS MILLONES CUATROCIENTOS MIL CIENTO VEINTISÉIS PESOS CON NOVENTA CENTAVOS";
-                const valorTotalFormateado = `${textoValorDesc} ($${valorDesc})`;
-
-                textoFinal = `C O N S I D E R A N D O:\n\n` +
-                `Que mediante comunicación oficial nro. ${comunicadoRadicacion}, de fecha ${fRadicacionTxt}, se solicitó adelantar las actuaciones administrativas correspondientes a la extinción de la Bonificación para la Asistencia Familiar reconocida a ${artUniformado} ${grado} ${nombreUniformado}, ${idUniformado} con cédula de ciudadanía nro. ${cedulaUniformado}, por concepto de su ${rolExPareja}, ${artExPareja} ${nombreConyugeExtincion}, ${idExPareja} con cédula de ciudadanía nro. ${cedulaConyugeExtincion}, con fundamento en la disolución de la unión marital de hecho.\n\n` +
-                `Que, de conformidad con los documentos aportados y obrantes en el expediente administrativo, se acreditó la disolución de la unión marital de hecho entre ${funcionarioTxt} y ${artExPareja} ${nombreConyugeExtincion}, con efectos a partir del ${fHechoTxt}, circunstancia que hace necesario verificar la continuidad de las condiciones legales que dieron lugar al reconocimiento de la Bonificación para la Asistencia Familiar.\n\n` +
-                `Que, en consecuencia, y una vez verificado el cumplimiento de los presupuestos legales aplicables, resulta procedente adoptar las medidas administrativas correspondientes respecto del reconocimiento efectuado mediante Resolución nro. ${resolucionAnterior} del ${fechaResolucionAnterior}, así como disponer la actualización de los registros administrativos y de nómina, de conformidad con la fecha en que cesaron las condiciones que sustentaban el derecho.\n\n` +
-                `Que, revisada la liquidación de nómina correspondiente al período objeto de análisis, se estableció un valor de ${valorTotalFormateado}, correspondiente a pagos cuya procedencia debe determinarse a partir del ${fHechoTxt}, para efectos de establecer, conforme al procedimiento legal aplicable, la existencia de sumas pagadas sin causa legal y su eventual recuperación.\n\n` +
-                `En mérito de lo expuesto, el suscrito Jefe Nacional del Servicio de Policía en uso de sus facultades legales,\n\n` +
-                `R E S U E L V E:\n\n` +
-                `ARTÍCULO 1. EXTINGUIR. Ordenar la extinción del reconocimiento de la Bonificación para la Asistencia Familiar correspondiente al porcentaje del treinta por ciento (30 %) otorgado por razón de la unión marital de hecho entre ${artUniformado} ${grado} ${nombreUniformado}, ${idUniformado} con cédula de ciudadanía nro. ${cedulaUniformado}, y ${artExPareja} ${nombreConyugeExtincion}, ${idExPareja} con cédula de ciudadanía nro. ${cedulaConyugeExtincion}, a partir del ${fHechoTxt}, de conformidad con los fundamentos fácticos y jurídicos expuestos en la parte considerativa del presente acto administrativo y siempre que se haya verificado la inexistencia de las condiciones legales que permitan la continuidad del beneficio.\n\n` +
-                `ARTÍCULO 2. DETERMINAR. Establecer, con fundamento en la liquidación detallada que hace parte integral del expediente administrativo, que el valor de los pagos efectuados por concepto de la Bonificación para la Asistencia Familiar, cuya procedencia se cuestiona a partir del ${fHechoTxt}, asciende a la suma de ${valorTotalFormateado}, sin perjuicio de la verificación de su exigibilidad y de las garantías que le asisten a ${funcionarioTxt} en el trámite de recuperación.\n\n` +
-                `ARTÍCULO 3. ADELANTAR EL TRÁMITE DE RECUPERACIÓN. Ordenar al Grupo de Talento Humano de la Jefatura Nacional del Servicio de Policía, o a la dependencia competente, adelantar las actuaciones administrativas necesarias para establecer y recuperar los valores que se acrediten como efectivamente pagados sin causa legal por concepto de la Bonificación para la Asistencia Familiar a ${artUniformado} ${grado} ${nombreUniformado}, ${idUniformado} con cédula de ciudadanía nro. ${cedulaUniformado}, con observancia del debido proceso, el derecho de defensa y las disposiciones vigentes aplicables.\n\n` +
-                `Una vez determinado el valor exigible y surtido el procedimiento correspondiente, se gestionará su reintegro mediante el mecanismo legalmente procedente, incluida, cuando haya lugar a ello, la aplicación de descuentos por nómina, conforme a las condiciones, límites y autorizaciones exigibles. Los recursos recuperados deberán registrarse y reintegrarse de acuerdo con las disposiciones presupuestales y contables aplicables.\n\n` +
-                `ARTÍCULO 4. ACTUALIZAR LOS REGISTROS ADMINISTRATIVOS. Ordenar a la dependencia competente efectuar las actualizaciones correspondientes en el Sistema de Información para la Administración del Talento Humano (SIATH) y en los registros de nómina, de conformidad con la decisión adoptada en el presente acto administrativo.\n\n` +
-                `ARTÍCULO 5. NOTIFICAR. Notificar el contenido de la presente resolución a ${funcionarioTxt} interesada/o, de conformidad con las disposiciones de la Ley 1437 de 2011, Código de Procedimiento Administrativo y de lo Contencioso Administrativo, garantizando su conocimiento íntegro y el ejercicio de los derechos que le asisten.\n\n` +
-                `ARTÍCULO 6. RECURSOS. Contra la presente resolución proceden los recursos administrativos que legalmente correspondan, de conformidad con los artículos 74, 76 y 77 de la Ley 1437 de 2011, los cuales deberán interponerse dentro de los diez (10) días siguientes a su notificación, en los términos y condiciones previstos en la ley.\n\n` +
-                `ARTÍCULO 7. VIGENCIA. La presente resolución rige a partir de su expedición, sin perjuicio de las reglas aplicables a su notificación, eficacia y ejecutoriedad.\n\n` +
-                `NOTIFÍQUESE Y CÚMPLASE.`;
-
-            } else if (tipoAccion === "CONTINUIDADES") {
-                const porcentajeContinuidad = document.getElementById('porcentajeContinuidad').value;
-                const fechaInicioContinuidad = formatearFechaTexto(document.getElementById('fechaInicioContinuidad').value);
-                const fechaFinContinuidad = formatearFechaTexto(document.getElementById('fechaFinContinuidad').value);
-                
-                const nombreHijoContinuidad = document.getElementById('nombreHijoContinuidad').value.trim().toUpperCase() || "[HIJO/A ESTUDIANTE]";
-                const sexoHijoContinuidad = document.getElementById('sexoHijoContinuidad').value;
-                const cedulaHijoContinuidad = document.getElementById('cedulaHijoContinuidad').value.trim() || "[CÉDULA]";
-                const universidadContinuidad = document.getElementById('universidadContinuidad').value.trim().toUpperCase() || "[UNIVERSIDAD]";
-                const fechaCertificadoContinuidad = formatearFechaTexto(document.getElementById('fechaCertificadoContinuidad').value);
-
-                const descHijo = sexoHijoContinuidad === "F" ? "su hija" : "su hijo";
-                const idHijo = sexoHijoContinuidad === "F" ? "identificada" : "identificado";
-
-                textoFinal = `C O N S I D E R A N D O:\n\n` +
-                `Que el artículo 132 de la Ley 2179 del 30 de diciembre de 2021 establece las directrices sobre la Bonificación para la Asistencia Familiar y su continuidad por estudios de los hijos.\n\n` +
-                `Que ${artUniformado} ${grado} ${nombreUniformado}, ${idUniformado} con cédula de ciudadanía nro. ${cedulaUniformado}, solicitó mediante comunicación oficial nro. ${comunicadoRadicacion} del ${fRadicacionTxt} la continuidad en el reconocimiento de la bonificación por ${descHijo} ${nombreHijoContinuidad}.\n\n` +
-                `En mérito de lo expuesto, el suscrito Jefe Nacional del Servicio de Policía en uso de sus facultades legales,\n\n` +
-                `R E S U E L V E:\n\n` +
-                `ARTÍCULO 1. Reconocer la continuidad en el pago de la Bonificación para la Asistencia Familiar equivalente al ${porcentajeContinuidad} de la asignación básica, a favor de ${artUniformado} ${grado} ${nombreUniformado}, ${idUniformado} con cédula nro. ${cedulaUniformado}, por ${descHijo} ${nombreHijoContinuidad}, ${idHijo} con cédula nro. ${cedulaHijoContinuidad}, desde el ${fechaInicioContinuidad} hasta el ${fechaFinContinuidad}, acreditando condición de estudiante conforme a certificación expedida el ${fechaCertificadoContinuidad} por ${universidadContinuidad}.\n\n` +
-                `ARTÍCULO 2. Notificar el contenido de la presente resolución al funcionario interesado.\n\n` +
-                `ARTÍCULO 3. La presente resolución rige a partir de la fecha de su expedición.\n\n` +
-                `NOTIFÍQUESE Y CÚMPLASE.`;
-
-            } else {
-                const tipoPorcentaje = document.querySelector('input[name="tipoPorcentaje"]:checked').value;
-                let detalleBeneficiario = "";
-
-                if (tipoPorcentaje === "30") {
-                    const nombreConyuge = document.getElementById('nombreConyuge').value.trim().toUpperCase() || "[PAREJA]";
-                    const sexoConyuge = document.getElementById('sexoConyuge').value;
-                    const cedulaConyuge = document.getElementById('cedulaConyuge').value.trim() || "[CÉDULA]";
-                    
-                    const artPareja = sexoConyuge === "F" ? "la señora" : "el señor";
-                    const idPareja = sexoConyuge === "F" ? "identificada" : "identificado";
-
-                    detalleBeneficiario = `unión marital de hecho constituida con ${artPareja} ${nombreConyuge}, ${idPareja} con cédula nro. ${cedulaConyuge}, a partir del ${fHechoTxt}`;
-                } else {
-                    const nombreHijo = document.getElementById('nombreHijo').value.trim().toUpperCase() || "[HIJO/A]";
-                    const sexoHijo = document.getElementById('sexoHijo').value;
-                    const registroCivil = document.getElementById('registroCivil').value.trim() || "[REGISTRO CIVIL]";
-                    const pctTxt = tipoPorcentaje === "3" ? "3%" : "2%";
-                    
-                    const descHijo = sexoHijo === "F" ? "su hija" : "su hijo";
-                    detalleBeneficiario = `el ${pctTxt} por concepto de ${descHijo} (${nombreHijo}), según registro civil nro. ${registroCivil}, nacido(a) el ${fHechoTxt}`;
-                }
-
-                textoFinal = `C O N S I D E R A N D O:\n\n` +
-                `Que el artículo 132 de la Ley 2179 de 2021 regula el reconocimiento de la Bonificación para la Asistencia Familiar para el personal en servicio activo de la Policía Nacional.\n\n` +
-                `Que ${artUniformado} ${grado} ${nombreUniformado}, ${idUniformado} con cédula nro. ${cedulaUniformado}, solicitó mediante comunicado oficial nro. ${comunicadoRadicacion} del ${fRadicacionTxt} el reconocimiento correspondiente.\n\n` +
-                `En mérito de lo expuesto, el suscrito Jefe Nacional del Servicio de Policía en uso de sus facultades legales,\n\n` +
-                `R E S U E L V E:\n\n` +
-                `ARTÍCULO 1. Reconocer y actualizar la Bonificación para la Asistencia Familiar a favor de ${artUniformado} ${grado} ${nombreUniformado}, ${idUniformado} con cédula nro. ${cedulaUniformado}, por razón de ${detalleBeneficiario}.\n\n` +
-                `ARTÍCULO 2. Ordenar al Grupo de Talento Humano las gestiones pertinentes de nómina.\n\n` +
-                `ARTÍCULO 3. Notificar el presente acto administrativo conforme a la ley.\n\n` +
-                `ARTÍCULO 4. La presente resolución rige a partir de la fecha de su expedición.\n\n` +
-                `NOTIFÍQUESE Y CÚMPLASE.`;
-            }
-
             document.getElementById('resultadoTexto').value = textoFinal;
             document.getElementById('btnCopiarTodo').disabled = false;
             
             btn.disabled = false;
             btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> Generar Texto y Guardar en Excel`;
-            alert("¡Texto generado con éxito y registrado en la hoja de Excel!");
+            alert(`¡Texto corregido, generado y guardado en Excel con éxito!`);
         }
 
         function copiarTodoElTexto() {
@@ -623,7 +800,9 @@
             document.getElementById('btnCopiarTodo').disabled = true;
             toggleTipoAccion();
             toggleCategoriaResolucion();
+            toggleOrigenUnion();
         }
     </script>
 </body>
 </html>
+
