@@ -799,20 +799,24 @@
                 textoResuelveCustom: textoResuelveExcel
             };
 
-            let errorGuardado = "";
+           let errorGuardado = "";
             try {
                 const resp = await fetch(SCRIPT_URL, {
                     method: 'POST',
+                    redirect: 'follow', // <-- Importante para seguir la redirección de Google
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify(payload)
                 });
-                const resultado = await resp.json();
+                
+                const textoRespuesta = await resp.text(); // Leer como texto primero
+                const resultado = JSON.parse(textoRespuesta); // Intentar parsear a JSON
+
                 if (resultado.status !== "success") {
                     errorGuardado = "El servidor respondió: " + (resultado.message || "error desconocido");
                 }
             } catch (err) {
                 console.error("Error al guardar en hoja:", err);
-                errorGuardado = "No se pudo confirmar la conexión con el Web App de Google (" + err + "). Verifica la URL y que el acceso esté en \"Cualquier persona\".";
+                errorGuardado = "No se pudo confirmar la conexión con el Web App de Google (" + err + ").";
             }
 
             document.getElementById('resultadoTexto').value = textoFinal;
