@@ -9,7 +9,7 @@
     <!-- FontAwesome para Iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwHcZgzSOa4rRspTWlTZt1GXfQwz-t7RvOGVTkjZo0xu9VjiOdV7OT1ti2R56-1JsCJ/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzVQlEFpMwJgjtbqMJxD6Fg8ZHnmQWBS4qK6IyjpHjX4yB9KSa7OzrnEf6Of8FHMvvU/exec";
     </script>
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans min-h-screen pb-12">
@@ -799,24 +799,20 @@
                 textoResuelveCustom: textoResuelveExcel
             };
 
-           let errorGuardado = "";
+            let errorGuardado = "";
             try {
                 const resp = await fetch(SCRIPT_URL, {
                     method: 'POST',
-                    redirect: 'follow', // <-- Importante para seguir la redirección de Google
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify(payload)
                 });
-                
-                const textoRespuesta = await resp.text(); // Leer como texto primero
-                const resultado = JSON.parse(textoRespuesta); // Intentar parsear a JSON
-
+                const resultado = await resp.json();
                 if (resultado.status !== "success") {
                     errorGuardado = "El servidor respondió: " + (resultado.message || "error desconocido");
                 }
             } catch (err) {
                 console.error("Error al guardar en hoja:", err);
-                errorGuardado = "No se pudo confirmar la conexión con el Web App de Google (" + err + ").";
+                errorGuardado = "No se pudo confirmar la conexión con el Web App de Google (" + err + "). Verifica la URL y que el acceso esté en \"Cualquier persona\".";
             }
 
             document.getElementById('resultadoTexto').value = textoFinal;
