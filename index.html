@@ -9,7 +9,7 @@
     <!-- FontAwesome para Iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzVQlEFpMwJgjtbqMJxD6Fg8ZHnmQWBS4qK6IyjpHjX4yB9KSa7OzrnEf6Of8FHMvvU/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwHcZgzSOa4rRspTWlTZt1GXfQwz-t7RvOGVTkjZo0xu9VjiOdV7OT1ti2R56-1JsCJ/exec";
     </script>
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans min-h-screen pb-12">
@@ -25,7 +25,7 @@
                 </div>
             </div>
             <div class="mt-2 md:mt-0 text-xs bg-emerald-800 px-3 py-1.5 rounded-full border border-emerald-700">
-                <i class="fa-solid fa-wand-magic text-amber-400 mr-1"></i> Módulo de Actas y Corrección Automática Activo
+                <i class="fa-solid fa-wand-magic text-amber-400 mr-1"></i> Corrector Dinámico e Inspección Previa de Lote
             </div>
         </div>
     </header>
@@ -85,7 +85,7 @@
                     </div>
                     <div class="md:col-span-2">
                         <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre Completo Uniformado</label>
-                        <input type="text" id="nombreUniformado" required placeholder="EJ: MATEO DUVAN GÓMEZ SANTANA" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
+                        <input type="text" id="nombreUniformado" onblur="corregirCampoTexto(this)" required placeholder="EJ: ÁLVARO DUVÁN GARCÍA RESTÁN" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
                     </div>
                 </div>
 
@@ -130,7 +130,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                         <div class="md:col-span-2">
                             <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre Ex-Compañero(a)</label>
-                            <input type="text" id="nombreConyugeExtincion" placeholder="JUAN SEBASTIÁN HERNÁNDEZ ARTEAGA" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2">
+                            <input type="text" id="nombreConyugeExtincion" onblur="corregirCampoTexto(this)" placeholder="JUAN SEBASTIÁN HERNÁNDEZ ARTEAGA" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2">
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-600 mb-1">Sexo Ex-Pareja</label>
@@ -179,7 +179,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                         <div class="md:col-span-2">
                             <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre del Hijo(a) Estudiante</label>
-                            <input type="text" id="nombreHijoContinuidad" placeholder="Nombres y Apellidos" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2">
+                            <input type="text" id="nombreHijoContinuidad" onblur="corregirCampoTexto(this)" placeholder="Nombres y Apellidos" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2">
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-600 mb-1">Sexo Hijo(a)</label>
@@ -201,7 +201,7 @@
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre de la Universidad / Institución</label>
-                        <input type="text" id="universidadContinuidad" placeholder="EJ: UNIVERSIDAD NACIONAL DE COLOMBIA" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2">
+                        <input type="text" id="universidadContinuidad" onblur="corregirCampoTexto(this)" placeholder="EJ: UNIVERSIDAD NACIONAL DE COLOMBIA" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2">
                     </div>
                 </div>
 
@@ -212,7 +212,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                         <div class="md:col-span-2">
                             <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre Pareja</label>
-                            <input type="text" id="nombreConyuge" placeholder="Nombres y Apellidos" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2 focus:outline-none">
+                            <input type="text" id="nombreConyuge" onblur="corregirCampoTexto(this)" placeholder="Nombres y Apellidos" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2 focus:outline-none">
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-600 mb-1">Sexo Pareja</label>
@@ -243,12 +243,12 @@
                             <span class="text-xs font-bold text-emerald-800"><i class="fa-solid fa-building-shield mr-1"></i> Centro de Conciliación de la Policía Nacional</span>
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-600 mb-1">Seccional / Metropolitana (Opcional)</label>
-                            <input type="text" id="seccionalPolicia" placeholder="Ej: Metropolitana de Bogotá / DEPRO" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2">
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Sede del Centro de Conciliación</label>
+                            <input type="text" id="sedeConciliacion" onblur="corregirCampoTexto(this)" placeholder="Ej: Sede Dirección General / Bogotá" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-600 mb-1">Sede del Centro de Conciliación</label>
-                            <input type="text" id="sedeConciliacion" placeholder="Ej: Sede Dirección General / Bogotá" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Fecha del Acta de Conciliación</label>
+                            <input type="date" id="fechaActaConciliacion" class="w-full text-sm border border-slate-300 rounded-lg p-2 bg-white focus:ring-2 focus:ring-emerald-800 focus:outline-none">
                         </div>
                     </div>
 
@@ -265,14 +265,20 @@
                         </div>
                         <div id="bloqueOtroOrigen" class="hidden">
                             <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre Específico de la Notaría, Juzgado u Otra Entidad (incluya la sede si aplica)</label>
-                            <input type="text" id="otroOrigenTxt" placeholder="Ej: Notaría Primera del Círculo de Bogotá" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2">
+                            <input type="text" id="otroOrigenTxt" onblur="corregirCampoTexto(this)" placeholder="Ej: Notaría Primera del Círculo de Bogotá" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2">
                         </div>
                     </div>
 
-                    <!-- CAMPO PARA EL NÚMERO DE ACTA -->
-                    <div class="bg-white p-3 rounded-lg border border-emerald-200">
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">Número de Acta / Escritura (Opcional)</label>
-                        <input type="text" id="numActaUnion" placeholder="Ej: 045 (solo el número)" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
+                    <!-- CAMPO PARA EL NÚMERO DE ACTA Y SU FECHA EXACTAMENTE DEBAJO -->
+                    <div class="bg-white p-3 rounded-lg border border-emerald-200 space-y-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Número de Acta / Escritura / Providencia (Opcional)</label>
+                            <input type="text" id="numActaUnion" placeholder="Ej: 045 (solo el número)" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Fecha del Acto / Acta / Escritura / Providencia</label>
+                            <input type="date" id="fechaOtroOrigen" class="w-full text-sm border border-slate-300 rounded-lg p-2 bg-white focus:ring-2 focus:ring-emerald-800 focus:outline-none">
+                        </div>
                     </div>
                 </div>
 
@@ -282,7 +288,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                         <div class="md:col-span-2">
                             <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre del Hijo(a)</label>
-                            <input type="text" id="nombreHijo" placeholder="EJ: SOFÍA ISABEL GÓMEZ ALGARÍN" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2">
+                            <input type="text" id="nombreHijo" onblur="corregirCampoTexto(this)" placeholder="EJ: SOFÍA ISABEL GÓMEZ ALGARÍN" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2">
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-600 mb-1">Sexo Hijo(a)</label>
@@ -308,12 +314,24 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 border-t border-slate-100">
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 mb-1">Comunicado Oficial de Radicación</label>
-                        <input type="text" id="comunicadoRadicacion" required placeholder="Ej: GS-2026-043812-JESEP" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
+                        <input type="text" id="comunicadoRadicacion" onblur="corregirCampoTexto(this)" required placeholder="Ej: GS-2026-043812-JESEP" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 mb-1">Fecha Radicación</label>
                         <input type="date" id="fechaRadicacion" required class="w-full text-sm border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
                     </div>
+                </div>
+
+                <!-- Controles para el modo de Lote (Reconocimiento Múltiple) -->
+                <div id="bloqueLoteControles" class="bg-amber-50 p-3 rounded-lg border border-amber-200 space-y-2">
+                    <p class="text-xs font-bold text-amber-800"><i class="fa-solid fa-layer-group mr-1"></i> Modo de Ingreso Múltiple (Reconocimiento)</p>
+                    <div class="flex gap-2">
+                        <button type="button" onclick="agregarRegistroLote()" class="flex-1 bg-amber-700 hover:bg-amber-800 text-white font-semibold py-2 px-3 rounded-lg text-xs transition duration-200 flex items-center justify-center space-x-1">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Agregar a la lista actual</span>
+                        </button>
+                    </div>
+                    <div id="contadorLote" class="text-xs text-amber-900 font-semibold text-center">Registros acumulados en este lote: 0</div>
                 </div>
 
                 <!-- Botón de Generar Texto y Guardar -->
@@ -324,40 +342,152 @@
             </form>
         </section>
 
-        <!-- Panel de Resultado para Copiar y Pegar -->
-        <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col justify-between">
-            <div>
-                <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
+        <!-- Panel de Resultado y Edición Previa del Lote -->
+        <section class="space-y-6">
+
+            <!-- Panel de Corrección / Edición Previa de Lote -->
+            <div id="panelGestionLote" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 hidden">
+                <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
                     <h2 class="text-md font-bold text-slate-700 flex items-center">
-                        <i class="fa-solid fa-file-lines text-amber-500 mr-2"></i> Texto Generado (Copiar y Pegar)
+                        <i class="fa-solid fa-list-check text-amber-600 mr-2"></i> Registros en Lote para la Resolución
                     </h2>
-                    <button onclick="copiarTodoElTexto()" id="btnCopiarTodo" disabled class="bg-emerald-700 hover:bg-emerald-800 disabled:bg-slate-300 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition duration-200 flex items-center space-x-1">
-                        <i class="fa-solid fa-copy"></i>
-                        <span>Copiar Todo</span>
+                    <span id="badgeLote" class="bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-0.5 rounded-full">0 registros</span>
+                </div>
+                <p class="text-xs text-slate-500 mb-3">Puedes revisar, corregir o eliminar registros individuales antes de presionar "Generar Texto y Guardar en Excel":</p>
+                <div id="listaLoteUI" class="space-y-2 max-h-[220px] overflow-y-auto pr-1">
+                    <!-- Los elementos se cargan dinámicamente aquí -->
+                </div>
+            </div>
+
+            <!-- Panel de Resultado para Copiar y Pegar -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
+                        <h2 class="text-md font-bold text-slate-700 flex items-center">
+                            <i class="fa-solid fa-file-lines text-amber-500 mr-2"></i> Texto Generado (Copiar y Pegar)
+                        </h2>
+                        <button onclick="copiarTodoElTexto()" id="btnCopiarTodo" disabled class="bg-emerald-700 hover:bg-emerald-800 disabled:bg-slate-300 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition duration-200 flex items-center space-x-1">
+                            <i class="fa-solid fa-copy"></i>
+                            <span>Copiar Todo</span>
+                        </button>
+                    </div>
+
+                    <div class="relative">
+                        <textarea id="resultadoTexto" readonly placeholder="Aquí aparecerá el texto estructurado..." class="w-full h-[350px] text-xs font-mono bg-slate-50 border border-slate-300 rounded-lg p-3 text-slate-700 focus:outline-none resize-none"></textarea>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-slate-100 mt-2">
+                    <button onclick="reiniciarTodo()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold py-2 px-4 rounded-lg text-xs transition duration-200">
+                        <i class="fa-solid fa-rotate-right mr-1"></i> Limpiar Formulario / Reiniciar Lote
                     </button>
                 </div>
-
-                <div class="relative">
-                    <textarea id="resultadoTexto" readonly placeholder="Aquí aparecerá el texto estructurado con inclusión de número de acta y corrección ortográfica..." class="w-full h-[450px] text-xs font-mono bg-slate-50 border border-slate-300 rounded-lg p-3 text-slate-700 focus:outline-none resize-none"></textarea>
-                </div>
             </div>
 
-            <div class="pt-4 border-t border-slate-100 mt-2">
-                <button onclick="reiniciarTodo()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold py-2 px-4 rounded-lg text-xs transition duration-200">
-                    <i class="fa-solid fa-rotate-right mr-1"></i> Limpiar Formulario
-                </button>
-            </div>
         </section>
 
     </main>
 
-    <!-- Script de Control y Corrección Ortográfica -->
+    <!-- Script con Corrector Dinámico Fonético / Morfológico, Limpieza Completa de Formulario y Panel de Edición de Lote -->
     <script>
+        let registrosLote = [];
+
         document.addEventListener("DOMContentLoaded", function() {
             toggleTipoAccion();
             toggleCategoriaResolucion();
             toggleOrigenUnion();
         });
+
+        // Diccionario base prioritario para nombres y apellidos conocidos
+        const diccionarioTildesMayus = {
+            "RENE": "RENÉ",
+            "PULGARIN": "PULGARÍN",
+            "FABIAN": "FABIÁN",
+            "DARIO": "DARÍO",
+            "IVAN": "IVÁN",
+            "DUVAN": "DUVÁN",
+            "GARCIA": "GARCÍA",
+            "RESTAN": "RESTÁN",
+            "ALVARO": "ÁLVARO",
+            "MARIA": "MARÍA",
+            "JESUS": "JESÚS",
+            "ANDRES": "ANDRÉS",
+            "OSCAR": "ÓSCAR",
+            "HECTOR": "HÉCTOR",
+            "CESAR": "CÉSAR",
+            "VICTOR": "VÍCTOR",
+            "MONICA": "MÓNICA",
+            "ANGEL": "ÁNGEL",
+            "RAUL": "RAÚL",
+            "RUBEN": "RUBÉN",
+            "ESTEBAN": "ESTEBAN",
+            "MARIO": "MARIO",
+            "GOMEZ": "GÓMEZ",
+            "RODRIGUEZ": "RODRÍGUEZ",
+            "PEREZ": "PÉREZ",
+            "GUTIERREZ": "GUTIÉRREZ",
+            "SANCHEZ": "SÁNCHEZ",
+            "RAMIREZ": "RAMÍREZ",
+            "MARTINEZ": "MARTÍNEZ",
+            "LOPEZ": "LÓPEZ",
+            "GONZALEZ": "GONZÁLEZ",
+            "HERNANDEZ": "HERNÁNDEZ",
+            "JIMENEZ": "JIMÉNEZ",
+            "SUAREZ": "SUÁREZ",
+            "AVILA": "ÁVILA",
+            "CACERES": "CÁCERES"
+        };
+
+        // Motor de corrección inteligente
+        function corregirNombreDinamico(palabra) {
+            let limpia = palabra.replace(/[,.;:]/g, '');
+            let signo = palabra.replace(/[^,.;:]/g, '');
+            
+            if (!limpia || limpia.length < 2) return palabra;
+
+            if (diccionarioTildesMayus[limpia]) {
+                return diccionarioTildesMayus[limpia] + signo;
+            }
+
+            let base = limpia.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+            if (base.endsWith("EZ") && base.length > 4) {
+                return base.substring(0, base.length - 2) + "ÉZ" + signo;
+            }
+            if (base.endsWith("AN") && !["JUAN", "BELTRAN", "GAVILAN"].includes(base)) {
+                return base.substring(0, base.length - 2) + "ÁN" + signo;
+            }
+            if (base.endsWith("ON") && !["CORONEL"].includes(base)) {
+                return base.substring(0, base.length - 2) + "ÓN" + signo;
+            }
+            if (base.endsWith("IN") && !["TIN"].includes(base)) {
+                return base.substring(0, base.length - 2) + "ÍN" + signo;
+            }
+            if (base.endsWith("EN") && !["CARMEN", "VIRGEN"].includes(base)) {
+                return base.substring(0, base.length - 2) + "ÉN" + signo;
+            }
+            if (base.endsWith("IA") && base.length > 3) {
+                let penultima = base[base.length - 3];
+                if (!"AEIOU".includes(penultima)) {
+                    return base.substring(0, base.length - 2) + "ÍA" + signo;
+                }
+            }
+            if (base.endsWith("IO") && ["DARIO", "JULIO", "FABIO", "MAURICIO", "HORACIO"].includes(base)) {
+                if (base === "DARIO") return "DARÍO" + signo;
+            }
+
+            return palabra;
+        }
+
+        function corregirCampoTexto(input) {
+            let val = input.value.trim().toUpperCase();
+            if (!val) return;
+
+            let palabras = val.split(/\s+/);
+            let palabrasCorregidas = palabras.map(palabra => corregirNombreDinamico(palabra));
+
+            input.value = palabrasCorregidas.join(' ');
+        }
 
         function toggleOrigenUnion() {
             const porCentro = document.querySelector('input[name="porCentroConciliacion"]:checked').value === "SI";
@@ -385,8 +515,17 @@
             const contenedorFechaHecho = document.getElementById('contenedorFechaHecho');
             const inputFechaHecho = document.getElementById('fechaHecho');
             const lblFechaHecho = document.getElementById('lblFechaHecho');
+            const bloqueLoteControles = document.getElementById('bloqueLoteControles');
 
             bloqueCategoria.classList.remove('hidden');
+
+            if (tipoAccion === "RECONOCIMIENTO") {
+                bloqueLoteControles.classList.remove('hidden');
+            } else {
+                bloqueLoteControles.classList.add('hidden');
+                registrosLote = [];
+                actualizarContadorLote();
+            }
 
             if (tipoAccion === "EXTINCION") {
                 bloquePorcentaje.classList.add('hidden');
@@ -505,7 +644,7 @@
             return res.trim();
         }
 
-        // MOTOR DE CORRECCIÓN ORTOGRÁFICA Y TIPOGRÁFICA AUTOMÁTICA
+        // MOTOR ESTRICTO DE CORRECCIÓN ORTOGRÁFICA, TIPOGRÁFICA Y DE PUNTUACIÓN
         function aplicarCorreccionOrtografica(texto) {
             if (!texto) return "";
             
@@ -513,24 +652,24 @@
                 .replace(/[ \t]+([,.;:\?!])/g, '$1')
                 .replace(/,(?=[^\s\d])/g, ', ')
                 .replace(/([;:])(?=\S)/g, '$1 ')
-                .replace(/\.([A-ZÁÉÍÓÚÑa-záéíóúñ])/g, '. $1')
+                .replace(/\.(\s*\.)+/g, '.')
+                .replace(/\.([A-ZÁÉÍÓÚÑ])/g, '. $1')
                 .replace(/[ \t]+/g, ' ')
                 .replace(/ ?\n ?/g, '\n');
 
             limpio = limpio
-                .replace(/\bcedula\b/gi, 'cédula')
-                .replace(/\barticulo\b/gi, 'artículo')
-                .replace(/\bparagrafo\b/gi, 'parágrafo')
-                .replace(/\bcodigo\b/gi, 'código')
-                .replace(/\btramite\b/gi, 'trámite')
-                .replace(/\bregimen\b/gi, 'régimen')
-                .replace(/\buni[oó]n\b/gi, 'unión')
-                .replace(/\bfamiliar\b/gi, 'Familiar');
+                .replace(/\bCEDULA\b/gi, 'CÉDULA')
+                .replace(/\bARTICULO\b/gi, 'ARTÍCULO')
+                .replace(/\bPARAGRAFO\b/gi, 'PARÁGRAFO')
+                .replace(/\bCODIGO\b/gi, 'CÓDIGO')
+                .replace(/\bTRAMITE\b/gi, 'TRÁMITE')
+                .replace(/\bREGIMEN\b/gi, 'RÉGIMEN')
+                .replace(/\bUNION\b/gi, 'UNIÓN')
+                .replace(/\bFAMILIAR\b/gi, 'FAMILIAR');
 
             return limpio.trim();
         }
 
-        // CÁLCULO DE DÍAS HÁBILES EN COLOMBIA
         function contarDiasHabilesColombia(fInicioStr, fFinStr) {
             if (!fInicioStr || !fFinStr) return 0;
             let fInicio = new Date(fInicioStr + "T00:00:00");
@@ -600,8 +739,11 @@
             return new Date(year, mes - 1, dia);
         }
 
-        async function procesarYGenerar() {
-            const tipoAccion = document.querySelector('input[name="tipoAccion"]:checked').value;
+        function extraerDatosFormularioActual() {
+            document.querySelectorAll('input[type="text"]').forEach(input => {
+                if (input.id && input.id !== 'resultadoTexto') corregirCampoTexto(input);
+            });
+
             const grado = document.getElementById('grado').value;
             const nombreUniformado = document.getElementById('nombreUniformado').value.trim().toUpperCase();
             const sexoUniformado = document.getElementById('sexoUniformado').value;
@@ -610,71 +752,354 @@
             const fechaRadicacion = document.getElementById('fechaRadicacion').value;
             const fechaHecho = document.getElementById('fechaHecho').value;
 
-            if (!nombreUniformado || !cedulaUniformado || !comunicadoRadicacion || !fechaRadicacion) {
-                alert("Por favor completa los datos básicos obligatorios.");
-                return;
+            if (!nombreUniformado || !cedulaUniformado || !comunicadoRadicacion || !fechaRadicacion || !fechaHecho) {
+                alert("Por favor completa los datos obligatorios del uniformado (Nombre, Cédula, Fechas y Radicado).");
+                return null;
+            }
+
+            const pronombresUni = sexoUniformado === "F" ? { id: "identificada" } : { id: "identificado" };
+            const tipoPorcentaje = document.querySelector('input[name="tipoPorcentaje"]:checked').value;
+            let porcentajeTxt = tipoPorcentaje === "30" ? "30%" : (tipoPorcentaje === "3" ? "3%" : "2%");
+            let detalleVinculo = "";
+            let prefijoVinculo = "por concepto de";
+            let sedeGuardar = "";
+
+            // Guardar Estado Completo del Formulario para Edición Posterior
+            const estadoCampos = {
+                tipoPorcentaje,
+                sexoUniformado,
+                nombreConyuge: document.getElementById('nombreConyuge') ? document.getElementById('nombreConyuge').value : "",
+                sexoConyuge: document.getElementById('sexoConyuge') ? document.getElementById('sexoConyuge').value : "F",
+                cedulaConyuge: document.getElementById('cedulaConyuge') ? document.getElementById('cedulaConyuge').value : "",
+                porCentroConciliacion: document.querySelector('input[name="porCentroConciliacion"]:checked') ? document.querySelector('input[name="porCentroConciliacion"]:checked').value : "NO",
+                sedeConciliacion: document.getElementById('sedeConciliacion') ? document.getElementById('sedeConciliacion').value : "",
+                fechaActaConciliacion: document.getElementById('fechaActaConciliacion') ? document.getElementById('fechaActaConciliacion').value : "",
+                origenUnion: document.getElementById('origenUnion') ? document.getElementById('origenUnion').value : "",
+                otroOrigenTxt: document.getElementById('otroOrigenTxt') ? document.getElementById('otroOrigenTxt').value : "",
+                numActaUnion: document.getElementById('numActaUnion') ? document.getElementById('numActaUnion').value : "",
+                fechaOtroOrigen: document.getElementById('fechaOtroOrigen') ? document.getElementById('fechaOtroOrigen').value : "",
+                nombreHijo: document.getElementById('nombreHijo') ? document.getElementById('nombreHijo').value : "",
+                sexoHijo: document.getElementById('sexoHijo') ? document.getElementById('sexoHijo').value : "F",
+                registroCivil: document.getElementById('registroCivil') ? document.getElementById('registroCivil').value : "",
+                fechaNacimientoHijo: document.getElementById('fechaNacimientoHijo') ? document.getElementById('fechaNacimientoHijo').value : ""
+            };
+
+            if (tipoPorcentaje === "30") {
+                const nombreConyuge = estadoCampos.nombreConyuge.trim().toUpperCase() || "[PAREJA]";
+                const sexoConyuge = estadoCampos.sexoConyuge;
+                const cedulaConyuge = estadoCampos.cedulaConyuge.trim() || "[CÉDULA]";
+                const numActaUnion = estadoCampos.numActaUnion.trim().toUpperCase()
+                    .replace(/^(ACTA|ESCRITURA(\s+P[ÚU]BLICA)?)?\s*(NRO\.?|N[°º]\.?|NO\.|N\.º|NÚMERO|NUMERO)?\s*/, '').trim();
+                const artSeñor = sexoConyuge === "F" ? "la señora" : "el señor";
+
+                const porCentro = estadoCampos.porCentroConciliacion === "SI";
+                const origenVal = porCentro ? "CENTRO_CONCILIACION_PN" : estadoCampos.origenUnion;
+
+                const sede = porCentro ? estadoCampos.sedeConciliacion.trim().toUpperCase() : "";
+                sedeGuardar = sede;
+                
+                const fechaActaInput = porCentro ? estadoCampos.fechaActaConciliacion : estadoCampos.fechaOtroOrigen;
+                const fechaActaTxt = fechaActaInput ? formatearFechaTexto(fechaActaInput) : "";
+
+                const otroTxt = estadoCampos.otroOrigenTxt.trim().toUpperCase();
+
+                let entidad = "";
+                if (origenVal === "CENTRO_CONCILIACION_PN") {
+                    entidad = "el Centro de Conciliación de la Policía Nacional";
+                    if (sede) entidad += `, sede ${sede}`;
+                } else if ((origenVal === "NOTARIA" || origenVal === "JUZGADO" || origenVal === "OTRO") && otroTxt) {
+                    if (origenVal === "NOTARIA") {
+                        entidad = /^NOTAR[ÍI]A/.test(otroTxt) ? `la ${otroTxt}` : `la Notaría ${otroTxt}`;
+                    } else if (origenVal === "JUZGADO") {
+                        entidad = /^JUZGADO/.test(otroTxt) ? `el ${otroTxt}` : `el Juzgado ${otroTxt}`;
+                    } else {
+                        entidad = otroTxt;
+                    }
+                }
+
+                let docUnion = "mediante el acta administrativa";
+                if (porCentro) docUnion = "mediante el acta de conciliación";
+                else if (origenVal === "NOTARIA") docUnion = "mediante la escritura pública";
+                else if (origenVal === "JUZGADO") docUnion = "mediante la providencia";
+
+                let sufijoOrigen = "";
+                if (numActaUnion && entidad) {
+                    sufijoOrigen = ` ${docUnion} nro. ${numActaUnion}`;
+                    if (fechaActaTxt) sufijoOrigen += ` del ${fechaActaTxt}`;
+                    sufijoOrigen += ` expedida por ${entidad}`;
+                } else if (numActaUnion) {
+                    sufijoOrigen = ` ${docUnion} nro. ${numActaUnion}`;
+                    if (fechaActaTxt) sufijoOrigen += ` del ${fechaActaTxt}`;
+                } else if (fechaActaTxt && entidad) {
+                    sufijoOrigen = ` ${docUnion} del ${fechaActaTxt} expedida por ${entidad}`;
+                } else if (fechaActaTxt) {
+                    sufijoOrigen = ` ${docUnion} del ${fechaActaTxt}`;
+                } else if (entidad) {
+                    sufijoOrigen = ` ante ${entidad}`;
+                }
+
+                const idConyuge = sexoConyuge === "F" ? "identificada" : "identificado";
+                prefijoVinculo = "por";
+                detalleVinculo = `haber constituido unión marital de hecho con ${artSeñor} ${nombreConyuge}, ${idConyuge} con cédula de ciudadanía nro. ${cedulaConyuge}, declarada${sufijoOrigen}`;
+
+            } else {
+                const nombreHijo = estadoCampos.nombreHijo.trim().toUpperCase() || "[HIJO/A]";
+                const sexoHijo = estadoCampos.sexoHijo;
+                const descHijo = sexoHijo === "F" ? "su hija" : "su hijo";
+                const regCivil = estadoCampos.registroCivil.trim() || "[REGISTRO CIVIL]";
+                const fHechoTxt = formatearFechaTexto(fechaHecho);
+                detalleVinculo = `${descHijo} ${nombreHijo}, conforme al registro civil de nacimiento nro. ${regCivil}, en el que consta que nació el ${fHechoTxt}`;
+            }
+
+            const diasHabiles = contarDiasHabilesColombia(fechaHecho, fechaRadicacion);
+            const dentroPlazo = diasHabiles <= 90;
+            const fHechoTxt = formatearFechaTexto(fechaHecho);
+            const fRadicacionTxt = formatearFechaTexto(fechaRadicacion);
+
+            let textoEfectosFiscales = "";
+            if (dentroPlazo) {
+                textoEfectosFiscales = `Al haberse presentado dentro del término legal de noventa (90) días hábiles, los efectos fiscales se reconocerán a partir de la fecha del hecho que lo motiva, esto es, desde el ${fHechoTxt}, de conformidad con la norma aplicable.`;
+            } else {
+                textoEfectosFiscales = `Teniendo en cuenta que la solicitud fue presentada por fuera del término legal de noventa (90) días hábiles, los efectos fiscales se reconocerán a partir de la fecha de su radicación, esto es, desde el ${fRadicacionTxt}, de conformidad con la norma aplicable.`;
+            }
+
+            const textoResuelveExcel = `${grado} ${nombreUniformado}, ${pronombresUni.id} con cédula nro. ${cedulaUniformado}, causa derecho al reconocimiento del ${porcentajeTxt} por ${detalleVinculo}. Solicitud radicada mediante comunicado ${comunicadoRadicacion} del ${fRadicacionTxt}.`;
+
+            const parrafoIndividual = `${grado}. ${nombreUniformado}, ${pronombresUni.id} con cédula de ciudadanía nro. ${cedulaUniformado}, causa derecho al reconocimiento del ${porcentajeTxt} de la asignación básica correspondiente a su grado, ${prefijoVinculo} ${detalleVinculo}. La solicitud fue radicada mediante el comunicado oficial ${comunicadoRadicacion} del ${fRadicacionTxt}. ${textoEfectosFiscales}`;
+
+            return {
+                grado,
+                nombreUniformado,
+                cedulaUniformado,
+                fechaHecho,
+                fechaRadicacion,
+                comunicadoRadicacion,
+                sedeConciliacion: sedeGuardar,
+                diasHabiles,
+                dentroPlazo: dentroPlazo ? "SÍ" : "NO",
+                textoResuelveCustom: textoResuelveExcel,
+                parrafo: parrafoIndividual,
+                estadoCampos: estadoCampos
+            };
+        }
+
+        // LIMPIEZA COMPLETA DEL FORMULARIO SIN AFECTAR EL CONTADOR ACUMULADO
+        function limpiarFormulario() {
+            document.getElementById('resolucionForm').reset();
+            
+            // Reestablecer selectores por defecto y radios iniciales
+            toggleTipoAccion();
+            toggleCategoriaResolucion();
+            toggleOrigenUnion();
+        }
+
+        function agregarRegistroLote() {
+            const registro = extraerDatosFormularioActual();
+            if (!registro) return;
+
+            registrosLote.push(registro);
+            actualizarContadorLote();
+            limpiarFormulario(); // Limpia completamente el formulario para el siguiente ingreso
+        }
+
+        function actualizarContadorLote() {
+            const contadorEl = document.getElementById('contadorLote');
+            contadorEl.textContent = `Registros acumulados en este lote: ${registrosLote.length}`;
+
+            const panelGestion = document.getElementById('panelGestionLote');
+            const listaUI = document.getElementById('listaLoteUI');
+            const badgeLote = document.getElementById('badgeLote');
+
+            if (registrosLote.length > 0) {
+                panelGestion.classList.remove('hidden');
+                badgeLote.textContent = `${registrosLote.length} registro(s)`;
+                
+                listaUI.innerHTML = registrosLote.map((reg, index) => `
+                    <div class="flex items-center justify-between bg-slate-50 border border-slate-200 p-2.5 rounded-lg text-xs">
+                        <div class="flex-1 pr-2">
+                            <span class="font-bold text-slate-800">${index + 1}. ${reg.grado} ${reg.nombreUniformado}</span>
+                            <span class="text-slate-500 block text-[11px]">CC: ${reg.cedulaUniformado} | Rad: ${reg.comunicadoRadicacion}</span>
+                        </div>
+                        <div class="flex space-x-1">
+                            <button type="button" onclick="editarRegistroLote(${index})" class="bg-amber-100 hover:bg-amber-200 text-amber-800 px-2 py-1 rounded font-semibold transition" title="Editar Registro">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+                            <button type="button" onclick="eliminarRegistroLote(${index})" class="bg-red-100 hover:bg-red-200 text-red-800 px-2 py-1 rounded font-semibold transition" title="Eliminar Registro">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                panelGestion.classList.add('hidden');
+            }
+        }
+
+        // PERMITE EDITAR UN REGISTRO PREVIO CARGÁNDOLO DE NUEVO AL FORMULARIO
+        function editarRegistroLote(index) {
+            const reg = registrosLote[index];
+            if (!reg) return;
+
+            // Cargar datos principales
+            document.getElementById('grado').value = reg.grado;
+            document.getElementById('nombreUniformado').value = reg.nombreUniformado;
+            document.getElementById('cedulaUniformado').value = reg.cedulaUniformado;
+            document.getElementById('comunicadoRadicacion').value = reg.comunicadoRadicacion;
+            document.getElementById('fechaRadicacion').value = reg.fechaRadicacion;
+            document.getElementById('fechaHecho').value = reg.fechaHecho;
+
+            if (reg.estadoCampos) {
+                const c = reg.estadoCampos;
+                
+                // Cargar Porcentaje
+                const radioPct = document.querySelector(`input[name="tipoPorcentaje"][value="${c.tipoPorcentaje}"]`);
+                if (radioPct) radioPct.checked = true;
+
+                document.getElementById('sexoUniformado').value = c.sexoUniformado || "M";
+
+                if (c.tipoPorcentaje === "30") {
+                    if (document.getElementById('nombreConyuge')) document.getElementById('nombreConyuge').value = c.nombreConyuge;
+                    if (document.getElementById('sexoConyuge')) document.getElementById('sexoConyuge').value = c.sexoConyuge;
+                    if (document.getElementById('cedulaConyuge')) document.getElementById('cedulaConyuge').value = c.cedulaConyuge;
+                    
+                    const radioCentro = document.querySelector(`input[name="porCentroConciliacion"][value="${c.porCentroConciliacion}"]`);
+                    if (radioCentro) radioCentro.checked = true;
+
+                    if (document.getElementById('sedeConciliacion')) document.getElementById('sedeConciliacion').value = c.sedeConciliacion;
+                    if (document.getElementById('fechaActaConciliacion')) document.getElementById('fechaActaConciliacion').value = c.fechaActaConciliacion;
+                    if (document.getElementById('origenUnion')) document.getElementById('origenUnion').value = c.origenUnion;
+                    if (document.getElementById('otroOrigenTxt')) document.getElementById('otroOrigenTxt').value = c.otroOrigenTxt;
+                    if (document.getElementById('numActaUnion')) document.getElementById('numActaUnion').value = c.numActaUnion;
+                    if (document.getElementById('fechaOtroOrigen')) document.getElementById('fechaOtroOrigen').value = c.fechaOtroOrigen;
+                } else {
+                    if (document.getElementById('nombreHijo')) document.getElementById('nombreHijo').value = c.nombreHijo;
+                    if (document.getElementById('sexoHijo')) document.getElementById('sexoHijo').value = c.sexoHijo;
+                    if (document.getElementById('registroCivil')) document.getElementById('registroCivil').value = c.registroCivil;
+                    if (document.getElementById('fechaNacimientoHijo')) document.getElementById('fechaNacimientoHijo').value = c.fechaNacimientoHijo;
+                }
+            }
+
+            toggleTipoAccion();
+            toggleCategoriaResolucion();
+            toggleOrigenUnion();
+
+            // Elimina el elemento antiguo para reemplazarlo al presionar de nuevo agregar
+            registrosLote.splice(index, 1);
+            actualizarContadorLote();
+
+            alert(`El registro de ${reg.nombreUniformado} ha sido cargado nuevamente en el formulario para sus correcciones.`);
+        }
+
+        // PERMITE ELIMINAR UN REGISTRO ESPECÍFICO DEL LOTE
+        function eliminarRegistroLote(index) {
+            const reg = registrosLote[index];
+            if (confirm(`¿Estás seguro de eliminar el registro de ${reg.nombreUniformado} del lote actual?`)) {
+                registrosLote.splice(index, 1);
+                actualizarContadorLote();
+            }
+        }
+
+        async function procesarYGenerar() {
+            try {
+                await procesarYGenerarInterno();
+            } catch (err) {
+                console.error("Error al generar:", err);
+                const b = document.getElementById('btnProcesar');
+                b.disabled = false;
+                b.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> Generar Texto y Guardar en Excel`;
+                alert("Ocurrió un error al generar el texto: " + err.message);
+            }
+        }
+
+        async function procesarYGenerarInterno() {
+            const tipoAccion = document.querySelector('input[name="tipoAccion"]:checked').value;
+
+            if (tipoAccion === "RECONOCIMIENTO" && registrosLote.length === 0) {
+                const regActual = extraerDatosFormularioActual();
+                if (!regActual) return;
+                registrosLote.push(regActual);
             }
 
             const btn = document.getElementById('btnProcesar');
             btn.disabled = true;
             btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Procesando y Guardando...`;
 
-            const fHechoTxt = formatearFechaTexto(fechaHecho);
-            const fRadicacionTxt = formatearFechaTexto(fechaRadicacion);
-
-            let diasHabiles = 0;
-            let dentroPlazo = true;
-
-            if (tipoAccion !== "EXTINCION" && tipoAccion !== "CONTINUIDADES") {
-                diasHabiles = contarDiasHabilesColombia(fechaHecho, fechaRadicacion);
-                dentroPlazo = diasHabiles <= 90;
-            }
-
-            let textoResuelveExcel = "";
             let textoFinal = "";
-            let sedeGuardar = "";
+            let payloadParaEnviar = null;
 
             if (tipoAccion === "EXTINCION") {
+                const grado = document.getElementById('grado').value;
+                const nombreUniformado = document.getElementById('nombreUniformado').value.trim().toUpperCase();
+                const sexoUniformado = document.getElementById('sexoUniformado').value;
+                const cedulaUniformado = document.getElementById('cedulaUniformado').value.trim();
+                const comunicadoRadicacion = document.getElementById('comunicadoRadicacion').value.trim().toUpperCase();
+                const fechaRadicacion = document.getElementById('fechaRadicacion').value;
+                const fechaHecho = document.getElementById('fechaHecho').value;
+
+                if (!nombreUniformado || !cedulaUniformado || !comunicadoRadicacion || !fechaRadicacion) {
+                    alert("Por favor completa los datos básicos obligatorios.");
+                    btn.disabled = false;
+                    btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> Generar Texto y Guardar en Excel`;
+                    return;
+                }
+
+                const fHechoTxt = formatearFechaTexto(fechaHecho);
+                const fRadicacionTxt = formatearFechaTexto(fechaRadicacion);
                 const nombreConyugeExtincion = document.getElementById('nombreConyugeExtincion').value.trim().toUpperCase();
                 const cedulaConyugeExtincion = document.getElementById('cedulaConyugeExtincion').value.trim();
-                textoResuelveExcel = `EXTINGUIR. Ordenar la extinción de la Bonificación para la Asistencia Familiar entre el/la ${grado} ${nombreUniformado} y ${nombreConyugeExtincion}, a partir del ${fHechoTxt}.`;
+                const textoResuelveExcel = `EXTINGUIR. Ordenar la extinción de la Bonificación para la Asistencia Familiar entre el/la ${grado} ${nombreUniformado} y ${nombreConyugeExtincion}, a partir del ${fHechoTxt}.`;
 
-                const tipoDocVigenteTxt = document.getElementById('tipoDocVigente').value === "ESCRITURA" ? "escritura pública" : "resolución";
-                const resolucionAnterior = document.getElementById('resolucionAnterior').value.trim().toUpperCase() || "[NÚMERO]";
-                const fechaResolucionAnterior = formatearFechaLarga(document.getElementById('fechaResolucionAnterior').value) || "[FECHA]";
                 const aUniformadoExt = sexoUniformado === "F" ? "a la señora" : "al señor";
-                const aFuncionarioExt = sexoUniformado === "F" ? "a la funcionaria" : "al funcionario";
                 const aFuncionarioInteresado = sexoUniformado === "F" ? "a la funcionaria interesada" : "al funcionario interesado";
                 const fechaCuestionada = formatearFechaLarga(fechaHecho) || "[FECHA]";
-                const valorTotalCO = `${textoValorDesc} ($${formatearPesosCO(document.getElementById('valorDescuento').value) || "2.400.126,90"})`;
                 const sexoConyugeExtincion = document.getElementById('sexoConyugeExtincion').value;
                 const artExPareja = sexoConyugeExtincion === "F" ? "la señora" : "el señor";
-                const rolExPareja = sexoConyugeExtincion === "F" ? "excompañera permanente" : "excompañero permanente";
                 const idExPareja = sexoConyugeExtincion === "F" ? "identificada" : "identificado";
-                const valorDesc = document.getElementById('valorDescuento').value.trim() || "2.400.126,90";
                 const textoValorDesc = document.getElementById('textoValorDescuento').value.trim() || "DOS MILLONES CUATROCIENTOS MIL CIENTO VEINTISÉIS PESOS CON NOVENTA CENTAVOS";
-                const valorTotalFormateado = `${textoValorDesc} ($${valorDesc})`;
-                const artUniformadoExt = sexoUniformado === "F" ? "la señora" : "el señor";
+                const valorTotalCO = `${textoValorDesc} ($${formatearPesosCO(document.getElementById('valorDescuento').value) || "2.400.126,90"})`;
                 const idUniformadoExt = sexoUniformado === "F" ? "identificada" : "identificado";
-                const funcionarioExt = sexoUniformado === "F" ? "la funcionaria" : "el funcionario";
 
-                textoFinal = `C O N S I D E R A N D O:\n\n` +
-                `Que ${aUniformadoExt} ${grado.toLowerCase()} ${nombreUniformado}, ${idUniformadoExt} con cédula de ciudadanía nro. ${cedulaUniformado}, le fue reconocida la Bonificación para la Asistencia Familiar mediante ${tipoDocVigenteTxt} nro. ${resolucionAnterior} del ${fechaResolucionAnterior}, por la unión marital de hecho demostrada con ${artExPareja} ${nombreConyugeExtincion}, ${idExPareja} con cédula nro. ${cedulaConyugeExtincion}.\n\n` +
-                `Que mediante comunicación oficial nro. ${comunicadoRadicacion}, de fecha ${fRadicacionTxt}, se solicitó adelantar las actuaciones administrativas correspondientes a la extinción de la Bonificación para la Asistencia Familiar reconocida a ${artUniformadoExt} ${grado} ${nombreUniformado}, ${idUniformadoExt} con cédula de ciudadanía nro. ${cedulaUniformado}, por concepto de su ${rolExPareja}, ${artExPareja} ${nombreConyugeExtincion}, ${idExPareja} con cédula de ciudadanía nro. ${cedulaConyugeExtincion}, con fundamento en la disolución de la unión marital de hecho.\n\n` +
-                `Que, de conformidad con los documentos aportados y obrantes en el expediente administrativo, se acreditó la disolución de la unión marital de hecho entre ${funcionarioExt} y ${artExPareja} ${nombreConyugeExtincion}, con efectos a partir del ${fHechoTxt}, circunstancia que hace necesario verificar la continuidad de las condiciones legales que dieron lugar al reconocimiento de la Bonificación para la Asistencia Familiar.\n\n` +
-                `En mérito de lo expuesto, el suscrito Jefe Nacional del Servicio de Policía en uso de sus facultades legales,\n\n` +
-                `R E S U E L V E:\n\n` +
-                `ARTÍCULO 1. EXTINGUIR. Ordenar la extinción del reconocimiento de la Bonificación para la Asistencia Familiar correspondiente al porcentaje del treinta por ciento (30 %) otorgado por razón de la unión marital de hecho entre ${artUniformadoExt} ${grado} ${nombreUniformado}, ${idUniformadoExt} con cédula de ciudadanía nro. ${cedulaUniformado}, y ${artExPareja} ${nombreConyugeExtincion}, ${idExPareja} con cédula de ciudadanía nro. ${cedulaConyugeExtincion}, a partir del ${fHechoTxt}.\n\n` +
-                `ARTÍCULO 2. DETERMINAR. Establecer, con fundamento en la liquidación detallada que hace parte integral del expediente administrativo, que el valor de los pagos efectuados por concepto de la Bonificación para la Asistencia Familiar, cuya procedencia se cuestiona a partir del ${fechaCuestionada}, asciende a la suma de ${valorTotalCO}, sin perjuicio de la verificación de su exigibilidad y de las garantías que le asisten ${aFuncionarioExt} en el trámite de recuperación.\n\n` +
-                `ARTÍCULO 3. ADELANTAR EL TRÁMITE DE RECUPERACIÓN. Ordenar al Grupo de Talento Humano de la Jefatura Nacional del Servicio de Policía, o a la dependencia competente, adelantar las actuaciones administrativas necesarias para establecer y recuperar los valores que se acrediten como efectivamente pagados sin causa legal por concepto de la Bonificación para la Asistencia Familiar ${aUniformadoExt} ${grado} ${nombreUniformado}, ${idUniformadoExt} con cédula de ciudadanía nro. ${cedulaUniformado}, con observancia del debido proceso, el derecho de defensa y las disposiciones vigentes aplicables.\n\n` +
-                `Una vez determinado el valor exigible y surtido el procedimiento correspondiente, se gestionará su reintegro mediante el mecanismo legalmente procedente, incluida, cuando haya lugar a ello, la aplicación de descuentos por nómina, conforme a las condiciones, límites y autorizaciones exigibles. Los recursos recuperados deberán registrarse y reintegrarse de acuerdo con las disposiciones presupuestales y contables aplicables.\n\n` +
-                `ARTÍCULO 4. ACTUALIZAR LOS REGISTROS ADMINISTRATIVOS. Ordenar a la dependencia competente efectuar las actualizaciones correspondientes en el Sistema de Información para la Administración del Talento Humano (SIATH) y en los registros de nómina, de conformidad con la decisión adoptada en el presente acto administrativo.\n\n` +
-                `ARTÍCULO 5. NOTIFICAR. Notificar el contenido de la presente resolución ${aFuncionarioInteresado}, de conformidad con las disposiciones de la Ley 1437 de 2011, Código de Procedimiento Administrativo y de lo Contencioso Administrativo, garantizando su conocimiento íntegro y el ejercicio de los derechos que le asisten.\n\n` +
-                `ARTÍCULO 6. RECURSOS. Contra la presente resolución proceden los recursos administrativos que legalmente correspondan, de conformidad con los artículos 74, 76 y 77 de la Ley 1437 de 2011, los cuales deberán interponerse dentro de los diez (10) días siguientes a su notificación, en los términos y condiciones previstos en la ley.\n\n` +
-                `ARTÍCULO 7. VIGENCIA. La presente resolución rige a partir de su expedición, sin perjuicio de las reglas aplicables a su notificación, eficacia y ejecutoriedad.\n\n` +
+                textoFinal = `R E S U E L V E:\n\n` +
+                `ARTÍCULO 1. EXTINGUIR. Ordenar la extinción del reconocimiento de la Bonificación para la Asistencia Familiar correspondiente al porcentaje del treinta por ciento (30 %) otorgado por razón de la unión marital de hecho entre ${aUniformadoExt} ${grado} ${nombreUniformado}, ${idUniformadoExt} con cédula de ciudadanía nro. ${cedulaUniformado}, y ${artExPareja} ${nombreConyugeExtincion}, ${idExPareja} con cédula de ciudadanía nro. ${cedulaConyugeExtincion}, a partir del ${fHechoTxt}.\n\n` +
+                `ARTÍCULO 2. DETERMINAR. Establecer, con fundamento en la liquidación detallada que hace parte integral del expediente administrativo, que el valor de los pagos efectuados por concepto de la Bonificación para la Asistencia Familiar, cuya procedencia se cuestiona a partir del ${fechaCuestionada}, asciende a la suma de ${valorTotalCO}, sin perjuicio de la verificación de sus garantías.\n\n` +
+                `ARTÍCULO 3. ADELANTAR EL TRÁMITE DE RECUPERACIÓN. Ordenar al Grupo de Talento Humano de la Jefatura Nacional del Servicio de Policía adelantar las actuaciones administrativas necesarias para recuperar los valores.\n\n` +
+                `ARTÍCULO 4. ACTUALIZAR LOS REGISTROS ADMINISTRATIVOS. Ordenar a la dependencia competente efectuar las actualizaciones correspondientes en el SIATH y en nómina.\n\n` +
+                `ARTÍCULO 5. NOTIFICAR. Notificar el contenido de la presente resolución ${aFuncionarioInteresado}, conforme a la Ley 1437 de 2011.\n\n` +
+                `ARTÍCULO 6. RECURSOS. Contra la presente resolución proceden los recursos administrativos conforme a los artículos 74, 76 y 77 de la Ley 1437 de 2011.\n\n` +
+                `ARTÍCULO 7. VIGENCIA. Rige a partir de su expedición.\n\n` +
                 `NOTIFÍQUESE Y CÚMPLASE.`;
 
+                payloadParaEnviar = {
+                    tipoAccion: tipoAccion,
+                    tipoResolucion: document.querySelector('input[name="tipoResolucion"]:checked').value,
+                    tipoPorcentaje: "",
+                    grado: grado,
+                    nombreUniformado: nombreUniformado,
+                    cedulaUniformado: cedulaUniformado,
+                    fechaHecho: fechaHecho,
+                    fechaRadicacion: fechaRadicacion,
+                    comunicadoRadicacion: comunicadoRadicacion,
+                    sedeConciliacion: "",
+                    diasHabiles: 0,
+                    dentroPlazo: "NO",
+                    textoResuelveCustom: textoResuelveExcel
+                };
+
             } else if (tipoAccion === "CONTINUIDADES") {
+                const grado = document.getElementById('grado').value;
+                const nombreUniformado = document.getElementById('nombreUniformado').value.trim().toUpperCase();
+                const sexoUniformado = document.getElementById('sexoUniformado').value;
+                const cedulaUniformado = document.getElementById('cedulaUniformado').value.trim();
+                const comunicadoRadicacion = document.getElementById('comunicadoRadicacion').value.trim().toUpperCase();
+                const fechaRadicacion = document.getElementById('fechaRadicacion').value;
+
+                if (!nombreUniformado || !cedulaUniformado || !comunicadoRadicacion || !fechaRadicacion) {
+                    alert("Por favor completa los datos básicos obligatorios.");
+                    btn.disabled = false;
+                    btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> Generar Texto y Guardar en Excel`;
+                    return;
+                }
+
                 const porcentajeContinuidad = document.getElementById('porcentajeContinuidad').value;
                 const fechaInicioContinuidad = formatearFechaTexto(document.getElementById('fechaInicioContinuidad').value);
                 const fechaFinContinuidad = formatearFechaTexto(document.getElementById('fechaFinContinuidad').value);
@@ -688,123 +1113,72 @@
                 const artUniCont = sexoUniformado === "F" ? "la señora" : "el señor";
                 const idUniCont = sexoUniformado === "F" ? "identificada" : "identificado";
 
-                textoResuelveExcel = `${grado} ${nombreUniformado}, identificado/a con cédula N°. ${cedulaUniformado}. Continuidad del ${porcentajeContinuidad}.`;
+                const textoResuelveExcel = `${grado} ${nombreUniformado}, identificado/a con cédula N°. ${cedulaUniformado}. Continuidad del ${porcentajeContinuidad}.`;
 
-                textoFinal = `C O N S I D E R A N D O:\n\n` +
-                `Que el artículo 132 de la Ley 2179 del 30 de diciembre de 2021 establece las directrices sobre la Bonificación para la Asistencia Familiar y su continuidad por estudios de los hijos.\n\n` +
-                `Que ${artUniCont} ${grado} ${nombreUniformado}, ${idUniCont} con cédula de ciudadanía nro. ${cedulaUniformado}, solicitó mediante comunicación oficial nro. ${comunicadoRadicacion} del ${fRadicacionTxt} la continuidad en el reconocimiento de la bonificación por ${descHijo} ${nombreHijoContinuidad}.\n\n` +
-                `En mérito de lo expuesto, el suscrito Jefe Nacional del Servicio de Policía en uso de sus facultades legales,\n\n` +
-                `R E S U E L V E:\n\n` +
+                textoFinal = `R E S U E L V E:\n\n` +
                 `ARTÍCULO 1. Reconocer la continuidad en el pago de la Bonificación para la Asistencia Familiar equivalente al ${porcentajeContinuidad} de la asignación básica, a favor de ${artUniCont} ${grado} ${nombreUniformado}, ${idUniCont} con cédula nro. ${cedulaUniformado}, por ${descHijo} ${nombreHijoContinuidad}, ${idHijo} con cédula nro. ${cedulaHijoContinuidad}, desde el ${fechaInicioContinuidad} hasta el ${fechaFinContinuidad}, acreditando condición de estudiante conforme a certificación expedida el ${fechaCertificadoContinuidad} por ${universidadContinuidad}.\n\n` +
                 `NOTIFÍQUESE Y CÚMPLASE.`;
 
+                payloadParaEnviar = {
+                    tipoAccion: tipoAccion,
+                    tipoResolucion: document.querySelector('input[name="tipoResolucion"]:checked').value,
+                    tipoPorcentaje: "",
+                    grado: grado,
+                    nombreUniformado: nombreUniformado,
+                    cedulaUniformado: cedulaUniformado,
+                    fechaHecho: "",
+                    fechaRadicacion: fechaRadicacion,
+                    comunicadoRadicacion: comunicadoRadicacion,
+                    sedeConciliacion: "",
+                    diasHabiles: 0,
+                    dentroPlazo: "SÍ",
+                    textoResuelveCustom: textoResuelveExcel
+                };
+
             } else {
-                // RECONOCIMIENTO / ACTUALIZACIÓN
-                const pronombresUni = sexoUniformado === "F" ? { id: "identificada" } : { id: "identificado" };
-                const tipoPorcentaje = document.querySelector('input[name="tipoPorcentaje"]:checked').value;
-                let porcentajeTxt = tipoPorcentaje === "30" ? "30%" : (tipoPorcentaje === "3" ? "3%" : "2%");
-                let detalleVinculo = "";
-                let prefijoVinculo = "por concepto de";
+                let parrafosConcatenados = "";
+                registrosLote.forEach((reg) => {
+                    parrafosConcatenados += `\n\n   * ${reg.parrafo}`;
+                });
 
-                if (tipoPorcentaje === "30") {
-                    const nombreConyuge = document.getElementById('nombreConyuge').value.trim().toUpperCase() || "[PAREJA]";
-                    const sexoConyuge = document.getElementById('sexoConyuge').value;
-                    const cedulaConyuge = document.getElementById('cedulaConyuge').value.trim() || "[CÉDULA]";
-                    const numActaUnion = document.getElementById('numActaUnion').value.trim().toUpperCase()
-                        .replace(/^(ACTA|ESCRITURA(\s+P[ÚU]BLICA)?)?\s*(NRO\.?|N[°º]\.?|NO\.|N\.º|NÚMERO|NUMERO)?\s*/, '').trim();
-                    const artPareja = sexoConyuge === "F" ? "su compañera permanente" : "su compañero permanente";
-                    const artSeñor = sexoConyuge === "F" ? "la señora" : "el señor";
+                textoFinal = `R E S U E L V E:\n\n` +
+                `ARTÍCULO 1. Ordenar el reconocimiento de la Bonificación para la Asistencia Familiar por hijos(as), compañeros(as) permanentes o cónyuges del personal que se relaciona a continuación, a partir del hecho que motive el reconocimiento, de conformidad con lo establecido en el artículo 132 de la Ley 2179 del 30/12/2021 y el parágrafo 1 del artículo 8 del Decreto 669 del 30/04/2022, que adiciona el artículo 21 A al capítulo II del título I del Decreto 1091 del 27/06/1995:` +
+                parrafosConcatenados + `\n\n` +
+                `ARTÍCULO 2. Disponer que, en virtud del reconocimiento de la bonificación para la asistencia familiar, los valores liquidados sean cancelados con cargo a la vigencia actual para cada caso en concreto.\n\n` +
+                `ARTÍCULO 3. Adelántese la notificación del presente acto administrativo de conformidad con los procedimientos previstos en la Ley 1437 de 2011 “Por la cual se expide el Código de Procedimiento Administrativo y de lo Contencioso Administrativo”.\n\n` +
+                `ARTÍCULO 4. Cuando ocurra cualquiera de los eventos que dan lugar a la extinción o disminución de la bonificación para la asistencia familiar, el integrante del Nivel Ejecutivo está en la obligación de dar el aviso correspondiente dentro de los noventa (90) días siguientes mediante escrito, si no lo hiciere, la Dirección General de la Policía Nacional a través de la unidad nominadora ordenará el descuento de una suma igual a la que hubiere recibido en exceso.\n\n` +
+                `ARTÍCULO 5. Contra la presente resolución procede el recurso de reposición y/o apelación que deberá ser interpuesto dentro de los diez (10) días hábiles siguientes a la fecha de su notificación, en los términos de los artículos 76 y 77 del Código de Procedimiento Administrativo y de lo Contencioso Administrativo.\n\n` +
+                `ARTÍCULO 6. La presente resolución rige a partir de la fecha de su expedición.\n\n` +
+                `NOTIFÍQUESE Y CÚMPLASE:`;
 
-                    const porCentro = document.querySelector('input[name="porCentroConciliacion"]:checked').value === "SI";
-                    const origenVal = porCentro ? "CENTRO_CONCILIACION_PN" : document.getElementById('origenUnion').value;
-
-                    const sede = porCentro ? document.getElementById('sedeConciliacion').value.trim().toUpperCase() : "";
-                    sedeGuardar = sede;
-                    const otroTxt = document.getElementById('otroOrigenTxt').value.trim().toUpperCase();
-
-                    // Entidad que expide / ante quien se declara
-                    let entidad = "";
-                    if (origenVal === "CENTRO_CONCILIACION_PN") {
-                        const seccional = document.getElementById('seccionalPolicia').value.trim().toUpperCase();
-                        entidad = "el Centro de Conciliación de la Policía Nacional";
-                        if (seccional) entidad += ` - ${seccional}`;
-                        if (sede) entidad += `, sede ${sede}`;
-                    } else if ((origenVal === "NOTARIA" || origenVal === "JUZGADO" || origenVal === "OTRO") && otroTxt) {
-                        // Artículo correcto según el tipo de entidad
-                        if (origenVal === "NOTARIA") {
-                            entidad = /^NOTAR[ÍI]A/.test(otroTxt) ? `la ${otroTxt}` : `la Notaría ${otroTxt}`;
-                        } else if (origenVal === "JUZGADO") {
-                            entidad = /^JUZGADO/.test(otroTxt) ? `el ${otroTxt}` : `el Juzgado ${otroTxt}`;
-                        } else {
-                            entidad = otroTxt;
-                        }
-                    }
-
-                    // Tipo de documento según el origen de la declaración
-                    let docUnion = "mediante el acta administrativa";
-                    if (porCentro) docUnion = "mediante el acta de conciliación";
-                    else if (origenVal === "NOTARIA") docUnion = "mediante la escritura pública";
-
-                    let sufijoOrigen = "";
-                    if (numActaUnion && entidad) {
-                        sufijoOrigen = ` ${docUnion} nro. ${numActaUnion} expedida por ${entidad}`;
-                    } else if (numActaUnion) {
-                        sufijoOrigen = ` ${docUnion} nro. ${numActaUnion}`;
-                    } else if (entidad) {
-                        sufijoOrigen = ` ante ${entidad}`;
-                    }
-
-                    const idConyuge = sexoConyuge === "F" ? "identificada" : "identificado";
-                    prefijoVinculo = "por";
-                    detalleVinculo = `haber constituido unión marital de hecho con ${artSeñor} ${nombreConyuge}, ${idConyuge} con cédula de ciudadanía nro. ${cedulaConyuge}, declarada${sufijoOrigen}`;
-
-                } else {
-                    const nombreHijo = document.getElementById('nombreHijo').value.trim().toUpperCase() || "[HIJO/A]";
-                    const sexoHijo = document.getElementById('sexoHijo').value;
-                    const descHijo = sexoHijo === "F" ? "su hija" : "su hijo";
-                    const regCivil = document.getElementById('registroCivil').value.trim() || "[REGISTRO CIVIL]";
-                    detalleVinculo = `${descHijo} ${nombreHijo}, conforme al registro civil de nacimiento nro. ${regCivil}, en el que consta que nació el ${fHechoTxt}`;
-                }
-
-                let textoEfectosFiscales = "";
-                if (dentroPlazo) {
-                    textoEfectosFiscales = `Al haberse presentado dentro del término legal de noventa (90) días hábiles, los efectos fiscales se reconocerán a partir de la fecha del hecho que lo motiva, esto es, desde el ${fHechoTxt}.`;
-                } else {
-                    textoEfectosFiscales = `Teniendo en cuenta que la solicitud fue presentada por fuera del término legal de noventa (90) días hábiles, los efectos fiscales se reconocerán a partir de la fecha de su radicación, esto es, desde el ${fRadicacionTxt}.`;
-                }
-
-                textoResuelveExcel = `${grado} ${nombreUniformado}, ${pronombresUni.id} con cédula nro. ${cedulaUniformado}, causa derecho al reconocimiento del ${porcentajeTxt} por ${detalleVinculo}. Solicitud radicada mediante comunicado ${comunicadoRadicacion} del ${fRadicacionTxt}.`;
-
-                textoFinal = `${grado}. ${nombreUniformado}, ${pronombresUni.id} con cédula de ciudadanía nro. ${cedulaUniformado}, causa derecho al reconocimiento del ${porcentajeTxt} de la asignación básica correspondiente a su grado, ${prefijoVinculo} ${detalleVinculo}. La solicitud fue radicada mediante el comunicado oficial ${comunicadoRadicacion} del ${fRadicacionTxt}. ${textoEfectosFiscales}`;
+                payloadParaEnviar = {
+                    tipoAccion: tipoAccion,
+                    tipoResolucion: document.querySelector('input[name="tipoResolucion"]:checked').value,
+                    tipoPorcentaje: document.querySelector('input[name="tipoPorcentaje"]:checked').value,
+                    grado: registrosLote[0].grado,
+                    nombreUniformado: registrosLote[0].nombreUniformado,
+                    cedulaUniformado: registrosLote[0].cedulaUniformado,
+                    fechaHecho: registrosLote[0].fechaHecho,
+                    fechaRadicacion: registrosLote[0].fechaRadicacion,
+                    comunicadoRadicacion: registrosLote[0].comunicadoRadicacion,
+                    sedeConciliacion: registrosLote[0].sedeConciliacion,
+                    diasHabiles: registrosLote[0].diasHabiles,
+                    dentroPlazo: registrosLote[0].dentroPlazo,
+                    textoResuelveCustom: registrosLote.map(r => r.textoResuelveCustom).join(" | ")
+                };
             }
 
-            // Aplicar corrección ortográfica y tipográfica final
             textoFinal = aplicarCorreccionOrtografica(textoFinal);
-            textoResuelveExcel = aplicarCorreccionOrtografica(textoResuelveExcel);
-
-            // Enviar a Apps Script
-            const payload = {
-                tipoAccion: tipoAccion,
-                tipoResolucion: document.querySelector('input[name="tipoResolucion"]:checked').value,
-                tipoPorcentaje: tipoAccion === "EXTINCION" || tipoAccion === "CONTINUIDADES" ? "" : document.querySelector('input[name="tipoPorcentaje"]:checked').value,
-                grado: grado,
-                nombreUniformado: nombreUniformado,
-                cedulaUniformado: cedulaUniformado,
-                fechaHecho: fechaHecho,
-                fechaRadicacion: fechaRadicacion,
-                comunicadoRadicacion: comunicadoRadicacion,
-                sedeConciliacion: sedeGuardar,
-                diasHabiles: diasHabiles,
-                dentroPlazo: dentroPlazo ? "SÍ" : "NO",
-                textoResuelveCustom: textoResuelveExcel
-            };
 
             let errorGuardado = "";
+            const controlador = new AbortController();
+            const temporizador = setTimeout(() => controlador.abort(), 30000);
             try {
                 const resp = await fetch(SCRIPT_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify(payloadParaEnviar),
+                    signal: controlador.signal
                 });
                 const resultado = await resp.json();
                 if (resultado.status !== "success") {
@@ -812,7 +1186,11 @@
                 }
             } catch (err) {
                 console.error("Error al guardar en hoja:", err);
-                errorGuardado = "No se pudo confirmar la conexión con el Web App de Google (" + err + "). Verifica la URL y que el acceso esté en \"Cualquier persona\".";
+                errorGuardado = err.name === "AbortError"
+                    ? "El Web App de Google tardó más de 30 segundos en responder."
+                    : "No se pudo confirmar la conexión con el Web App de Google (" + err + ").";
+            } finally {
+                clearTimeout(temporizador);
             }
 
             document.getElementById('resultadoTexto').value = textoFinal;
@@ -820,10 +1198,11 @@
             
             btn.disabled = false;
             btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> Generar Texto y Guardar en Excel`;
+            
             if (errorGuardado) {
-                alert("El texto se generó, pero NO se confirmó el guardado en Excel.\n\n" + errorGuardado);
+                alert("El texto se generó, pero NO se confirmó el guardado en Excel:\n\n" + errorGuardado);
             } else {
-                alert(`¡Texto corregido, generado y guardado en Excel con éxito!`);
+                alert(`¡Texto en lote generado y guardado con éxito (${registrosLote.length} registro(s) procesados)!`);
             }
         }
 
@@ -858,12 +1237,11 @@
         }
 
         function reiniciarTodo() {
-            document.getElementById('resolucionForm').reset();
+            limpiarFormulario();
             document.getElementById('resultadoTexto').value = "";
             document.getElementById('btnCopiarTodo').disabled = true;
-            toggleTipoAccion();
-            toggleCategoriaResolucion();
-            toggleOrigenUnion();
+            registrosLote = [];
+            actualizarContadorLote();
         }
     </script>
 </body>
