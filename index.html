@@ -1149,7 +1149,7 @@
                 const esPlural = registrosLote.length > 1;
                 const gradosLote = [...new Set(registrosLote.map(r => r.grado))];
                 const pluralesGrado = {
-                    "Patrullero de Policía": ["patrullero de Policía", "patrulleros de Policía"],
+                    "Patrullero de Policía": ["patrullero", "patrulleros"],
                     "Subintendente": ["subintendente", "subintendentes"],
                     "Intendente": ["intendente", "intendentes"],
                     "Intendente Jefe": ["intendente jefe", "intendentes jefe"],
@@ -1162,13 +1162,13 @@
                 } else {
                     destinatarios = esPlural ? "a los funcionarios" : "al funcionario";
                 }
-                const verboRelacion = esPlural ? "que se relacionan" : "que se relaciona";
+                const relacionados = esPlural ? "relacionados" : "relacionado";
                 const vinculosTxt = esPlural
-                    ? "por hijos(as), compañeros(as) permanentes o cónyuges"
-                    : "por hijo(a), compañero(a) permanente o cónyuge";
+                    ? "hijos(as), cónyuge o compañero(a) permanente"
+                    : "hijo(a), cónyuge o compañero(a) permanente";
 
                 textoFinal = `R E S U E L V E:\n\n` +
-                `ARTÍCULO 1. Ordenar el reconocimiento de la Bonificación para la Asistencia Familiar ${destinatarios} ${verboRelacion} a continuación, ${vinculosTxt}, según corresponda, a partir del hecho que motive el reconocimiento, de conformidad con lo establecido en el artículo 132 de la Ley 2179 del 30 de diciembre de 2021 y el parágrafo 1 del artículo 8 del Decreto 669 del 30 de abril de 2022, que adiciona el artículo 21A al capítulo II del título I del Decreto 1091 del 27 de junio de 1995:` +
+                `ARTÍCULO 1. Ordenar el reconocimiento de la Bonificación para la Asistencia Familiar ${destinatarios} de la Policía Nacional ${relacionados} a continuación, por concepto de ${vinculosTxt}, según corresponda, a partir de la fecha en que ocurrió el hecho generador del derecho, siempre que la solicitud se haya presentado dentro del término legal establecido; en caso contrario, a partir de la fecha de radicación de la respectiva solicitud, de conformidad con lo dispuesto en el artículo 132 de la Ley 2179 del 30 de diciembre de 2021 y el parágrafo 1 del artículo 21 del Decreto 668 del 28 de abril de 2022:` +
                 parrafosConcatenados + `\n\n` +
                 `ARTÍCULO 2. Disponer que, en virtud del reconocimiento de la bonificación para la asistencia familiar, los valores liquidados sean cancelados con cargo a la vigencia actual para cada caso en concreto.\n\n` +
                 `ARTÍCULO 3. Adelántese la notificación del presente acto administrativo de conformidad con los procedimientos previstos en la Ley 1437 de 2011 “Por la cual se expide el Código de Procedimiento Administrativo y de lo Contencioso Administrativo”.\n\n` +
