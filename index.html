@@ -664,8 +664,7 @@
                 .replace(/\bCODIGO\b/gi, 'CÓDIGO')
                 .replace(/\bTRAMITE\b/gi, 'TRÁMITE')
                 .replace(/\bREGIMEN\b/gi, 'RÉGIMEN')
-                .replace(/\bUNION\b/gi, 'UNIÓN')
-                .replace(/\bFAMILIAR\b/gi, 'FAMILIAR');
+                .replace(/\bUNION\b/gi, 'UNIÓN');
 
             return limpio.trim();
         }
@@ -1163,6 +1162,17 @@
                     destinatarios = esPlural ? "a los funcionarios" : "al funcionario";
                 }
                 const relacionados = esPlural ? "relacionados" : "relacionado";
+                let integranteArt4;
+                if (gradosLote.length === 1 && pluralesGrado[gradosLote[0]]) {
+                    const gradoTxt = pluralesGrado[gradosLote[0]][esPlural ? 1 : 0] + (gradosLote[0] === "Patrullero de Policía" ? " de Policía" : "");
+                    integranteArt4 = esPlural
+                        ? `los integrantes del Nivel Ejecutivo, ${gradoTxt}, están en la obligación`
+                        : `el integrante del Nivel Ejecutivo, ${gradoTxt}, está en la obligación`;
+                } else {
+                    integranteArt4 = esPlural ? "los integrantes del Nivel Ejecutivo están en la obligación" : "el integrante del Nivel Ejecutivo está en la obligación";
+                }
+                const verboNoHiciere = esPlural ? "si no lo hicieren" : "si no lo hiciere";
+                const excesoTxt = esPlural ? "hubieren recibido" : "hubiere recibido";
                 const vinculosTxt = esPlural
                     ? "hijos(as), cónyuge o compañero(a) permanente"
                     : "hijo(a), cónyuge o compañero(a) permanente";
@@ -1172,7 +1182,7 @@
                 parrafosConcatenados + `\n\n` +
                 `ARTÍCULO 2. Disponer que, en virtud del reconocimiento de la bonificación para la asistencia familiar, los valores liquidados sean cancelados con cargo a la vigencia actual para cada caso en concreto.\n\n` +
                 `ARTÍCULO 3. Adelántese la notificación del presente acto administrativo de conformidad con los procedimientos previstos en la Ley 1437 de 2011 “Por la cual se expide el Código de Procedimiento Administrativo y de lo Contencioso Administrativo”.\n\n` +
-                `ARTÍCULO 4. Cuando ocurra cualquiera de los eventos que dan lugar a la extinción o disminución de la bonificación para la asistencia familiar, el integrante del Nivel Ejecutivo está en la obligación de dar el aviso correspondiente dentro de los noventa (90) días siguientes mediante escrito, si no lo hiciere, la Dirección General de la Policía Nacional a través de la unidad nominadora ordenará el descuento de una suma igual a la que hubiere recibido en exceso.\n\n` +
+                `ARTÍCULO 4. Cuando ocurra cualquiera de los eventos que dan lugar a la extinción o disminución de la bonificación para la asistencia familiar, ${integranteArt4} de dar el aviso correspondiente dentro de los noventa (90) días siguientes, mediante escrito; ${verboNoHiciere}, la Dirección General de la Policía Nacional, a través de la unidad nominadora, ordenará el descuento de una suma igual a la que ${excesoTxt} en exceso.\n\n` +
                 `ARTÍCULO 5. Contra la presente resolución procede el recurso de reposición y/o apelación que deberá ser interpuesto dentro de los diez (10) días hábiles siguientes a la fecha de su notificación, en los términos de los artículos 76 y 77 del Código de Procedimiento Administrativo y de lo Contencioso Administrativo.\n\n` +
                 `ARTÍCULO 6. La presente resolución rige a partir de la fecha de su expedición.\n\n` +
                 `NOTIFÍQUESE Y CÚMPLASE:`;
