@@ -1145,8 +1145,30 @@
                     parrafosConcatenados += `\n\n   * ${reg.parrafo}`;
                 });
 
+                // Redacción del Artículo 1 según número y grado de los funcionarios
+                const esPlural = registrosLote.length > 1;
+                const gradosLote = [...new Set(registrosLote.map(r => r.grado))];
+                const pluralesGrado = {
+                    "Patrullero de Policía": ["patrullero de Policía", "patrulleros de Policía"],
+                    "Subintendente": ["subintendente", "subintendentes"],
+                    "Intendente": ["intendente", "intendentes"],
+                    "Intendente Jefe": ["intendente jefe", "intendentes jefe"],
+                    "Comisario": ["comisario", "comisarios"],
+                    "Subcomisario": ["subcomisario", "subcomisarios"]
+                };
+                let destinatarios;
+                if (gradosLote.length === 1 && pluralesGrado[gradosLote[0]]) {
+                    destinatarios = esPlural ? `a los ${pluralesGrado[gradosLote[0]][1]}` : `al ${pluralesGrado[gradosLote[0]][0]}`;
+                } else {
+                    destinatarios = esPlural ? "a los funcionarios" : "al funcionario";
+                }
+                const verboRelacion = esPlural ? "que se relacionan" : "que se relaciona";
+                const vinculosTxt = esPlural
+                    ? "por hijos(as), compañeros(as) permanentes o cónyuges"
+                    : "por hijo(a), compañero(a) permanente o cónyuge";
+
                 textoFinal = `R E S U E L V E:\n\n` +
-                `ARTÍCULO 1. Ordenar el reconocimiento de la Bonificación para la Asistencia Familiar por hijos(as), compañeros(as) permanentes o cónyuges del personal que se relaciona a continuación, a partir del hecho que motive el reconocimiento, de conformidad con lo establecido en el artículo 132 de la Ley 2179 del 30/12/2021 y el parágrafo 1 del artículo 8 del Decreto 669 del 30/04/2022, que adiciona el artículo 21 A al capítulo II del título I del Decreto 1091 del 27/06/1995:` +
+                `ARTÍCULO 1. Ordenar el reconocimiento de la Bonificación para la Asistencia Familiar ${destinatarios} ${verboRelacion} a continuación, ${vinculosTxt}, según corresponda, a partir del hecho que motive el reconocimiento, de conformidad con lo establecido en el artículo 132 de la Ley 2179 del 30 de diciembre de 2021 y el parágrafo 1 del artículo 8 del Decreto 669 del 30 de abril de 2022, que adiciona el artículo 21A al capítulo II del título I del Decreto 1091 del 27 de junio de 1995:` +
                 parrafosConcatenados + `\n\n` +
                 `ARTÍCULO 2. Disponer que, en virtud del reconocimiento de la bonificación para la asistencia familiar, los valores liquidados sean cancelados con cargo a la vigencia actual para cada caso en concreto.\n\n` +
                 `ARTÍCULO 3. Adelántese la notificación del presente acto administrativo de conformidad con los procedimientos previstos en la Ley 1437 de 2011 “Por la cual se expide el Código de Procedimiento Administrativo y de lo Contencioso Administrativo”.\n\n` +
