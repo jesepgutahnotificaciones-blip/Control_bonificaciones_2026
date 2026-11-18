@@ -840,12 +840,14 @@
 
                 const idConyuge = sexoConyuge === "F" ? "identificada" : "identificado";
                 prefijoVinculo = "por";
-                detalleVinculo = `haber constituido unión marital de hecho con ${artSeñor} ${nombreConyuge}, ${idConyuge} con cédula de ciudadanía nro. ${cedulaConyuge}, declarada${sufijoOrigen}`;
+                detalleVinculo = `haber constituido una unión marital de hecho con ${artSeñor} ${nombreConyuge}, ${idConyuge} con cédula de ciudadanía nro. ${cedulaConyuge}, declarada${sufijoOrigen}`;
 
             } else {
                 const nombreHijo = estadoCampos.nombreHijo.trim().toUpperCase() || "[HIJO/A]";
                 const sexoHijo = estadoCampos.sexoHijo;
-                const descHijo = sexoHijo === "F" ? "su hija" : "su hijo";
+                const descHijo = tipoPorcentaje === "3"
+                    ? (sexoHijo === "F" ? "su primera hija" : "su primer hijo")
+                    : (sexoHijo === "F" ? "su segunda hija" : "su segundo hijo");
                 const regCivil = estadoCampos.registroCivil.trim() || "[REGISTRO CIVIL]";
                 const fHechoTxt = formatearFechaTexto(fechaHecho);
                 detalleVinculo = `${descHijo} ${nombreHijo}, conforme al registro civil de nacimiento nro. ${regCivil}, en el que consta que nació el ${fHechoTxt}`;
@@ -1108,7 +1110,9 @@
                 const cedulaHijoContinuidad = document.getElementById('cedulaHijoContinuidad').value.trim() || "[CÉDULA]";
                 const universidadContinuidad = document.getElementById('universidadContinuidad').value.trim().toUpperCase() || "[UNIVERSIDAD]";
                 const fechaCertificadoContinuidad = formatearFechaTexto(document.getElementById('fechaCertificadoContinuidad').value);
-                const descHijo = sexoHijoContinuidad === "F" ? "su hija" : "su hijo";
+                const descHijo = porcentajeContinuidad === "3%"
+                    ? (sexoHijoContinuidad === "F" ? "su primera hija" : "su primer hijo")
+                    : (sexoHijoContinuidad === "F" ? "su segunda hija" : "su segundo hijo");
                 const idHijo = sexoHijoContinuidad === "F" ? "identificada" : "identificado";
                 const artUniCont = sexoUniformado === "F" ? "la señora" : "el señor";
                 const idUniCont = sexoUniformado === "F" ? "identificada" : "identificado";
