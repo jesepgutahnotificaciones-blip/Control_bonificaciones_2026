@@ -1166,10 +1166,10 @@
                 if (gradosLote.length === 1 && pluralesGrado[gradosLote[0]]) {
                     const gradoTxt = pluralesGrado[gradosLote[0]][esPlural ? 1 : 0] + (gradosLote[0] === "Patrullero de Policía" ? " de Policía" : "");
                     integranteArt4 = esPlural
-                        ? `los integrantes del Nivel Ejecutivo, ${gradoTxt}, están en la obligación`
-                        : `el integrante del Nivel Ejecutivo, ${gradoTxt}, está en la obligación`;
+                        ? `los ${gradoTxt} están en la obligación`
+                        : `el ${gradoTxt} está en la obligación`;
                 } else {
-                    integranteArt4 = esPlural ? "los integrantes del Nivel Ejecutivo están en la obligación" : "el integrante del Nivel Ejecutivo está en la obligación";
+                    integranteArt4 = esPlural ? "los funcionarios están en la obligación" : "el funcionario está en la obligación";
                 }
                 const verboNoHiciere = esPlural ? "si no lo hicieren" : "si no lo hiciere";
                 const excesoTxt = esPlural ? "hubieren recibido" : "hubiere recibido";
