@@ -9,7 +9,7 @@
     <!-- FontAwesome para Iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwHcZgzSOa4rRspTWlTZt1GXfQwz-t7RvOGVTkjZo0xu9VjiOdV7OT1ti2R56-1JsCJ/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzJQgDXuo6U6gIU-e3ReNip2utcDmX6ZOA2xXWIhJDFn5wtXw4gEsD1xTvXblmVXP7d/exec";
     </script>
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans min-h-screen pb-12">
@@ -885,6 +885,7 @@
                 comunicadoRadicacion,
                 sedeConciliacion: sedeGuardar,
                 diasHabiles,
+                tipoPorcentaje,
                 dentroPlazo: dentroPlazo ? "SÍ" : "NO",
                 textoResuelveCustom: textoResuelveExcel,
                 parrafo: parrafoIndividual,
@@ -1198,7 +1199,7 @@
                 payloadParaEnviar = {
                     tipoAccion: tipoAccion,
                     tipoResolucion: document.querySelector('input[name="tipoResolucion"]:checked').value,
-                    tipoPorcentaje: document.querySelector('input[name="tipoPorcentaje"]:checked').value,
+                    tipoPorcentaje: registrosLote[0].tipoPorcentaje || document.querySelector('input[name="tipoPorcentaje"]:checked').value,
                     grado: registrosLote[0].grado,
                     nombreUniformado: registrosLote[0].nombreUniformado,
                     cedulaUniformado: registrosLote[0].cedulaUniformado,
@@ -1213,6 +1214,27 @@
             }
 
             textoFinal = aplicarCorreccionOrtografica(textoFinal);
+
+            // Verificar en la matriz si ya existe el funcionario antes de guardar
+            const candidatos = (tipoAccion === "RECONOCIMIENTO")
+                ? registrosLote.map(r => ({ nombre: r.nombreUniformado, cedula: r.cedulaUniformado, porcentaje: r.tipoPorcentaje }))
+                : [{ nombre: payloadParaEnviar.nombreUniformado, cedula: payloadParaEnviar.cedulaUniformado, porcentaje: payloadParaEnviar.tipoPorcentaje }];
+            const verificacion = await verificarDuplicadosEnMatriz(candidatos, tipoAccion);
+            let mensajeAviso = "";
+            if (!verificacion.ok) {
+                mensajeAviso = "No se pudo verificar si el funcionario ya está en la matriz (" + verificacion.error + ").\n\n¿Desea continuar y guardar de todas formas?";
+            } else if (verificacion.duplicados.length > 0) {
+                const detalle = verificacion.duplicados.map(d => {
+                    const c = candidatos[d.indice];
+                    return "• " + c.nombre + " (CC " + c.cedula + (d.porcentaje && d.porcentaje !== "N/A" ? ", " + d.porcentaje + "%" : "") + ") ya está en la fila " + d.fila + " de la matriz, registrado el " + d.fechaRegistro + ".";
+                }).join("\n");
+                mensajeAviso = "Se encontraron registros que ya existen en la matriz:\n\n" + detalle + "\n\n¿Desea guardar de todas formas?";
+            }
+            if (mensajeAviso && !confirm(mensajeAviso)) {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> Generar Texto y Guardar en Excel`;
+                return;
+            }
 
             let errorGuardado = "";
             const controlador = new AbortController();
@@ -1247,6 +1269,29 @@
                 alert("El texto se generó, pero NO se confirmó el guardado en Excel:\n\n" + errorGuardado);
             } else {
                 alert(`¡Texto en lote generado y guardado con éxito (${registrosLote.length} registro(s) procesados)!`);
+            }
+        }
+
+        // Consulta a la matriz si el funcionario ya fue registrado (cédula, porcentaje y nombres)
+        async function verificarDuplicadosEnMatriz(registros, tipoAccion) {
+            const controlador = new AbortController();
+            const temporizador = setTimeout(() => controlador.abort(), 20000);
+            try {
+                const resp = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ accion: "VERIFICAR_DUPLICADOS", tipoAccion: tipoAccion, registros: registros }),
+                    signal: controlador.signal
+                });
+                const r = await resp.json();
+                if (r.status !== "success" || !Array.isArray(r.duplicados)) {
+                    return { ok: false, error: r.message || "respuesta no válida del servidor" };
+                }
+                return { ok: true, duplicados: r.duplicados };
+            } catch (err) {
+                return { ok: false, error: err.name === "AbortError" ? "tiempo de espera agotado" : String(err) };
+            } finally {
+                clearTimeout(temporizador);
             }
         }
 
