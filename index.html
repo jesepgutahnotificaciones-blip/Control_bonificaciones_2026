@@ -805,7 +805,7 @@
                 let entidad = "";
                 if (origenVal === "CENTRO_CONCILIACION_PN") {
                     entidad = "el Centro de Conciliación de la Policía Nacional";
-                    if (sede) entidad += `, sede ${sede}`;
+                    if (sede) entidad += ` (sede ${sede})`;
                 } else if ((origenVal === "NOTARIA" || origenVal === "JUZGADO" || origenVal === "OTRO") && otroTxt) {
                     if (origenVal === "NOTARIA") {
                         entidad = /^NOTAR[ÍI]A/.test(otroTxt) ? `la ${otroTxt}` : `la Notaría ${otroTxt}`;
@@ -816,21 +816,24 @@
                     }
                 }
 
-                let docUnion = "mediante el acta administrativa";
-                if (porCentro) docUnion = "mediante el acta de conciliación";
-                else if (origenVal === "NOTARIA") docUnion = "mediante la escritura pública";
+                let docUnion = "mediante el acta de conciliación";
+                if (origenVal === "NOTARIA") docUnion = "mediante la escritura pública";
                 else if (origenVal === "JUZGADO") docUnion = "mediante la providencia";
+
+                let verboEmision = "expedida por";
+                if (origenVal === "NOTARIA") verboEmision = "otorgada ante";
+                else if (origenVal === "JUZGADO") verboEmision = "proferida por";
 
                 let sufijoOrigen = "";
                 if (numActaUnion && entidad) {
                     sufijoOrigen = ` ${docUnion} nro. ${numActaUnion}`;
                     if (fechaActaTxt) sufijoOrigen += ` del ${fechaActaTxt}`;
-                    sufijoOrigen += ` expedida por ${entidad}`;
+                    sufijoOrigen += `, ${verboEmision} ${entidad}`;
                 } else if (numActaUnion) {
                     sufijoOrigen = ` ${docUnion} nro. ${numActaUnion}`;
                     if (fechaActaTxt) sufijoOrigen += ` del ${fechaActaTxt}`;
                 } else if (fechaActaTxt && entidad) {
-                    sufijoOrigen = ` ${docUnion} del ${fechaActaTxt} expedida por ${entidad}`;
+                    sufijoOrigen = ` ${docUnion} del ${fechaActaTxt}, ${verboEmision} ${entidad}`;
                 } else if (fechaActaTxt) {
                     sufijoOrigen = ` ${docUnion} del ${fechaActaTxt}`;
                 } else if (entidad) {
@@ -857,16 +860,21 @@
             const fHechoTxt = formatearFechaTexto(fechaHecho);
             const fRadicacionTxt = formatearFechaTexto(fechaRadicacion);
 
+            const esUnion = tipoPorcentaje === "30";
+            const referenciaHecho = esUnion
+                ? "la fecha de constitución de la unión marital de hecho"
+                : "la fecha del hecho que lo motiva";
+
             let textoEfectosFiscales = "";
             if (dentroPlazo) {
-                textoEfectosFiscales = `Al haberse presentado dentro del término legal de noventa (90) días hábiles, los efectos fiscales se reconocerán a partir de la fecha del hecho que lo motiva, esto es, desde el ${fHechoTxt}, de conformidad con la norma aplicable.`;
+                textoEfectosFiscales = `Al haberse presentado la solicitud dentro del término legal de noventa (90) días, los efectos fiscales se reconocerán a partir de ${referenciaHecho}, esto es, desde el ${fHechoTxt}, de conformidad con la norma aplicable.`;
             } else {
-                textoEfectosFiscales = `Teniendo en cuenta que la solicitud fue presentada por fuera del término legal de noventa (90) días hábiles, los efectos fiscales se reconocerán a partir de la fecha de su radicación, esto es, desde el ${fRadicacionTxt}, de conformidad con la norma aplicable.`;
+                textoEfectosFiscales = `Teniendo en cuenta que la solicitud fue presentada por fuera del término legal de noventa (90) días, los efectos fiscales se reconocerán a partir de la fecha de su radicación, esto es, desde el ${fRadicacionTxt}, de conformidad con la norma aplicable.`;
             }
 
-            const textoResuelveExcel = `${grado} ${nombreUniformado}, ${pronombresUni.id} con cédula nro. ${cedulaUniformado}, causa derecho al reconocimiento del ${porcentajeTxt} por ${detalleVinculo}. Solicitud radicada mediante comunicado ${comunicadoRadicacion} del ${fRadicacionTxt}.`;
+            const textoResuelveExcel = limpiarPuntuacion(`${grado} ${nombreUniformado}, ${pronombresUni.id} con cédula de ciudadanía nro. ${cedulaUniformado}, causa derecho al reconocimiento del ${porcentajeTxt} por ${detalleVinculo}. La solicitud fue radicada mediante el comunicado oficial ${comunicadoRadicacion} del ${fRadicacionTxt}.`);
 
-            const parrafoIndividual = `${grado}. ${nombreUniformado}, ${pronombresUni.id} con cédula de ciudadanía nro. ${cedulaUniformado}, causa derecho al reconocimiento del ${porcentajeTxt} de la asignación básica correspondiente a su grado, ${prefijoVinculo} ${detalleVinculo}. La solicitud fue radicada mediante el comunicado oficial ${comunicadoRadicacion} del ${fRadicacionTxt}. ${textoEfectosFiscales}`;
+            const parrafoIndividual = limpiarPuntuacion(`${grado}. ${nombreUniformado}, ${pronombresUni.id} con cédula de ciudadanía nro. ${cedulaUniformado}, causa derecho al reconocimiento del ${porcentajeTxt} de la asignación básica correspondiente a su grado, ${prefijoVinculo} ${detalleVinculo}. La solicitud fue radicada mediante el comunicado oficial ${comunicadoRadicacion} del ${fRadicacionTxt}. ${textoEfectosFiscales}`);
 
             return {
                 grado,
@@ -1253,7 +1261,7 @@
             if (!fechaStr || !fechaStr.includes("-")) return fechaStr || "";
             const meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
             const partes = fechaStr.split("-");
-            return `${parseInt(partes[2], 10)} de ${meses[parseInt(partes[1], 10) - 1]} del ${partes[0]}`;
+            return `${parseInt(partes[2], 10)} de ${meses[parseInt(partes[1], 10) - 1]} de ${partes[0]}`;
         }
 
         function formatearPesosCO(valor) {
@@ -1267,9 +1275,18 @@
 
         function formatearFechaLarga(fechaStr) {
             if (!fechaStr || !fechaStr.includes("-")) return "";
-            const meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
-            const p = fechaStr.split("-");
-            return `${String(parseInt(p[2], 10)).padStart(2, "0")} de ${meses[parseInt(p[1], 10) - 1]} de ${p[0]}`;
+            return formatearFechaTexto(fechaStr);
+        }
+
+        // Limpia comas duplicadas, espacios dobles y signos de puntuación repetidos
+        function limpiarPuntuacion(txt) {
+            return (txt || "")
+                .replace(/,(\s*,)+/g, ",")
+                .replace(/[ \t]+,/g, ",")
+                .replace(/,\s*\./g, ".")
+                .replace(/\.{2}(?!\.)/g, ".")
+                .replace(/;\s*;/g, ";")
+                .replace(/[ \t]{2,}/g, " ");
         }
 
         function reiniciarTodo() {
