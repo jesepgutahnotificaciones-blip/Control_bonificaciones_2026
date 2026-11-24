@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
         // URL DE TU WEB APP DE GOOGLE APPS SCRIPT ACTUALIZADA
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzLEbiJiGkGuznBnM75uJOFXQyRgDqFHXAZyXQ6F65CYQdVWR-Rpi-UHl1PUZPvtGvK/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxezzCkHWOzedUGRc2FaNIJKqk7mDRURKVIecWsZWCQMVQ7UQCUmX2IW0pgapfh2Vms/exec";
     </script>
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans min-h-screen pb-12">
@@ -101,18 +101,18 @@
                     </div>
                     <div class="md:col-span-2">
                         <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre Completo Uniformado</label>
-                        <input type="text" id="nombreUniformado" required placeholder="EJ: FABIAN ANDRES CAMACHO TAVERA" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
+                        <input type="text" id="nombreUniformado" placeholder="EJ: FABIAN ANDRES CAMACHO TAVERA" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 mb-1">Cédula Uniformado</label>
-                        <input type="text" id="cedulaUniformado" required placeholder="Ej: 1005148477" class="w-full text-sm border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
+                        <input type="text" id="cedulaUniformado" placeholder="Ej: 1005148477" class="w-full text-sm border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
                     </div>
                     <div>
                         <label id="lblFechaHecho" class="block text-xs font-semibold text-slate-600 mb-1">Fecha del Hecho</label>
-                        <input type="date" id="fechaHecho" required class="w-full text-sm border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
+                        <input type="date" id="fechaHecho" class="w-full text-sm border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
                     </div>
                 </div>
 
@@ -276,19 +276,25 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 border-t border-slate-100">
                     <div>
                         <label id="lblComunicado" class="block text-xs font-semibold text-slate-600 mb-1">Comunicado Oficial de Radicación</label>
-                        <input type="text" id="comunicadoRadicacion" required placeholder="Ej: GS-2026-043812-JESEP" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
+                        <input type="text" id="comunicadoRadicacion" placeholder="Ej: GS-2026-043812-JESEP" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
                     </div>
                     <div>
                         <label id="lblFechaRad" class="block text-xs font-semibold text-slate-600 mb-1">Fecha Radicación</label>
-                        <input type="date" id="fechaRadicacion" required class="w-full text-sm border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
+                        <input type="date" id="fechaRadicacion" class="w-full text-sm border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
                     </div>
+                </div>
+
+                <!-- Banner de Edición activa -->
+                <div id="bannerEditando" class="hidden bg-blue-50 border border-blue-200 text-blue-900 text-xs rounded-lg p-2.5 flex items-center justify-between">
+                    <span><i class="fa-solid fa-pen mr-1"></i> Editando funcionario de la lista. Modifique los campos y pulse <strong>«Guardar Cambios en Lista»</strong>.</span>
+                    <button type="button" onclick="cancelarEdicionCola()" class="text-blue-700 hover:underline font-semibold ml-2">Cancelar edición</button>
                 </div>
 
                 <!-- Botones de Carga Múltiple (Reconocimiento / Actualización) -->
                 <div id="botonesMultiples" class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
-                    <button type="button" onclick="agregarFuncionarioALaCola()" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2.5 px-4 rounded-lg shadow transition duration-200 flex items-center justify-center space-x-2 text-sm">
+                    <button type="button" id="btnAgregarCola" onclick="agregarFuncionarioALaCola()" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2.5 px-4 rounded-lg shadow transition duration-200 flex items-center justify-center space-x-2 text-sm">
                         <i class="fa-solid fa-user-plus"></i>
-                        <span>+ Agregar Funcionario a la Lista</span>
+                        <span id="textoBtnAgregarCola">+ Agregar Funcionario a la Lista</span>
                     </button>
                     <button type="button" id="btnProcesarLote" onclick="procesarLoteEnSheets()" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white font-semibold py-2.5 px-4 rounded-lg shadow transition duration-200 flex items-center justify-center space-x-2 text-sm">
                         <i class="fa-solid fa-cloud-arrow-up"></i>
@@ -349,6 +355,7 @@
     <!-- Script de Funcionalidad -->
     <script>
         let colaPendiente = [];            // Varios funcionarios agregados antes de enviar a Sheets
+        let indiceEditandoCola = null;     // Índice del funcionario en cola que se está editando
         let listaResuelveAcumulada = [];   // Textos ya registrados en Sheets para el Word
         let listaRegistrosAcumulados = []; // Objetos completos registrados para concordancia singular/plural en Word
         let extincionActual = null;        // Datos de la extinción en curso (modo Extinción)
@@ -362,6 +369,12 @@
             "Subcomisario": "SC.",
             "Comisario": "CM."
         };
+
+        // Helper seguro para evitar "Cannot set properties of null (setting 'textContent')"
+        function setText(id, valor) {
+            const el = document.getElementById(id);
+            if (el) el.textContent = String(valor);
+        }
 
         function toggleCamposPorcentaje() {
             const porcentaje = document.querySelector('input[name="tipoPorcentaje"]:checked').value;
@@ -430,10 +443,61 @@
                 const el = document.getElementById(id);
                 if (el) el.value = '';
             });
+            indiceEditandoCola = null;
+            document.getElementById('bannerEditando').classList.add('hidden');
+            setText('textoBtnAgregarCola', '+ Agregar Funcionario a la Lista');
             limpiarAvisos();
         }
 
-        // Agrega el funcionario actual a la tabla de carga múltiple
+        function editarDeCola(idx) {
+            const f = colaPendiente[idx];
+            if (!f) return;
+
+            indiceEditandoCola = idx;
+            document.getElementById('bannerEditando').classList.remove('hidden');
+            setText('textoBtnAgregarCola', 'Guardar Cambios en Lista');
+
+            const radioAccion = document.querySelector(`input[name="tipoAccion"][value="${f.tipoAccion}"]`);
+            if (radioAccion) { radioAccion.checked = true; toggleModo(); }
+
+            const radioCat = document.querySelector(`input[name="tipoResolucion"][value="${f.tipoResolucion}"]`);
+            if (radioCat) { radioCat.checked = true; actualizarGrados(); }
+
+            const radioPct = document.querySelector(`input[name="tipoPorcentaje"][value="${f.tipoPorcentaje}"]`);
+            if (radioPct) { radioPct.checked = true; toggleCamposPorcentaje(); }
+
+            document.getElementById('generoUniformado').value = f.generoUniformado || "Señor";
+            document.getElementById('grado').value = f.grado || "";
+            document.getElementById('nombreUniformado').value = f.nombreUniformado || "";
+            document.getElementById('cedulaUniformado').value = f.cedulaUniformado || "";
+            document.getElementById('fechaHecho').value = f.fechaHecho || "";
+            document.getElementById('comunicadoRadicacion').value = f.comunicadoRadicacion || "";
+            document.getElementById('fechaRadicacion').value = f.fechaRadicacion || "";
+
+            if (f.tipoPorcentaje === "30") {
+                document.getElementById('motivo30').value = f.motivo30 || "haber constituido unión marital de hecho";
+                document.getElementById('generoConyuge').value = f.generoConyuge || "Señora";
+                document.getElementById('nombreConyuge').value = f.nombreConyuge || "";
+                document.getElementById('cedulaConyuge').value = f.cedulaConyuge || "";
+                document.getElementById('tipoDocumento').value = f.tipoDocumento || "acta de conciliación";
+                document.getElementById('numeroDocumento').value = f.numeroDocumento || "";
+                document.getElementById('enteEmisor').value = f.enteEmisor || "";
+            } else {
+                document.getElementById('parentescoHijo').value = f.parentescoHijo || "su hija";
+                document.getElementById('nombreHijo').value = f.nombreHijo || "";
+                document.getElementById('registroCivil').value = f.registroCivil || "";
+            }
+
+            renderizarColaPendiente();
+            document.getElementById('nombreUniformado').focus();
+        }
+
+        function cancelarEdicionCola() {
+            limpiarCamposFuncionario();
+            renderizarColaPendiente();
+        }
+
+        // Agrega o actualiza un funcionario en la tabla de carga múltiple
         function agregarFuncionarioALaCola() {
             if (extincionActual) {
                 alert("Hay una extinción en curso. Genere el Word o use «Limpiar Todo / Nuevo Lote» antes de agregar reconocimientos.");
@@ -446,8 +510,12 @@
                 return;
             }
 
-            const categoriaActiva = colaPendiente.length > 0
-                ? colaPendiente[0].tipoResolucion
+            const otrosEnCola = indiceEditandoCola !== null
+                ? colaPendiente.filter((_, i) => i !== indiceEditandoCola)
+                : colaPendiente;
+
+            const categoriaActiva = otrosEnCola.length > 0
+                ? otrosEnCola[0].tipoResolucion
                 : (listaRegistrosAcumulados.length > 0 ? listaRegistrosAcumulados[0].tipoResolucion : null);
 
             if (categoriaActiva && categoriaActiva !== p.tipoResolucion) {
@@ -455,25 +523,36 @@
                 return;
             }
 
-            colaPendiente.push(p);
-            renderizarColaPendiente();
+            if (indiceEditandoCola !== null) {
+                colaPendiente[indiceEditandoCola] = p;
+            } else {
+                colaPendiente.push(p);
+            }
+
             limpiarCamposFuncionario();
+            renderizarColaPendiente();
         }
 
         function quitarDeCola(idx) {
+            if (indiceEditandoCola === idx) {
+                limpiarCamposFuncionario();
+            } else if (indiceEditandoCola !== null && idx < indiceEditandoCola) {
+                indiceEditandoCola--;
+            }
             colaPendiente.splice(idx, 1);
             renderizarColaPendiente();
         }
 
         function limpiarCola() {
             colaPendiente = [];
+            limpiarCamposFuncionario();
             renderizarColaPendiente();
         }
 
         function renderizarColaPendiente() {
             const cont = document.getElementById('tablaColaContenedor');
-            document.getElementById('contadorCola').textContent = colaPendiente.length;
-            document.getElementById('contadorColaBtn').textContent = colaPendiente.length;
+            setText('contadorCola', colaPendiente.length);
+            setText('contadorColaBtn', colaPendiente.length);
 
             if (colaPendiente.length === 0) {
                 cont.innerHTML = `<p class="text-xs text-slate-500 italic">Diligencie los datos arriba y pulse <strong>«+ Agregar Funcionario a la Lista»</strong> para ir sumando varios funcionarios antes de registrarlos.</p>`;
@@ -483,12 +562,16 @@
             const filas = colaPendiente.map((f, i) => {
                 const sigla = f.tipoResolucion === "PP" ? "PP." : (SIGLAS_GRADO[f.grado] || f.grado);
                 const benef = f.tipoPorcentaje === "30" ? `${f.nombreConyuge} (30%)` : `${f.nombreHijo} (${f.tipoPorcentaje}%)`;
+                const resaltado = indiceEditandoCola === i ? "bg-blue-50" : "";
                 return `
-                    <tr class="border-b border-amber-200/70">
+                    <tr class="border-b border-amber-200/70 ${resaltado}">
                         <td class="py-1.5 px-2 font-bold text-slate-700">${i + 1}</td>
                         <td class="py-1.5 px-2 font-semibold text-emerald-900">${sigla} ${f.nombreUniformado}<br><span class="text-[10px] text-slate-500">CC: ${f.cedulaUniformado}</span></td>
                         <td class="py-1.5 px-2 text-slate-600">${benef}<br><span class="text-[10px] text-slate-500">${f.comunicadoRadicacion}</span></td>
-                        <td class="py-1.5 px-2 text-right">
+                        <td class="py-1.5 px-2 text-right whitespace-nowrap space-x-2">
+                            <button type="button" onclick="editarDeCola(${i})" class="text-blue-700 hover:text-blue-900 text-xs font-semibold" title="Editar para corregir">
+                                <i class="fa-solid fa-pen-to-square"></i> Editar
+                            </button>
                             <button type="button" onclick="quitarDeCola(${i})" class="text-red-600 hover:text-red-800 text-xs font-semibold" title="Quitar">
                                 <i class="fa-solid fa-xmark"></i>
                             </button>
@@ -503,7 +586,7 @@
                             <th class="py-1 px-2">#</th>
                             <th class="py-1 px-2">Funcionario</th>
                             <th class="py-1 px-2">Beneficiario / Radicado</th>
-                            <th class="py-1 px-2 text-right">Quitar</th>
+                            <th class="py-1 px-2 text-right">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>${filas}</tbody>
@@ -517,7 +600,11 @@
                 return;
             }
 
-            // Si la lista está vacía, intenta tomar directamente lo diligenciado en el formulario (1 funcionario)
+            if (indiceEditandoCola !== null) {
+                alert("Primero pulse «Guardar Cambios en Lista» o «Cancelar edición» antes de registrar.");
+                return;
+            }
+
             if (colaPendiente.length === 0) {
                 const p = capturarDatosFormulario();
                 const error = validarDatosReconocimiento(p);
@@ -538,6 +625,7 @@
             const btn = document.getElementById('btnProcesarLote');
             btn.disabled = true;
             const total = colaPendiente.length;
+            let registradosOk = 0;
 
             try {
                 for (let i = 0; i < total; i++) {
@@ -555,25 +643,32 @@
                         const textoResuelveGenerado = resData.textoResuelve || construirTextoResuelveConDiasHabiles(payload);
                         listaResuelveAcumulada.push(textoResuelveGenerado);
                         listaRegistrosAcumulados.push(payload);
+                        registradosOk++;
                     } else {
                         alert(`Error en el funcionario #${i + 1} (${payload.nombreUniformado}): ` + (resData.message || "No se pudo registrar."));
                         break;
                     }
                 }
 
-                colaPendiente = [];
+                if (registradosOk === total) {
+                    colaPendiente = [];
+                } else {
+                    colaPendiente = colaPendiente.slice(registradosOk);
+                }
                 renderizarColaPendiente();
                 actualizarVistaAcumulador();
-                alert(`¡Se registraron ${total} funcionario(s) en Google Sheets y se agregaron al RESUELVE!`);
+                if (registradosOk > 0) {
+                    alert(`¡Se registraron ${registradosOk} funcionario(s) en Google Sheets! Ya puede pulsar «Generar Proyecto en Word (Con Firmas)».`);
+                }
             } catch (err) {
                 alert("Error de conexión con Google Sheets: " + err);
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> <span>Registrar Lista en Sheets (<span id="contadorColaBtn">${colaPendiente.length}</span>)</span>`;
+                setText('contadorColaBtn', colaPendiente.length);
             }
         }
 
-        // Submit estándar (usado en modo Extinción)
         document.getElementById('resolucionForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             normalizarFormulario();
@@ -584,7 +679,6 @@
             }
         });
 
-        // Vista previa exacta en el frontend (sincronizada con el backend)
         function construirTextoResuelveConDiasHabiles(p) {
             const fHechoTxt = formatearFechaTexto(p.fechaHecho);
             const fRadicacionTxt = formatearFechaTexto(p.fechaRadicacion);
@@ -636,10 +730,9 @@
 
         function actualizarVistaAcumulador() {
             const contenedor = document.getElementById('contenedorResultado');
-            const contador = document.getElementById('contadorArticulos');
             const btnGenerar = document.getElementById('btnGenerarWord');
 
-            contador.textContent = listaResuelveAcumulada.length;
+            setText('contadorArticulos', listaResuelveAcumulada.length);
             btnGenerar.disabled = listaResuelveAcumulada.length === 0;
 
             if (listaResuelveAcumulada.length === 0) {
@@ -656,8 +749,8 @@
                     <span class="font-bold text-emerald-900 block mb-1">${etiqueta}</span>
                     <p class="text-slate-600 mb-2">${texto}</p>
                     <div class="flex justify-end space-x-2">
-                        <button onclick="copiarTextoResuelve(${idx})" class="text-slate-500 hover:text-emerald-800 text-[11px] font-semibold"><i class="fa-solid fa-copy mr-1"></i> Copiar</button>
-                        <button onclick="eliminarArticulo(${idx})" class="text-red-500 hover:text-red-700 text-[11px] font-semibold"><i class="fa-solid fa-trash mr-1"></i> Eliminar</button>
+                        <button type="button" onclick="copiarTextoResuelve(${idx})" class="text-slate-500 hover:text-emerald-800 text-[11px] font-semibold"><i class="fa-solid fa-copy mr-1"></i> Copiar</button>
+                        <button type="button" onclick="eliminarArticulo(${idx})" class="text-red-500 hover:text-red-700 text-[11px] font-semibold"><i class="fa-solid fa-trash mr-1"></i> Eliminar</button>
                     </div>
                 `;
                 contenedor.appendChild(div);
@@ -745,6 +838,7 @@
             document.getElementById('seccionExtincion').classList.toggle('hidden', !ext);
             document.getElementById('botonesMultiples').classList.toggle('hidden', ext);
             document.getElementById('bloqueColaFuncionarios').classList.toggle('hidden', ext);
+            document.getElementById('bannerEditando').classList.add('hidden');
             document.getElementById('btnProcesar').classList.toggle('hidden', !ext);
             document.getElementById('badgeModoCarga').classList.toggle('hidden', ext);
 
@@ -895,6 +989,7 @@
         const avisosCorreccion = {};
         function mostrarAvisos() {
             const box = document.getElementById('avisoCorrecciones');
+            if (!box) return;
             const lineas = Object.values(avisosCorreccion).flat();
             box.textContent = lineas.length ? "Tildes corregidas: " + lineas.join(", ") + ". Verifique que sean correctas." : "";
             box.classList.toggle('hidden', lineas.length === 0);
@@ -959,11 +1054,14 @@
         function reiniciarTodo() {
             if (confirm("¿Desea limpiar todos los registros acumulados y reiniciar el formulario?")) {
                 colaPendiente = [];
+                indiceEditandoCola = null;
                 renderizarColaPendiente();
                 listaResuelveAcumulada = [];
                 listaRegistrosAcumulados = [];
                 actualizarVistaAcumulador();
                 document.getElementById('resolucionForm').reset();
+                document.getElementById('bannerEditando').classList.add('hidden');
+                setText('textoBtnAgregarCola', '+ Agregar Funcionario a la Lista');
                 extincionActual = null;
                 delete document.getElementById('descuentoDesde').dataset.manual;
                 actualizarGrados();
