@@ -296,10 +296,40 @@
                         <i class="fa-solid fa-user-plus"></i>
                         <span id="textoBtnAgregarCola">+ Agregar Funcionario a la Lista</span>
                     </button>
-                    <button type="button" id="btnProcesarLote" onclick="procesarLoteEnSheets()" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white font-semibold py-2.5 px-4 rounded-lg shadow transition duration-200 flex items-center justify-center space-x-2 text-sm">
-                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <button type="button" id="btnProcesarLote" onclick="verificarAntesDeGrabarSheets()" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white font-semibold py-2.5 px-4 rounded-lg shadow transition duration-200 flex items-center justify-center space-x-2 text-sm">
+                        <i class="fa-solid fa-magnifying-glass-chart"></i>
                         <span>Registrar Lista en Sheets (<span id="contadorColaBtn">0</span>)</span>
                     </button>
+                </div>
+
+                <!-- Panel de Feedback / Verificación previa en Google Sheets -->
+                <div id="panelVerificacionSheets" class="hidden bg-sky-50 border-2 border-sky-400 rounded-xl p-4 space-y-3 shadow-sm">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <h3 class="text-sm font-bold text-sky-950 flex items-center">
+                                <i class="fa-solid fa-clipboard-check text-sky-700 mr-2"></i>
+                                Verificación previa en Google Sheets (PROYECTO_RESOLUCIONES)
+                            </h3>
+                            <p class="text-[11px] text-sky-800 mt-0.5">
+                                Revise el resumen de lo que se va a grabar y si ya existen registros anteriores con la misma cédula:
+                            </p>
+                        </div>
+                        <button type="button" onclick="cerrarPanelVerificacion()" class="text-slate-500 hover:text-slate-800 text-xs font-bold px-2 py-0.5">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+
+                    <div id="detalleVerificacionContenido" class="space-y-2 max-h-64 overflow-y-auto pr-1"></div>
+
+                    <div class="flex flex-wrap justify-end gap-2 pt-2 border-t border-sky-200">
+                        <button type="button" onclick="cerrarPanelVerificacion()" class="bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 font-semibold py-2 px-3 rounded-lg text-xs">
+                            <i class="fa-solid fa-arrow-left mr-1"></i> Cancelar / Corregir
+                        </button>
+                        <button type="button" id="btnConfirmarGrabado" onclick="ejecutarGrabadoConfirmadoEnSheets()" class="bg-emerald-800 hover:bg-emerald-900 text-white font-semibold py-2 px-4 rounded-lg text-xs shadow flex items-center space-x-1.5">
+                            <i class="fa-solid fa-check-double"></i>
+                            <span>Confirmar y Grabar en Google Sheets</span>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Botón de Envío Exclusivo Extinción -->
@@ -370,7 +400,6 @@
             "Comisario": "CM."
         };
 
-        // Helper seguro para evitar "Cannot set properties of null (setting 'textContent')"
         function setText(id, valor) {
             const el = document.getElementById(id);
             if (el) el.textContent = String(valor);
@@ -453,6 +482,7 @@
             const f = colaPendiente[idx];
             if (!f) return;
 
+            cerrarPanelVerificacion();
             indiceEditandoCola = idx;
             document.getElementById('bannerEditando').classList.remove('hidden');
             setText('textoBtnAgregarCola', 'Guardar Cambios en Lista');
@@ -497,7 +527,6 @@
             renderizarColaPendiente();
         }
 
-        // Agrega o actualiza un funcionario en la tabla de carga múltiple
         function agregarFuncionarioALaCola() {
             if (extincionActual) {
                 alert("Hay una extinción en curso. Genere el Word o use «Limpiar Todo / Nuevo Lote» antes de agregar reconocimientos.");
@@ -529,6 +558,7 @@
                 colaPendiente.push(p);
             }
 
+            cerrarPanelVerificacion();
             limpiarCamposFuncionario();
             renderizarColaPendiente();
         }
@@ -540,11 +570,13 @@
                 indiceEditandoCola--;
             }
             colaPendiente.splice(idx, 1);
+            cerrarPanelVerificacion();
             renderizarColaPendiente();
         }
 
         function limpiarCola() {
             colaPendiente = [];
+            cerrarPanelVerificacion();
             limpiarCamposFuncionario();
             renderizarColaPendiente();
         }
@@ -593,15 +625,19 @@
                 </table>`;
         }
 
-        // Procesa todos los funcionarios de la lista (o el del formulario si aún no pulsó "+ Agregar")
-        async function procesarLoteEnSheets() {
+        function cerrarPanelVerificacion() {
+            const panel = document.getElementById('panelVerificacionSheets');
+            if (panel) panel.classList.add('hidden');
+        }
+
+        // PASO 1: Al dar clic en "Registrar Lista en Sheets", verifica en el libro si ya existen cédulas y muestra el feedback
+        async function verificarAntesDeGrabarSheets() {
             if (extincionActual) {
                 alert("Hay una extinción en curso. Genere el Word o use «Limpiar Todo / Nuevo Lote».");
                 return;
             }
-
             if (indiceEditandoCola !== null) {
-                alert("Primero pulse «Guardar Cambios en Lista» o «Cancelar edición» antes de registrar.");
+                alert("Primero pulse «Guardar Cambios en Lista» o «Cancelar edición» antes de continuar.");
                 return;
             }
 
@@ -624,13 +660,103 @@
 
             const btn = document.getElementById('btnProcesarLote');
             btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>Verificando en Sheets...</span>`;
+
+            try {
+                const respuesta = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({
+                        accion: "VERIFICAR_REGISTROS_SHEETS",
+                        listaRegistros: colaPendiente
+                    })
+                });
+                const resData = await respuesta.json();
+
+                if (resData.status === "success" && Array.isArray(resData.resultados)) {
+                    mostrarFeedbackVerificacion(resData.resultados);
+                } else {
+                    alert("Aviso al verificar en Sheets: " + (resData.message || "No se pudo consultar el libro."));
+                }
+            } catch (err) {
+                alert("Error de conexión al verificar en Google Sheets: " + err);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-magnifying-glass-chart"></i> <span>Registrar Lista en Sheets (<span id="contadorColaBtn">${colaPendiente.length}</span>)</span>`;
+                setText('contadorColaBtn', colaPendiente.length);
+            }
+        }
+
+        function mostrarFeedbackVerificacion(resultados) {
+            const panel = document.getElementById('panelVerificacionSheets');
+            const cont = document.getElementById('detalleVerificacionContenido');
+
+            // También revisa si la misma cédula aparece repetida dentro de la propia lista actual
+            const conteoEnCola = {};
+            colaPendiente.forEach(item => {
+                conteoEnCola[item.cedulaUniformado] = (conteoEnCola[item.cedulaUniformado] || 0) + 1;
+            });
+
+            cont.innerHTML = resultados.map((r, idx) => {
+                const itemCola = colaPendiente[idx];
+                const sigla = itemCola.tipoResolucion === "PP" ? "PP." : (SIGLAS_GRADO[itemCola.grado] || itemCola.grado);
+                const benef = itemCola.tipoPorcentaje === "30" ? itemCola.nombreConyuge : itemCola.nombreHijo;
+                const repetidoEnLote = conteoEnCola[r.cedula] > 1;
+                const tienePrevios = r.totalExistentes > 0 || repetidoEnLote;
+
+                const borde = tienePrevios ? "border-amber-400 bg-amber-50/90" : "border-emerald-300 bg-white";
+                const estadoBadge = tienePrevios
+                    ? `<span class="text-[11px] font-bold bg-amber-200 text-amber-950 px-2 py-0.5 rounded-full"><i class="fa-solid fa-triangle-exclamation mr-1"></i> ${r.totalExistentes} registro(s) en Sheets</span>`
+                    : `<span class="text-[11px] font-bold bg-emerald-100 text-emerald-900 px-2 py-0.5 rounded-full"><i class="fa-solid fa-circle-check mr-1"></i> Nuevo (0 previos en Sheets)</span>`;
+
+                let detallePrevios = "";
+                if (r.totalExistentes > 0) {
+                    const listaCoinc = r.coincidencias.map(c =>
+                        `<li class="text-[11px] text-amber-950">• <strong>${c.nombre}</strong> (CC: ${c.cedula}) — Porcentaje: <strong>${c.porcentaje}</strong> | Acción: ${c.accion} | Radicado: ${c.comunicado} (${c.fechaRegistro})</li>`
+                    ).join("");
+                    detallePrevios = `
+                        <div class="mt-1.5 pt-1.5 border-t border-amber-200">
+                            <p class="text-[11px] font-semibold text-amber-900">Registros encontrados en el libro:</p>
+                            <ul class="mt-0.5 space-y-0.5">${listaCoinc}</ul>
+                        </div>`;
+                }
+                if (repetidoEnLote) {
+                    detallePrevios += `<p class="text-[11px] font-semibold text-red-700 mt-1"><i class="fa-solid fa-circle-info mr-1"></i> Atención: Esta cédula aparece ${conteoEnCola[r.cedula]} veces en la lista actual.</p>`;
+                }
+
+                return `
+                    <div class="border ${borde} rounded-lg p-2.5 text-xs">
+                        <div class="flex flex-wrap items-center justify-between gap-1">
+                            <span class="font-bold text-slate-800">${idx + 1}. ${sigla} ${r.nombreNuevo} <span class="font-normal text-slate-600">(CC: ${r.cedula})</span></span>
+                            ${estadoBadge}
+                        </div>
+                        <p class="text-[11px] text-slate-700 mt-1">
+                            <strong>A grabar:</strong> ${r.accionNueva} | Porcentaje: <strong>${r.porcentajeNuevo}</strong> | Beneficiario(a): ${benef} | Radicado: ${itemCola.comunicadoRadicacion}
+                        </p>
+                        ${detallePrevios}
+                    </div>`;
+            }).join("");
+
+            panel.classList.remove('hidden');
+            panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // PASO 2: Confirmado en el panel de feedback, graba cada registro en Google Sheets
+        async function ejecutarGrabadoConfirmadoEnSheets() {
+            if (colaPendiente.length === 0) return;
+
+            const btnConfirmar = document.getElementById('btnConfirmarGrabado');
+            const btnLote = document.getElementById('btnProcesarLote');
+            btnConfirmar.disabled = true;
+            btnLote.disabled = true;
+
             const total = colaPendiente.length;
             let registradosOk = 0;
 
             try {
                 for (let i = 0; i < total; i++) {
                     const payload = colaPendiente[i];
-                    btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Guardando ${i + 1} de ${total} en Sheets...`;
+                    btnConfirmar.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>Grabando ${i + 1} de ${total}...</span>`;
 
                     const respuesta = await fetch(SCRIPT_URL, {
                         method: 'POST',
@@ -652,19 +778,23 @@
 
                 if (registradosOk === total) {
                     colaPendiente = [];
+                    cerrarPanelVerificacion();
                 } else {
                     colaPendiente = colaPendiente.slice(registradosOk);
                 }
+
                 renderizarColaPendiente();
                 actualizarVistaAcumulador();
                 if (registradosOk > 0) {
-                    alert(`¡Se registraron ${registradosOk} funcionario(s) en Google Sheets! Ya puede pulsar «Generar Proyecto en Word (Con Firmas)».`);
+                    alert(`¡Se grabaron ${registradosOk} funcionario(s) en Google Sheets! Ya puede pulsar «Generar Proyecto en Word (Con Firmas)».`);
                 }
             } catch (err) {
-                alert("Error de conexión con Google Sheets: " + err);
+                alert("Error de conexión al grabar en Google Sheets: " + err);
             } finally {
-                btn.disabled = false;
-                btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> <span>Registrar Lista en Sheets (<span id="contadorColaBtn">${colaPendiente.length}</span>)</span>`;
+                btnConfirmar.disabled = false;
+                btnConfirmar.innerHTML = `<i class="fa-solid fa-check-double"></i> <span>Confirmar y Grabar en Google Sheets</span>`;
+                btnLote.disabled = false;
+                btnLote.innerHTML = `<i class="fa-solid fa-magnifying-glass-chart"></i> <span>Registrar Lista en Sheets (<span id="contadorColaBtn">${colaPendiente.length}</span>)</span>`;
                 setText('contadorColaBtn', colaPendiente.length);
             }
         }
@@ -839,6 +969,7 @@
             document.getElementById('botonesMultiples').classList.toggle('hidden', ext);
             document.getElementById('bloqueColaFuncionarios').classList.toggle('hidden', ext);
             document.getElementById('bannerEditando').classList.add('hidden');
+            cerrarPanelVerificacion();
             document.getElementById('btnProcesar').classList.toggle('hidden', !ext);
             document.getElementById('badgeModoCarga').classList.toggle('hidden', ext);
 
@@ -1055,6 +1186,7 @@
             if (confirm("¿Desea limpiar todos los registros acumulados y reiniciar el formulario?")) {
                 colaPendiente = [];
                 indiceEditandoCola = null;
+                cerrarPanelVerificacion();
                 renderizarColaPendiente();
                 listaResuelveAcumulada = [];
                 listaRegistrosAcumulados = [];
