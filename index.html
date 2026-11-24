@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
         // URL DE TU WEB APP DE GOOGLE APPS SCRIPT ACTUALIZADA
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxezzCkHWOzedUGRc2FaNIJKqk7mDRURKVIecWsZWCQMVQ7UQCUmX2IW0pgapfh2Vms/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzLEbiJiGkGuznBnM75uJOFXQyRgDqFHXAZyXQ6F65CYQdVWR-Rpi-UHl1PUZPvtGvK/exec";
     </script>
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans min-h-screen pb-12">
@@ -35,9 +35,14 @@
         
         <!-- Formulario de Ingreso -->
         <section class="md:col-span-2 bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-            <h2 class="text-md font-bold text-slate-700 mb-4 pb-2 border-b border-slate-100 flex items-center">
-                <i class="fa-solid fa-pen-to-square text-emerald-700 mr-2"></i> Datos del Uniformado y Solicitud
-            </h2>
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-4 pb-2 border-b border-slate-100">
+                <h2 class="text-md font-bold text-slate-700 flex items-center">
+                    <i class="fa-solid fa-pen-to-square text-emerald-700 mr-2"></i> Datos del Uniformado y Solicitud
+                </h2>
+                <span id="badgeModoCarga" class="text-[11px] font-semibold bg-emerald-100 text-emerald-900 px-2.5 py-1 rounded-full">
+                    <i class="fa-solid fa-users mr-1"></i> Modo Múltiple: Agrega 1 o varios funcionarios
+                </span>
+            </div>
 
             <form id="resolucionForm" class="space-y-4">
 
@@ -50,8 +55,8 @@
                     <div id="avisoCorrecciones" class="text-[11px] text-emerald-800 mt-1 hidden"></div>
                 </div>
 
-                <!-- Tipo de Acción -->
-                <div class="grid grid-cols-2 gap-4">
+                <!-- Tipo de Acción y Categoría -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-semibold uppercase text-slate-600 mb-1">Tipo de Acción</label>
                         <div class="flex flex-wrap gap-x-4 gap-y-1">
@@ -72,10 +77,10 @@
                 <!-- Porcentaje a Reconocer -->
                 <div id="bloquePorcentaje">
                     <label class="block text-xs font-semibold uppercase text-slate-600 mb-1">Porcentaje de Asistencia Familiar</label>
-                    <div class="flex space-x-6 bg-slate-50 p-2.5 rounded-lg border border-slate-200">
-                        <label class="flex items-center text-sm cursor-pointer"><input type="radio" name="tipoPorcentaje" value="30" checked onchange="toggleCamposPorcentaje()" class="mr-2 accent-emerald-800"> 30% (Compañera / Unión Marital)</label>
+                    <div class="flex flex-wrap gap-x-6 gap-y-2 bg-slate-50 p-2.5 rounded-lg border border-slate-200">
+                        <label class="flex items-center text-sm cursor-pointer"><input type="radio" name="tipoPorcentaje" value="30" checked onchange="toggleCamposPorcentaje()" class="mr-2 accent-emerald-800"> 30% (Cónyuge / Unión Marital)</label>
                         <label class="flex items-center text-sm cursor-pointer"><input type="radio" name="tipoPorcentaje" value="3" onchange="toggleCamposPorcentaje()" class="mr-2 accent-emerald-800"> 3% (Primer hijo/a)</label>
-                        <label class="flex items-center text-sm cursor-pointer"><input type="radio" name="tipoPorcentaje" value="2" onchange="toggleCamposPorcentaje()" class="mr-2 accent-emerald-800"> 2% (Hijo/a adicional)</label>
+                        <label class="flex items-center text-sm cursor-pointer"><input type="radio" name="tipoPorcentaje" value="2" onchange="toggleCamposPorcentaje()" class="mr-2 accent-emerald-800"> 2% (Segundo hijo/a)</label>
                     </div>
                 </div>
 
@@ -111,10 +116,17 @@
                     </div>
                 </div>
 
-                <!-- Campos dinámicos según porcentaje -->
+                <!-- Campos dinámicos según porcentaje (30%) -->
                 <div id="seccionConyuge" class="bg-emerald-50/50 p-3 rounded-lg border border-emerald-100 space-y-3">
-                    <p class="text-xs font-bold text-emerald-900 uppercase"><i class="fa-solid fa-heart mr-1"></i> Datos del Compañero(a) (Unión Marital)</p>
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                    <p class="text-xs font-bold text-emerald-900 uppercase"><i class="fa-solid fa-heart mr-1"></i> Datos del Cónyuge o Compañero(a) Permanente (30%)</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Motivo / Vínculo</label>
+                            <select id="motivo30" class="w-full text-sm border border-slate-300 rounded-lg p-2 bg-white">
+                                <option value="haber constituido unión marital de hecho">Unión marital de hecho</option>
+                                <option value="haber contraído matrimonio">Matrimonio</option>
+                            </select>
+                        </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-600 mb-1">Tratamiento</label>
                             <select id="generoConyuge" class="w-full text-sm border border-slate-300 rounded-lg p-2 bg-white">
@@ -122,52 +134,45 @@
                                 <option value="Señor">Señor</option>
                             </select>
                         </div>
-                        <div class="md:col-span-2">
-                            <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre Compañero(a)</label>
-                            <input type="text" id="nombreConyuge" placeholder="Nombres y Apellidos" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2 focus:outline-none">
-                        </div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-600 mb-1">Cédula</label>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Cédula Compañero(a)</label>
                             <input type="text" id="cedulaConyuge" placeholder="Número de cédula" class="w-full text-sm border border-slate-300 rounded-lg p-2 focus:outline-none">
                         </div>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre Completo Compañero(a) / Cónyuge</label>
+                        <input type="text" id="nombreConyuge" placeholder="Nombres y Apellidos" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2 focus:outline-none">
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                         <div>
                             <label class="block text-xs font-semibold text-slate-600 mb-1">Tipo Documento</label>
                             <select id="tipoDocumento" class="w-full text-sm border border-slate-300 rounded-lg p-2 bg-white">
-                                <option value="Acta de Conciliación">Acta de Conciliación</option>
-                                <option value="Escritura Pública">Escritura Pública</option>
-                                <option value="Sentencia Judicial">Sentencia Judicial</option>
+                                <option value="acta de conciliación">Acta de Conciliación</option>
+                                <option value="escritura pública">Escritura Pública</option>
+                                <option value="sentencia judicial">Sentencia Judicial</option>
+                                <option value="registro civil de matrimonio">Registro Civil de Matrimonio</option>
                             </select>
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-600 mb-1">Nro. Documento / Acta</label>
-                            <input type="text" id="numeroDocumento" placeholder="Número" class="w-full text-sm border border-slate-300 rounded-lg p-2">
+                            <input type="text" id="numeroDocumento" placeholder="Ej: A-294-2026" class="w-full text-sm border border-slate-300 rounded-lg p-2">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-600 mb-1">Entidad</label>
-                            <select id="tipoEnteEmisor" class="w-full text-sm border border-slate-300 rounded-lg p-2 bg-white">
-                                <option value="Centro de Conciliación">Centro de Conciliación</option>
-                                <option value="Consultorio Jurídico">Consultorio Jurídico</option>
-                                <option value="Notaría">Notaría</option>
-                                <option value="Juzgado">Juzgado</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre / Sede Ente</label>
-                            <input type="text" id="enteEmisor" placeholder="Ej: POLICÍA NACIONAL / SEGUNDA" class="w-full text-sm border border-slate-300 rounded-lg p-2 uppercase">
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Ente Emisor (Notaría / Centro / Juzgado)</label>
+                            <input type="text" id="enteEmisor" placeholder="Ej: Centro de Conciliación de la Policía Nacional" class="w-full text-sm border border-slate-300 rounded-lg p-2">
                         </div>
                     </div>
                 </div>
 
+                <!-- Campos dinámicos según porcentaje (3% o 2%) -->
                 <div id="seccionHijo" class="bg-amber-50/50 p-3 rounded-lg border border-amber-100 space-y-3 hidden">
-                    <p class="text-xs font-bold text-amber-900 uppercase"><i class="fa-solid fa-child mr-1"></i> Datos del Hijo(a)</p>
+                    <p class="text-xs font-bold text-amber-900 uppercase"><i class="fa-solid fa-child mr-1"></i> Datos del Hijo o Hija (3% / 2%)</p>
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
                         <div>
                             <label class="block text-xs font-semibold text-slate-600 mb-1">Parentesco</label>
-                            <select id="generoHijo" class="w-full text-sm border border-slate-300 rounded-lg p-2 bg-white">
-                                <option value="Hija">Hija</option>
-                                <option value="Hijo">Hijo</option>
+                            <select id="parentescoHijo" class="w-full text-sm border border-slate-300 rounded-lg p-2 bg-white">
+                                <option value="su hija">Hija</option>
+                                <option value="su hijo">Hijo</option>
                             </select>
                         </div>
                         <div class="md:col-span-2">
@@ -271,7 +276,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 border-t border-slate-100">
                     <div>
                         <label id="lblComunicado" class="block text-xs font-semibold text-slate-600 mb-1">Comunicado Oficial de Radicación</label>
-                        <input type="text" id="comunicadoRadicacion" required placeholder="Ej: GS-2026-001234-JESEP" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
+                        <input type="text" id="comunicadoRadicacion" required placeholder="Ej: GS-2026-043812-JESEP" class="w-full text-sm uppercase border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-800 focus:outline-none">
                     </div>
                     <div>
                         <label id="lblFechaRad" class="block text-xs font-semibold text-slate-600 mb-1">Fecha Radicación</label>
@@ -279,11 +284,38 @@
                     </div>
                 </div>
 
-                <!-- Botón de Envío -->
-                <button type="submit" id="btnProcesar" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white font-semibold py-2.5 px-4 rounded-lg shadow transition duration-200 flex items-center justify-center space-x-2 text-sm">
+                <!-- Botones de Carga Múltiple (Reconocimiento / Actualización) -->
+                <div id="botonesMultiples" class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+                    <button type="button" onclick="agregarFuncionarioALaCola()" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2.5 px-4 rounded-lg shadow transition duration-200 flex items-center justify-center space-x-2 text-sm">
+                        <i class="fa-solid fa-user-plus"></i>
+                        <span>+ Agregar Funcionario a la Lista</span>
+                    </button>
+                    <button type="button" id="btnProcesarLote" onclick="procesarLoteEnSheets()" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white font-semibold py-2.5 px-4 rounded-lg shadow transition duration-200 flex items-center justify-center space-x-2 text-sm">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                        <span>Registrar Lista en Sheets (<span id="contadorColaBtn">0</span>)</span>
+                    </button>
+                </div>
+
+                <!-- Botón de Envío Exclusivo Extinción -->
+                <button type="submit" id="btnProcesar" class="hidden w-full bg-emerald-800 hover:bg-emerald-900 text-white font-semibold py-2.5 px-4 rounded-lg shadow transition duration-200 flex items-center justify-center space-x-2 text-sm">
                     <i class="fa-solid fa-gears"></i>
-                    <span>Procesar y Registrar en Google Sheets</span>
+                    <span>Procesar Extinción y Registrar en Google Sheets</span>
                 </button>
+
+                <!-- Tabla Visual de Varios Funcionarios Precargados -->
+                <div id="bloqueColaFuncionarios" class="bg-amber-50/70 border border-amber-200 rounded-lg p-3">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-bold text-amber-950 uppercase">
+                            <i class="fa-solid fa-list-ol mr-1"></i> Funcionarios listos para cargar (<span id="contadorCola">0</span>)
+                        </span>
+                        <button type="button" onclick="limpiarCola()" class="text-[11px] text-red-600 hover:underline font-semibold">
+                            Vaciar lista
+                        </button>
+                    </div>
+                    <div id="tablaColaContenedor" class="overflow-x-auto">
+                        <p class="text-xs text-slate-500 italic">Diligencie los datos arriba y pulse <strong>«+ Agregar Funcionario a la Lista»</strong> para ir sumando varios funcionarios antes de registrarlos.</p>
+                    </div>
+                </div>
             </form>
         </section>
 
@@ -291,12 +323,12 @@
         <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col justify-between">
             <div>
                 <h2 class="text-md font-bold text-slate-700 mb-3 pb-2 border-b border-slate-100 flex items-center justify-between">
-                    <span><i class="fa-solid fa-list-check text-amber-500 mr-2"></i> Artículos RESUELVE</span>
+                    <span><i class="fa-solid fa-file-lines text-amber-500 mr-2"></i> Artículos RESUELVE</span>
                     <span id="contadorArticulos" class="text-xs bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded-full">0</span>
                 </h2>
 
-                <div id="contenedorResultado" class="space-y-3 mb-4 max-h-[350px] overflow-y-auto pr-1">
-                    <p class="text-xs text-slate-400 text-center py-8 italic">No hay registros agregados todavía. Complete el formulario y procese el primer uniformado.</p>
+                <div id="contenedorResultado" class="space-y-3 mb-4 max-h-[420px] overflow-y-auto pr-1">
+                    <p class="text-xs text-slate-400 text-center py-8 italic">No hay registros procesados todavía. Agregue uno o varios funcionarios en el formulario y regístrelos en Sheets.</p>
                 </div>
             </div>
 
@@ -316,9 +348,20 @@
 
     <!-- Script de Funcionalidad -->
     <script>
-        let listaResuelveAcumulada = [];
-        let listaRegistrosAcumulados = [];
-        let extincionActual = null;
+        let colaPendiente = [];            // Varios funcionarios agregados antes de enviar a Sheets
+        let listaResuelveAcumulada = [];   // Textos ya registrados en Sheets para el Word
+        let listaRegistrosAcumulados = []; // Objetos completos registrados para concordancia singular/plural en Word
+        let extincionActual = null;        // Datos de la extinción en curso (modo Extinción)
+
+        const SIGLAS_GRADO = {
+            "Patrullero de Policía (PP)": "PP.",
+            "Patrullero": "PT.",
+            "Subintendente": "SI.",
+            "Intendente": "IT.",
+            "Intendente Jefe": "IJ.",
+            "Subcomisario": "SC.",
+            "Comisario": "CM."
+        };
 
         function toggleCamposPorcentaje() {
             const porcentaje = document.querySelector('input[name="tipoPorcentaje"]:checked').value;
@@ -334,95 +377,217 @@
             }
         }
 
-        function obtenerSiglaGradoJS(tipoResolucion, grado) {
-            if (tipoResolucion === "PP") return "PP";
-            const mapa = {
-                "Patrullero (PT)": "PT",
-                "Subintendente": "SI",
-                "Intendente": "IT",
-                "Intendente Jefe": "IJ",
-                "Subcomisario": "SC",
-                "Comisario": "CM"
-            };
-            return mapa[grado] || grado;
-        }
-
-        document.getElementById('resolucionForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-
+        function capturarDatosFormulario() {
             normalizarFormulario();
-
-            if (modoActual() === "EXTINCION") {
-                await procesarExtincion();
-                return;
-            }
-            if (extincionActual) {
-                alert("Hay una extinción en el lote. Genere el documento o use «Limpiar Todo / Nuevo Lote» antes de registrar otro tipo de trámite.");
-                return;
-            }
-
-            const btn = document.getElementById('btnProcesar');
-            btn.disabled = true;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Registrando en Google Sheets...`;
-
+            const catSeleccionada = document.querySelector('input[name="tipoResolucion"]:checked').value;
             const porcentaje = document.querySelector('input[name="tipoPorcentaje"]:checked').value;
-            
-            const payload = {
+
+            return {
                 tipoAccion: document.querySelector('input[name="tipoAccion"]:checked').value,
-                tipoResolucion: document.querySelector('input[name="tipoResolucion"]:checked').value,
+                tipoResolucion: catSeleccionada,
                 tipoPorcentaje: porcentaje,
                 generoUniformado: document.getElementById('generoUniformado').value,
                 grado: document.getElementById('grado').value,
                 nombreUniformado: document.getElementById('nombreUniformado').value.trim().toUpperCase(),
                 cedulaUniformado: document.getElementById('cedulaUniformado').value.trim(),
+                motivo30: porcentaje === "30" ? document.getElementById('motivo30').value : "",
                 generoConyuge: porcentaje === "30" ? document.getElementById('generoConyuge').value : "",
                 nombreConyuge: porcentaje === "30" ? document.getElementById('nombreConyuge').value.trim().toUpperCase() : "",
                 cedulaConyuge: porcentaje === "30" ? document.getElementById('cedulaConyuge').value.trim() : "",
                 tipoDocumento: porcentaje === "30" ? document.getElementById('tipoDocumento').value : "",
                 numeroDocumento: porcentaje === "30" ? document.getElementById('numeroDocumento').value.trim() : "",
-                tipoEnteEmisor: porcentaje === "30" ? document.getElementById('tipoEnteEmisor').value : "",
-                enteEmisor: porcentaje === "30" ? document.getElementById('enteEmisor').value.trim().toUpperCase() : "",
-                generoHijo: porcentaje !== "30" ? document.getElementById('generoHijo').value : "",
+                enteEmisor: porcentaje === "30" ? document.getElementById('enteEmisor').value.trim() : "",
+                parentescoHijo: porcentaje !== "30" ? document.getElementById('parentescoHijo').value : "",
                 nombreHijo: porcentaje !== "30" ? document.getElementById('nombreHijo').value.trim().toUpperCase() : "",
                 registroCivil: porcentaje !== "30" ? document.getElementById('registroCivil').value.trim() : "",
                 fechaHecho: document.getElementById('fechaHecho').value,
                 comunicadoRadicacion: document.getElementById('comunicadoRadicacion').value.trim().toUpperCase(),
                 fechaRadicacion: document.getElementById('fechaRadicacion').value
             };
+        }
+
+        function validarDatosReconocimiento(p) {
+            if (!p.nombreUniformado) return "Ingrese el nombre completo del uniformado.";
+            if (!p.cedulaUniformado) return "Ingrese la cédula del uniformado.";
+            if (!p.fechaHecho) return "Seleccione la fecha del hecho.";
+            if (p.tipoPorcentaje === "30") {
+                if (!p.nombreConyuge) return "Ingrese el nombre del cónyuge o compañero(a).";
+                if (!p.cedulaConyuge) return "Ingrese la cédula del cónyuge o compañero(a).";
+                if (!p.numeroDocumento) return "Ingrese el número del documento o acta.";
+            } else {
+                if (!p.nombreHijo) return "Ingrese el nombre del hijo(a).";
+                if (!p.registroCivil) return "Ingrese el número de registro civil de nacimiento.";
+            }
+            if (!p.comunicadoRadicacion) return "Ingrese el comunicado oficial de radicación.";
+            if (!p.fechaRadicacion) return "Seleccione la fecha de radicación.";
+            return null;
+        }
+
+        function limpiarCamposFuncionario() {
+            ['nombreUniformado', 'cedulaUniformado', 'nombreConyuge', 'cedulaConyuge',
+             'numeroDocumento', 'enteEmisor', 'nombreHijo', 'registroCivil',
+             'comunicadoRadicacion', 'fechaHecho', 'fechaRadicacion'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+            limpiarAvisos();
+        }
+
+        // Agrega el funcionario actual a la tabla de carga múltiple
+        function agregarFuncionarioALaCola() {
+            if (extincionActual) {
+                alert("Hay una extinción en curso. Genere el Word o use «Limpiar Todo / Nuevo Lote» antes de agregar reconocimientos.");
+                return;
+            }
+            const p = capturarDatosFormulario();
+            const error = validarDatosReconocimiento(p);
+            if (error) {
+                alert(error);
+                return;
+            }
+
+            const categoriaActiva = colaPendiente.length > 0
+                ? colaPendiente[0].tipoResolucion
+                : (listaRegistrosAcumulados.length > 0 ? listaRegistrosAcumulados[0].tipoResolucion : null);
+
+            if (categoriaActiva && categoriaActiva !== p.tipoResolucion) {
+                alert("Todos los funcionarios de una misma resolución deben ser de la misma categoría (PP o Nivel Ejecutivo).");
+                return;
+            }
+
+            colaPendiente.push(p);
+            renderizarColaPendiente();
+            limpiarCamposFuncionario();
+        }
+
+        function quitarDeCola(idx) {
+            colaPendiente.splice(idx, 1);
+            renderizarColaPendiente();
+        }
+
+        function limpiarCola() {
+            colaPendiente = [];
+            renderizarColaPendiente();
+        }
+
+        function renderizarColaPendiente() {
+            const cont = document.getElementById('tablaColaContenedor');
+            document.getElementById('contadorCola').textContent = colaPendiente.length;
+            document.getElementById('contadorColaBtn').textContent = colaPendiente.length;
+
+            if (colaPendiente.length === 0) {
+                cont.innerHTML = `<p class="text-xs text-slate-500 italic">Diligencie los datos arriba y pulse <strong>«+ Agregar Funcionario a la Lista»</strong> para ir sumando varios funcionarios antes de registrarlos.</p>`;
+                return;
+            }
+
+            const filas = colaPendiente.map((f, i) => {
+                const sigla = f.tipoResolucion === "PP" ? "PP." : (SIGLAS_GRADO[f.grado] || f.grado);
+                const benef = f.tipoPorcentaje === "30" ? `${f.nombreConyuge} (30%)` : `${f.nombreHijo} (${f.tipoPorcentaje}%)`;
+                return `
+                    <tr class="border-b border-amber-200/70">
+                        <td class="py-1.5 px-2 font-bold text-slate-700">${i + 1}</td>
+                        <td class="py-1.5 px-2 font-semibold text-emerald-900">${sigla} ${f.nombreUniformado}<br><span class="text-[10px] text-slate-500">CC: ${f.cedulaUniformado}</span></td>
+                        <td class="py-1.5 px-2 text-slate-600">${benef}<br><span class="text-[10px] text-slate-500">${f.comunicadoRadicacion}</span></td>
+                        <td class="py-1.5 px-2 text-right">
+                            <button type="button" onclick="quitarDeCola(${i})" class="text-red-600 hover:text-red-800 text-xs font-semibold" title="Quitar">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </td>
+                    </tr>`;
+            }).join("");
+
+            cont.innerHTML = `
+                <table class="w-full text-left text-xs bg-white rounded border border-amber-200">
+                    <thead class="bg-amber-100/80 text-amber-950">
+                        <tr>
+                            <th class="py-1 px-2">#</th>
+                            <th class="py-1 px-2">Funcionario</th>
+                            <th class="py-1 px-2">Beneficiario / Radicado</th>
+                            <th class="py-1 px-2 text-right">Quitar</th>
+                        </tr>
+                    </thead>
+                    <tbody>${filas}</tbody>
+                </table>`;
+        }
+
+        // Procesa todos los funcionarios de la lista (o el del formulario si aún no pulsó "+ Agregar")
+        async function procesarLoteEnSheets() {
+            if (extincionActual) {
+                alert("Hay una extinción en curso. Genere el Word o use «Limpiar Todo / Nuevo Lote».");
+                return;
+            }
+
+            // Si la lista está vacía, intenta tomar directamente lo diligenciado en el formulario (1 funcionario)
+            if (colaPendiente.length === 0) {
+                const p = capturarDatosFormulario();
+                const error = validarDatosReconocimiento(p);
+                if (error) {
+                    alert("Agregue al menos un funcionario a la lista o complete el formulario: " + error);
+                    return;
+                }
+                const categoriaActiva = listaRegistrosAcumulados.length > 0 ? listaRegistrosAcumulados[0].tipoResolucion : null;
+                if (categoriaActiva && categoriaActiva !== p.tipoResolucion) {
+                    alert("Todos los funcionarios de una misma resolución deben ser de la misma categoría (PP o Nivel Ejecutivo).");
+                    return;
+                }
+                colaPendiente.push(p);
+                renderizarColaPendiente();
+                limpiarCamposFuncionario();
+            }
+
+            const btn = document.getElementById('btnProcesarLote');
+            btn.disabled = true;
+            const total = colaPendiente.length;
 
             try {
-                const respuesta = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify(payload)
-                });
+                for (let i = 0; i < total; i++) {
+                    const payload = colaPendiente[i];
+                    btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Guardando ${i + 1} de ${total} en Sheets...`;
 
-                const resData = await respuesta.json();
-                
-                if (resData.status === "success") {
-                    const textoResuelveGenerado = resData.textoResuelve || construirTextoResuelveConDiasHabiles(payload);
-                    listaResuelveAcumulada.push(textoResuelveGenerado);
-                    listaRegistrosAcumulados.push(payload);
-                    actualizarVistaAcumulador();
-                    
-                    document.getElementById('nombreUniformado').value = '';
-                    document.getElementById('cedulaUniformado').value = '';
-                    document.getElementById('comunicadoRadicacion').value = '';
-                    alert("¡Registro guardado en Google Sheets y agregado al RESUELVE con éxito!");
-                } else {
-                    alert("Aviso del servidor: " + (resData.message || "No se pudo registrar."));
+                    const respuesta = await fetch(SCRIPT_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                        body: JSON.stringify(payload)
+                    });
+                    const resData = await respuesta.json();
+
+                    if (resData.status === "success") {
+                        const textoResuelveGenerado = resData.textoResuelve || construirTextoResuelveConDiasHabiles(payload);
+                        listaResuelveAcumulada.push(textoResuelveGenerado);
+                        listaRegistrosAcumulados.push(payload);
+                    } else {
+                        alert(`Error en el funcionario #${i + 1} (${payload.nombreUniformado}): ` + (resData.message || "No se pudo registrar."));
+                        break;
+                    }
                 }
+
+                colaPendiente = [];
+                renderizarColaPendiente();
+                actualizarVistaAcumulador();
+                alert(`¡Se registraron ${total} funcionario(s) en Google Sheets y se agregaron al RESUELVE!`);
             } catch (err) {
                 alert("Error de conexión con Google Sheets: " + err);
             } finally {
                 btn.disabled = false;
-                restaurarBotonProcesar();
+                btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> <span>Registrar Lista en Sheets (<span id="contadorColaBtn">${colaPendiente.length}</span>)</span>`;
+            }
+        }
+
+        // Submit estándar (usado en modo Extinción)
+        document.getElementById('resolucionForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            normalizarFormulario();
+            if (modoActual() === "EXTINCION") {
+                await procesarExtincion();
+            } else {
+                agregarFuncionarioALaCola();
             }
         });
 
+        // Vista previa exacta en el frontend (sincronizada con el backend)
         function construirTextoResuelveConDiasHabiles(p) {
-            const fHechoTxt = formatearFechaTextoLargo(p.fechaHecho);
-            const fRadicacionTxt = formatearFechaTextoLargo(p.fechaRadicacion);
+            const fHechoTxt = formatearFechaTexto(p.fechaHecho);
+            const fRadicacionTxt = formatearFechaTexto(p.fechaRadicacion);
             
             const d1 = new Date(p.fechaHecho + "T00:00:00");
             const d2 = new Date(p.fechaRadicacion + "T00:00:00");
@@ -430,43 +595,39 @@
             let diasHabiles = 0;
             let act = new Date(d1.getTime());
             act.setDate(act.getDate() + 1);
-            
             while (act <= d2) {
                 const day = act.getDay();
-                if (day !== 0 && day !== 6) {
-                    diasHabiles++;
-                }
+                if (day !== 0 && day !== 6) diasHabiles++;
                 act.setDate(act.getDate() + 1);
             }
 
             const esDentroPlazo = diasHabiles <= 90;
-            const esMujerUnif = p.generoUniformado === "Señora";
-            const idUnifTxt = esMujerUnif ? "identificada" : "identificado";
-            const siglaGrado = obtenerSiglaGradoJS(p.tipoResolucion, p.grado);
+            const esMujer = p.generoUniformado === "Señora";
+            const idUnif = esMujer ? "identificada" : "identificado";
+            const sigla = p.tipoResolucion === "PP" ? "PP." : (SIGLAS_GRADO[p.grado] || p.grado);
 
             let textoPlazo = esDentroPlazo 
-                ? `Al haberse presentado dentro del término legal de los noventa (90) días hábiles, los efectos fiscales se reconocen a partir de la fecha del hecho que lo motiva, esto es, ${fHechoTxt}.`
-                : `Al haberse presentado por fuera del término legal de los noventa (90) días hábiles, los efectos fiscales se reconocen a partir de la fecha de su radicación, esto es, ${fRadicacionTxt}.`;
+                ? `Al haberse presentado dentro del término legal de noventa (90) días hábiles, los efectos fiscales se reconocerán a partir de la fecha del hecho que lo motiva, esto es, desde el ${fHechoTxt}.`
+                : `Teniendo en cuenta que la solicitud fue presentada por fuera de los noventa (90) días hábiles, los efectos fiscales se reconocerán a partir de la fecha de su radicación, esto es, desde el ${fRadicacionTxt}, de conformidad con la norma aplicable.`;
 
-            let texto = `${siglaGrado} ${p.nombreUniformado}, ${idUnifTxt} con cédula de ciudadanía nro. ${p.cedulaUniformado}, causa derecho del `;
+            let texto = `${sigla} ${p.nombreUniformado}, ${idUnif} con cédula de ciudadanía nro. ${p.cedulaUniformado}, causa derecho al reconocimiento del `;
             if (p.tipoPorcentaje === "30") {
-                const esMujerCony = (p.generoConyuge || "Señora") === "Señora";
-                const tratoCony = esMujerCony ? "la señora" : "el señor";
-                const idConyTxt = esMujerCony ? "identificada" : "identificado";
-                const prefijoDoc = p.tipoDocumento === "Acta de Conciliación" ? "al acta" : `a la ${p.tipoDocumento.toLowerCase()}`;
-                const enteCompleto = p.tipoEnteEmisor ? `${p.tipoEnteEmisor} ${p.enteEmisor}` : p.enteEmisor;
-
-                texto += `30% de la asignación básica correspondiente a su grado, por haber constituido unión marital de hecho. Según lo anterior ${tratoCony} ${p.nombreConyuge}, ${idConyTxt} con cédula de ciudadanía nro. ${p.cedulaConyuge}, conforme ${prefijoDoc} ${p.numeroDocumento} del ${enteCompleto}, del ${fHechoTxt}. `;
+                const esConyugeMujer = p.generoConyuge === "Señora";
+                const tratConyuge = esConyugeMujer ? "la señora" : "el señor";
+                const idConyuge = esConyugeMujer ? "identificada" : "identificado";
+                const motivo = p.motivo30 || "haber constituido unión marital de hecho";
+                const enteTxt = p.enteEmisor ? ` del ${p.enteEmisor}` : "";
+                texto += `30 % de la asignación básica correspondiente a su grado, por ${motivo} con ${tratConyuge} ${p.nombreConyuge}, ${idConyuge} con cédula de ciudadanía nro. ${p.cedulaConyuge}, conforme al ${p.tipoDocumento} nro. ${p.numeroDocumento}${enteTxt} del ${fHechoTxt}. `;
             } else {
-                const pct = p.tipoPorcentaje === "3" ? "3%" : "2%";
-                const tipoHijoTxt = (p.generoHijo || "Hija") === "Hijo" ? "su hijo" : "su hija";
-                texto += `${pct} de la asignación básica correspondiente a su grado, por concepto de ${tipoHijoTxt} ${p.nombreHijo}, conforme al registro civil de nacimiento nro. ${p.registroCivil}, que acredita su nacimiento el ${fHechoTxt}. `;
+                const pct = p.tipoPorcentaje === "3" ? "3 %" : "2 %";
+                const parentesco = p.parentescoHijo || "su hija";
+                texto += `${pct} de la asignación básica correspondiente a su grado, por concepto de ${parentesco} ${p.nombreHijo}, conforme al registro civil de nacimiento nro. ${p.registroCivil}, que acredita su nacimiento el ${fHechoTxt}. `;
             }
-            texto += `La solicitud fue radicada mediante comunicado (${p.comunicadoRadicacion}) del ${fRadicacionTxt}. ${textoPlazo}`;
+            texto += `La solicitud fue radicada mediante el comunicado oficial ${p.comunicadoRadicacion} del ${fRadicacionTxt}. ${textoPlazo}`;
             return texto;
         }
 
-        function formatearFechaTextoLargo(fechaStr) {
+        function formatearFechaTexto(fechaStr) {
             const meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
             const partes = fechaStr.split("-");
             if (partes.length !== 3) return fechaStr;
@@ -482,19 +643,20 @@
             btnGenerar.disabled = listaResuelveAcumulada.length === 0;
 
             if (listaResuelveAcumulada.length === 0) {
-                contenedor.innerHTML = `<p class="text-xs text-slate-400 text-center py-8 italic">No hay registros agregados todavía.</p>`;
+                contenedor.innerHTML = `<p class="text-xs text-slate-400 text-center py-8 italic">No hay registros procesados todavía. Agregue uno o varios funcionarios en el formulario y regístrelos en Sheets.</p>`;
                 return;
             }
 
             contenedor.innerHTML = "";
             listaResuelveAcumulada.forEach((texto, idx) => {
+                const etiqueta = extincionActual ? `ARTÍCULO ${idx + 1}°.` : `FUNCIONARIO #${idx + 1}`;
                 const div = document.createElement('div');
                 div.className = "bg-slate-50 border border-slate-200 p-3 rounded-lg text-xs relative group";
                 div.innerHTML = `
-                    <span class="font-bold text-emerald-900 block mb-1">ARTÍCULO ${idx + 1}°.</span>
+                    <span class="font-bold text-emerald-900 block mb-1">${etiqueta}</span>
                     <p class="text-slate-600 mb-2">${texto}</p>
                     <div class="flex justify-end space-x-2">
-                        <button onclick="copiarTextoResuelve('${texto.replace(/'/g, "\\'")}')" class="text-slate-500 hover:text-emerald-800 text-[11px] font-semibold"><i class="fa-solid fa-copy mr-1"></i> Copiar</button>
+                        <button onclick="copiarTextoResuelve(${idx})" class="text-slate-500 hover:text-emerald-800 text-[11px] font-semibold"><i class="fa-solid fa-copy mr-1"></i> Copiar</button>
                         <button onclick="eliminarArticulo(${idx})" class="text-red-500 hover:text-red-700 text-[11px] font-semibold"><i class="fa-solid fa-trash mr-1"></i> Eliminar</button>
                     </div>
                 `;
@@ -502,9 +664,9 @@
             });
         }
 
-        function copiarTextoResuelve(texto) {
-            navigator.clipboard.writeText(texto);
-            alert("¡Artículo copiado al portapapeles!");
+        function copiarTextoResuelve(idx) {
+            navigator.clipboard.writeText(listaResuelveAcumulada[idx] || "");
+            alert("¡Párrafo copiado al portapapeles!");
         }
 
         function eliminarArticulo(index) {
@@ -512,7 +674,6 @@
                 if (!confirm("Los artículos de la extinción van juntos. ¿Desea eliminar la extinción completa del lote?")) return;
                 extincionActual = null;
                 listaResuelveAcumulada = [];
-                listaRegistrosAcumulados = [];
                 actualizarVistaAcumulador();
                 return;
             }
@@ -529,17 +690,20 @@
             btn.disabled = true;
             btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Generando en Drive...`;
 
-            const tipoResolucionSeleccionada = document.querySelector('input[name="tipoResolucion"]:checked').value;
+            const tipoResolucionSeleccionada = listaRegistrosAcumulados.length > 0
+                ? listaRegistrosAcumulados[0].tipoResolucion
+                : document.querySelector('input[name="tipoResolucion"]:checked').value;
+            const tipoAccionSeleccionada = document.querySelector('input[name="tipoAccion"]:checked').value;
 
             const payloadGlobal = {
                 accion: "GENERAR_DOCUMENTO_COMPLETO",
-                tipoAccion: extincionActual ? "EXTINCION" : "RECONOCIMIENTO",
+                tipoAccion: extincionActual ? "EXTINCION" : tipoAccionSeleccionada,
                 tipoResolucion: extincionActual ? extincionActual.tipoResolucion : tipoResolucionSeleccionada,
                 extincion: extincionActual,
-                registros: listaRegistrosAcumulados,
                 numeroResolucion: "0000",
-                fechaResolucion: new Date().toLocaleDateString('es-CO'),
-                listaResuelve: listaResuelveAcumulada
+                fechaResolucion: "DD/MAAAA",
+                listaResuelve: listaResuelveAcumulada,
+                listaRegistros: listaRegistrosAcumulados
             };
 
             try {
@@ -569,22 +733,20 @@
             return document.querySelector('input[name="tipoAccion"]:checked').value;
         }
 
-        function textoBotonProcesar() {
-            return modoActual() === "EXTINCION"
-                ? "Procesar Extinción y Registrar en Google Sheets"
-                : "Procesar y Registrar en Google Sheets";
-        }
-
         function restaurarBotonProcesar() {
             const btn = document.getElementById('btnProcesar');
             btn.disabled = false;
-            btn.innerHTML = `<i class="fa-solid fa-gears"></i> <span>${textoBotonProcesar()}</span>`;
+            btn.innerHTML = `<i class="fa-solid fa-gears"></i> <span>Procesar Extinción y Registrar en Google Sheets</span>`;
         }
 
         function toggleModo() {
             const ext = modoActual() === "EXTINCION";
             document.getElementById('bloquePorcentaje').classList.toggle('hidden', ext);
             document.getElementById('seccionExtincion').classList.toggle('hidden', !ext);
+            document.getElementById('botonesMultiples').classList.toggle('hidden', ext);
+            document.getElementById('bloqueColaFuncionarios').classList.toggle('hidden', ext);
+            document.getElementById('btnProcesar').classList.toggle('hidden', !ext);
+            document.getElementById('badgeModoCarga').classList.toggle('hidden', ext);
 
             if (ext) {
                 document.getElementById('seccionConyuge').classList.add('hidden');
@@ -705,7 +867,7 @@
             const opciones = cat === "PP"
                 ? [["Patrullero de Policía (PP)", "Patrullero de Policía (PP)"]]
                 : [
-                    ["Patrullero (PT)", "Patrullero (PT)"],
+                    ["Patrullero", "Patrullero (PT)"],
                     ["Subintendente", "Subintendente (SI)"],
                     ["Intendente", "Intendente (IT)"],
                     ["Intendente Jefe", "Intendente Jefe (IJ)"],
@@ -716,7 +878,7 @@
         }
         actualizarGrados();
 
-        // ===== CORRECTOR DE NOMBRES =====
+        // ===== CORRECTOR DE NOMBRES (tildes, Ñ, signos y comillas) =====
         const NOMBRES_CON_TILDE = (
             "JESÚS MARÍA JOSÉ ANDRÉS ÁLVARO ÁNGEL ÁNGELA ANGÉLICA ADRIÁN AGUSTÍN AMÉRICA ANÍBAL BENJAMÍN CÉSAR ELÍAS ELOÍSA FABIÁN FÉLIX " +
             "GERMÁN HÉCTOR HERNÁN IVÁN JULIÁN LEÓN LUCÍA MARTÍN MATÍAS MÓNICA NICOLÁS ÓSCAR RAÚL RENÉ ROMÁN RUBÉN SEBASTIÁN SOFÍA TOMÁS VÍCTOR " +
@@ -795,7 +957,9 @@
         document.getElementById('resolucionForm').addEventListener('focusout', normalizarFormulario);
 
         function reiniciarTodo() {
-            if (confirm("¿Desea limpiar todos los artículos acumulados y reiniciar el formulario?")) {
+            if (confirm("¿Desea limpiar todos los registros acumulados y reiniciar el formulario?")) {
+                colaPendiente = [];
+                renderizarColaPendiente();
                 listaResuelveAcumulada = [];
                 listaRegistrosAcumulados = [];
                 actualizarVistaAcumulador();
