@@ -632,60 +632,69 @@
 
         // PASO 1: Al dar clic en "Registrar Lista en Sheets", verifica en el libro si ya existen cédulas y muestra el feedback
         async function verificarAntesDeGrabarSheets() {
-            if (extincionActual) {
-                alert("Hay una extinción en curso. Genere el Word o use «Limpiar Todo / Nuevo Lote».");
-                return;
-            }
-            if (indiceEditandoCola !== null) {
-                alert("Primero pulse «Guardar Cambios en Lista» o «Cancelar edición» antes de continuar.");
-                return;
-            }
+    if (extincionActual) {
+        alert("Hay una extinción en curso. Genere el Word o use «Limpiar Todo / Nuevo Lote».");
+        return;
+    }
+    if (indiceEditandoCola !== null) {
+        alert("Primero pulse «Guardar Cambios en Lista» o «Cancelar edición» antes de continuar.");
+        return;
+    }
 
-            if (colaPendiente.length === 0) {
-                const p = capturarDatosFormulario();
-                const error = validarDatosReconocimiento(p);
-                if (error) {
-                    alert("Agregue al menos un funcionario a la lista o complete el formulario: " + error);
-                    return;
-                }
-                const categoriaActiva = listaRegistrosAcumulados.length > 0 ? listaRegistrosAcumulados[0].tipoResolucion : null;
-                if (categoriaActiva && categoriaActiva !== p.tipoResolucion) {
-                    alert("Todos los funcionarios de una misma resolución deben ser de la misma categoría (PP o Nivel Ejecutivo).");
-                    return;
-                }
-                colaPendiente.push(p);
-                renderizarColaPendiente();
-                limpiarCamposFuncionario();
-            }
-
-            const btn = document.getElementById('btnProcesarLote');
-            btn.disabled = true;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>Verificando en Sheets...</span>`;
-
-            try {
-                const respuesta = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify({
-                        accion: "VERIFICAR_REGISTROS_SHEETS",
-                        listaRegistros: colaPendiente
-                    })
-                });
-                const resData = await respuesta.json();
-
-                if (resData.status === "success" && Array.isArray(resData.resultados)) {
-                    mostrarFeedbackVerificacion(resData.resultados);
-                } else {
-                    alert("Aviso al verificar en Sheets: " + (resData.message || "No se pudo consultar el libro."));
-                }
-            } catch (err) {
-                alert("Error de conexión al verificar en Google Sheets: " + err);
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = `<i class="fa-solid fa-magnifying-glass-chart"></i> <span>Registrar Lista en Sheets (<span id="contadorColaBtn">${colaPendiente.length}</span>)</span>`;
-                setText('contadorColaBtn', colaPendiente.length);
-            }
+    if (colaPendiente.length === 0) {
+        const p = capturarDatosFormulario();
+        const error = validarDatosReconocimiento(p);
+        if (error) {
+            alert("Agregue al menos un funcionario a la lista o complete el formulario: " + error);
+            return;
         }
+        const categoriaActiva = listaRegistrosAcumulados.length > 0 ? listaRegistrosAcumulados[0].tipoResolucion : null;
+        if (categoriaActiva && categoriaActiva !== p.tipoResolucion) {
+            alert("Todos los funcionarios de una misma resolución deben ser de la misma categoría (PP o Nivel Ejecutivo).");
+            return;
+        }
+        colaPendiente.push(p);
+        renderizarColaPendiente();
+        limpiarCamposFuncionario();
+    }
+
+    const btn = document.getElementById('btnProcesarLote');
+    btn.disabled = true;
+    btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>Verificando en Sheets...</span>`;
+
+    try {
+        const respuesta = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({
+                accion: "VERIFICAR_REGISTROS_SHEETS",
+                listaRegistros: colaPendiente
+            })
+        });
+        const textoCrudo = await respuesta.text();
+        let resData;
+        try {
+            resData = JSON.parse(textoCrudo);
+        } catch (parseErr) {
+            alert("La Web App devolvió HTML en lugar de JSON (revise permisos 'Cualquier persona' en Apps Script):\n" + textoCrudo.slice(0, 200));
+            return;
+        }
+
+        if (resData.status === "success" && Array.isArray(resData.resultados)) {
+            mostrarFeedbackVerificacion(resData.resultados);
+        } else if (resData.status === "success" && !resData.resultados) {
+            alert("La Web App sigue ejecutando una versión anterior de Codigo.gs (no devolvió 'resultados').\n\nEn Apps Script ve a: Implementar > Administrar implementaciones > Editar (lápiz) > Versión: Nueva versión > Implementar.");
+        } else {
+            alert("Aviso al verificar en Sheets: " + (resData.message || "Error desconocido."));
+        }
+    } catch (err) {
+        alert("Error de conexión al verificar en Google Sheets: " + err);
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i class="fa-solid fa-magnifying-glass-chart"></i> <span>Registrar Lista en Sheets (<span id="contadorColaBtn">${colaPendiente.length}</span>)</span>`;
+        setText('contadorColaBtn', colaPendiente.length);
+    }
+}
 
         function mostrarFeedbackVerificacion(resultados) {
             const panel = document.getElementById('panelVerificacionSheets');
